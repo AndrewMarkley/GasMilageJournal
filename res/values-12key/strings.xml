@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="distance_traveled">"Distance Traveled: "</string>
+    <string name="date">10/08/2012</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/LinearLayout2"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="#55777777" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:orientation="vertical" >
+
+		<TextView
+			android:id="@+id/stats_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Stats"
+			android:textColor="#36B5E4"
+			android:textSize="25dp" />
+
+		<TextView
+			android:id="@+id/stats_val"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="ans"
+			android:textColor="#36B5E4"
+			android:textSize="20dp" />
+
+	</LinearLayout>
+
+</LinearLayout>
