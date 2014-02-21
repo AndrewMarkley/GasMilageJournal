@@ -1,19 +1,21 @@
 package andrews.gas.milage.journal;
 
-public class ServiceLog {
+public class ServiceLog
+{
 	int id = 0;
 	String date = "";
-	String service = ""; 
-	double price=0; 
-	double odometer= 0;
-	String shop=""; 
-	String comments="";
-	
-	public ServiceLog(){
-		
+	String service = "";
+	double price = 0;
+	double odometer = 0;
+	String shop = "";
+	String comments = "";
+
+	public ServiceLog() {
+
 	}
 
-	public ServiceLog(int Id, String Date, double od, String Service, double Price, String Shop, String Comms) {
+	public ServiceLog(int Id, String Date, double od, String Service,
+			double Price, String Shop, String Comms) {
 		id = Id;
 		date = Date;
 		service = Service;
@@ -23,31 +25,38 @@ public class ServiceLog {
 		odometer = od;
 	}
 
-	public double getMiles() {
+	public double getMiles()
+	{
 		return odometer;
 	}
-	
-	public int getId() {
+
+	public int getId()
+	{
 		return id;
 	}
 
-	public String getDate() {
+	public String getDate()
+	{
 		return date;
 	}
 
-	public String getService() {
+	public String getService()
+	{
 		return service;
 	}
 
-	public double getPrice() {
+	public double getPrice()
+	{
 		return price;
 	}
 
-	public String getRepairShop() {
+	public String getRepairShop()
+	{
 		return shop;
 	}
 
-	public String getComments() {
+	public String getComments()
+	{
 		return comments;
 	}
 }
