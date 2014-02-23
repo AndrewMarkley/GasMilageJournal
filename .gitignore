@@ -1,1 +1,4 @@
 /gas-ejb/nbproject/private/
+/gas-server/gas-ejb/target/
+/gas-server/gas-services/target/
+/gas-server/gas-ear/target/
