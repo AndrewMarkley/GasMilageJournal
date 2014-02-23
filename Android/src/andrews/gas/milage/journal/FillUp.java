@@ -15,29 +15,27 @@ public class FillUp
 	Calendar cal = null;
 	String car = "";
 
-	public FillUp(String carname, double distance, double gas, double price,
-			String date, String comments) {
+	public FillUp(String carname, double distance, double gas, double price, String date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
-		this.price = round( price , 2 );
+		this.price = round(price, 2);
 		this.comments = comments;
-		this.mpg = round( distance / gas , 3 );
+		this.mpg = round(distance / gas, 3);
 		this.totalCost = gas * price;
 		this.date = date;
-		this.cal = toCal( date );
+		this.cal = toCal(date);
 		this.car = carname;
 	}
 
-	public FillUp(String carname, double distance, double gas, double price,
-			double totalCost, double mpg, String date, String comments) {
+	public FillUp(String carname, double distance, double gas, double price, double totalCost, double mpg, String date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
-		this.price = round( price , 2 );
+		this.price = round(price, 2);
 		this.comments = comments;
-		this.mpg = round( mpg , 3 );
+		this.mpg = round(mpg, 3);
 		this.totalCost = totalCost;
 		this.date = date;
-		this.cal = toCal( date );
+		this.cal = toCal(date);
 		this.car = carname;
 	}
 
@@ -130,37 +128,32 @@ public class FillUp
 		if ( places < 0 ) {
 			return value;
 		}
-		long factor = (long) Math.pow( 10 , places );
+		long factor = (long) Math.pow(10, places);
 		value = value * factor;
-		long tmp = Math.round( value );
+		long tmp = Math.round(value);
 		return (double) tmp / factor;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Car: " + car + ", Distance: " + distance + ", Gas: " + gas
-				+ ", Price per Gallon: $" + price
-				+ ", Total Cost of Fill Up: $" + totalCost + ", MPG: " + mpg
-				+ ", Date: " + date + ", Comments: " + comments;
+		return "Car: " + car + ", Distance: " + distance + ", Gas: " + gas + ", Price per Gallon: $" + price + ", Total Cost of Fill Up: $" + totalCost + ", MPG: " + mpg + ", Date: " + date
+				+ ", Comments: " + comments;
 	}
 
 	public String toFileOutputString()
 	{
-		return "" + car + " , " + distance + " , " + gas + " , " + price
-				+ " , " + totalCost + " , " + mpg + " , " + date + " , "
-				+ comments;
+		return "" + car + " , " + distance + " , " + gas + " , " + price + " , " + totalCost + " , " + mpg + " , " + date + " , " + comments;
 	}
 
 	public Calendar toCal(String x)
 	{
 		String datee[] = new String[4];
-		datee[0] = x.substring( 0 , x.indexOf( "-" ) );
-		datee[1] = x.substring( x.indexOf( "-" ) , x.lastIndexOf( "-" ) );
-		datee[2] = x.substring( x.lastIndexOf( "-" ) + 1 );
-		Calendar temp = Calendar.getInstance( );
-		temp.set( Integer.parseInt( datee[2] ) , Integer.parseInt( datee[0] ) ,
-				Integer.parseInt( datee[1] ) );
+		datee[0] = x.substring(0, x.indexOf("-"));
+		datee[1] = x.substring(x.indexOf("-"), x.lastIndexOf("-"));
+		datee[2] = x.substring(x.lastIndexOf("-") + 1);
+		Calendar temp = Calendar.getInstance();
+		temp.set(Integer.parseInt(datee[2]), Integer.parseInt(datee[0]), Integer.parseInt(datee[1]));
 		return temp;
 	}
 
