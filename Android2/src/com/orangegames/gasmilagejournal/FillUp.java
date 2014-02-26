@@ -1,21 +1,45 @@
 package com.orangegames.gasmilagejournal;
 
-import java.util.Calendar;
+import java.util.Date;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "FillUps")
 public class FillUp
 {
-	double distance;
+	@DatabaseField(id = true)
+	private int id = 0;
+	
+	@DatabaseField(canBeNull = false)
+	private double distance;
+	
+	@DatabaseField(canBeNull = false)
 	double gas;
+	
+	@DatabaseField(canBeNull = false)
 	double price;
+	
+	@DatabaseField(canBeNull = false)
 	double totalCost;
+	
+	@DatabaseField(canBeNull = false)
 	double mpg;
-	int id = 0;
-	String comments = "empty";
-	String date = "";
-	Calendar cal = null;
-	String car = "";
+	
+	@DatabaseField(canBeNull = false)
+	String comments = "";
+	
+	@DatabaseField(canBeNull = false)
+	Date date = new Date();
+	
+	@DatabaseField(canBeNull = false)
+	int carId = 0;
+	
+	public FillUp() {
 
-	public FillUp(String carname, double distance, double gas, double price, String date, String comments) {
+	}
+
+	public FillUp(int carId, double distance, double gas, double price, Date date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -23,11 +47,10 @@ public class FillUp
 		this.mpg = round(distance / gas, 3);
 		this.totalCost = gas * price;
 		this.date = date;
-		this.cal = toCal(date);
-		this.car = carname;
+		this.carId = carId;
 	}
 
-	public FillUp(String carname, double distance, double gas, double price, double totalCost, double mpg, String date, String comments) {
+	public FillUp(int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -35,93 +58,32 @@ public class FillUp
 		this.mpg = round(mpg, 3);
 		this.totalCost = totalCost;
 		this.date = date;
-		this.cal = toCal(date);
-		this.car = carname;
+		this.carId = carId;
 	}
 
-	public FillUp() {
+	public int getCarId() { return carId; }
+	public void setCarId(int value) { this.carId = value; }
 
-	}
+	public Date getDate() { return date; }
+	public void setDate(Date value) { this.date = value; } 
+	
+	public double getDistance() { return distance; }
+	public void setDistance(double value) { this.distance = value; }
 
-	public String getCarName()
-	{
-		return car;
-	}
+	public double getGas() { return gas; }
+	public void setGas(double value) { this.gas = value; }
 
-	public String getDate()
-	{
-		return date;
-	}
+	public double getPrice() { return price; }
+	public void setPrice(double value) { this.price = value; }
 
-	public Calendar getCalendar()
-	{
-		return cal;
-	}
+	public double getTotalCost() { return totalCost; }
+	public void setTotalCost(double value) { this.totalCost = value; }
 
-	public double getDistance()
-	{
-		return distance;
-	}
+	public String getComments() { return comments; }
+	public void setComments(String value) { this.comments = value; }
 
-	public double getGas()
-	{
-		return gas;
-	}
-
-	public double getPrice()
-	{
-		return price;
-	}
-
-	public double getTotalCost()
-	{
-		return totalCost;
-	}
-
-	public String getComments()
-	{
-		return comments;
-	}
-
-	public double getMPG()
-	{
-		return mpg;
-	}
-
-	public void setDistance(double x)
-	{
-		distance = x;
-	}
-
-	public void setGas(double x)
-	{
-		gas = x;
-	}
-
-	public void setPrice(double x)
-	{
-		price = x;
-	}
-
-	public void setTotalCost(double x)
-	{
-		totalCost = x;
-	}
-
-	public void setComments(String x)
-	{
-		comments = x;
-	}
-
-	public void setName(String x)
-	{
-		car = x;
-	}
-
-	public void setMPG(double x)
-	{
-		mpg = x;
-	}
+	public double getMPG() { return mpg; }
+	public void setMPG(double value) { this.mpg = value; }
 
 	public double round(double value, int places)
 	{
@@ -137,24 +99,8 @@ public class FillUp
 	@Override
 	public String toString()
 	{
-		return "Car: " + car + ", Distance: " + distance + ", Gas: " + gas + ", Price per Gallon: $" + price + ", Total Cost of Fill Up: $" + totalCost + ", MPG: " + mpg + ", Date: " + date
+		return "Car: " + carId + ", Distance: " + distance + ", Gas: " + gas + ", Price per Gallon: $" + price + ", Total Cost of Fill Up: $" + totalCost + ", MPG: " + mpg + ", Date: " + date
 				+ ", Comments: " + comments;
-	}
-
-	public String toFileOutputString()
-	{
-		return "" + car + " , " + distance + " , " + gas + " , " + price + " , " + totalCost + " , " + mpg + " , " + date + " , " + comments;
-	}
-
-	public Calendar toCal(String x)
-	{
-		String datee[] = new String[4];
-		datee[0] = x.substring(0, x.indexOf("-"));
-		datee[1] = x.substring(x.indexOf("-"), x.lastIndexOf("-"));
-		datee[2] = x.substring(x.lastIndexOf("-") + 1);
-		Calendar temp = Calendar.getInstance();
-		temp.set(Integer.parseInt(datee[2]), Integer.parseInt(datee[0]), Integer.parseInt(datee[1]));
-		return temp;
 	}
 
 }

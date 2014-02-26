@@ -55,9 +55,23 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public Fragment getItem(int position)
 		{
-			Fragment fragment = new CarsViewFragment();
+			Fragment fragment = new FillUpViewFragment();
 			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			args.putInt("section_number", position + 1);
+			switch (position) {
+				case 1:
+					fragment = new FillUpViewFragment();
+					break;
+				case 2:
+					fragment = new CarsViewFragment();
+					break;
+				case 3:
+					fragment = new FillUpViewFragment();
+					break;
+				default:
+					break;
+			}
+			
 			fragment.setArguments(args);
 			return fragment;
 		}
@@ -82,30 +96,6 @@ public class MainActivity extends FragmentActivity
 					return getString(R.string.title_section3).toUpperCase(l);
 			}
 			return null;
-		}
-	}
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment
-	{
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		public DummySectionFragment() {}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
-			TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-			return rootView;
 		}
 	}
 

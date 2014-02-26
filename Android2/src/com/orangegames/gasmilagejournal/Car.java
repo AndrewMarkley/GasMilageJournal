@@ -2,16 +2,41 @@ package com.orangegames.gasmilagejournal;
 
 import java.util.ArrayList;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "Cars")
 public class Car
 {
-	int year = 0;
-	String name = "";
-	String make = "";
-	String model = "";
-	double engineSize = 0.0;
-	double milage = 0;
+	@DatabaseField(id = true)
+	private int id;
+	
+	@DatabaseField(canBeNull = false)
+	private int year = 0;
+	
+	@DatabaseField(canBeNull = false)
+	private String name = "";
+	
+	@DatabaseField(canBeNull = false)
+	private String make = "";
+	
+	@DatabaseField(canBeNull = false)
+	private String model = "";
+	
+	@DatabaseField(canBeNull = false)
+	private double engineSize = 0.0;
+	
+	@DatabaseField(canBeNull = false)
+	private double milage = 0;
+	
+	@DatabaseField(canBeNull = false)
 	ArrayList<FillUp> fillUps = new ArrayList<FillUp>();
 
+	public Car()
+	{
+		
+	}
+	
 	public Car(String name, int year, String make, String model, double milage) {
 		this.year = year;
 		this.make = make;
@@ -30,10 +55,6 @@ public class Car
 	}
 
 	public Car(String[] changes) {
-		for ( int ctr = 0; ctr < changes.length; ctr++ ) {
-			System.out.println(changes[ctr]);
-		}
-
 		name = changes[0];
 		year = Integer.parseInt(changes[1]);
 		make = changes[2];
@@ -41,80 +62,28 @@ public class Car
 		milage = Double.parseDouble(changes[4]);
 	}
 
-	public String getName()
-	{
-		return name;
-	}
+	public String getName() { return name; }
 
-	public void setMilage(double x)
-	{
-		milage = x;
-	}
+	public void setMilage(double x) { milage = x; }
 
-	public int getYear()
-	{
-		return year;
-	}
+	public int getYear() { return year; }
+	public void setYear(int value) { year = value; }
 
-	public void setYear(int value)
-	{
-		year = value;
-	}
+	public String getMake() { return make; }
+	public void setMake(String value) { make = value; }
 
-	public String getMake()
-	{
-		return make;
-	}
+	public String getModel() { return model; }
+	public void setModel(String value) { model = value; }
 
-	public void setMake(String value)
-	{
-		make = value;
-	}
+	public double getEngineSize() { return engineSize; }
+	public void setEngineSize(double value) { engineSize = value; }
 
-	public String getModel()
-	{
-		return model;
-	}
+	public double getMilage() { return milage; }
+	public void setMilage(int value) { milage = value; }
 
-	public void setModel(String value)
-	{
-		model = value;
-	}
-
-	public double getEngineSize()
-	{
-		return engineSize;
-	}
-
-	public void setEngineSize(double value)
-	{
-		engineSize = value;
-	}
-
-	public double getMilage()
-	{
-		return milage;
-	}
-
-	public void setMilage(int value)
-	{
-		milage = value;
-	}
-
-	public void setFillUps(ArrayList<FillUp> value)
-	{
-		fillUps = value;
-	}
-
-	public ArrayList<FillUp> getFillUps()
-	{
-		return fillUps;
-	}
-
-	public void addFillUp(FillUp value)
-	{
-		fillUps.add(value);
-	}
+	public ArrayList<FillUp> getFillUps() { return fillUps; }
+	public void setFillUps(ArrayList<FillUp> value) { fillUps = value; }
+	public void addFillUp(FillUp value) { fillUps.add(value); }
 
 	@Override
 	public String toString()
