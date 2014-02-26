@@ -1,0 +1,13 @@
+com\orangegames\crud\CrudManagerBean.class
+com\orangegames\vehicle\VehicleType.class
+com\orangegames\vehicle\VehicleTypeTO.class
+com\orangegames\car\CarTO.class
+com\orangegames\crud\QueryParameters.class
+com\orangegames\fillups\FillUpManager.class
+com\orangegames\car\CarManager.class
+com\orangegames\crud\AnnotationUtility.class
+com\orangegames\fillups\FillUpTO.class
+com\orangegames\vehicle\VehicleTypeManager.class
+com\orangegames\car\Car.class
+com\orangegames\fillups\FillUp.class
+com\orangegames\BaseEntity.class

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gas Milage Journal</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Fill Ups</string>
+    <string name="title_section2">Stats</string>
+    <string name="title_section3">Cars</string>
+
+</resources>

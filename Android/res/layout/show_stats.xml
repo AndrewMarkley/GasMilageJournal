@@ -52,8 +52,7 @@
 		android:orientation="vertical" >
 
 		<ScrollView
-			xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
-			xmlns:android="http://schemas.android.com/apk/res/android"
+
 			android:id="@+id/scroll"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content" >
