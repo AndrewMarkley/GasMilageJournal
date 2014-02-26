@@ -1,6 +1,11 @@
-package com.orangegames.gasmilagejournal;
+package com.orangegames.gasmilagejournal.fragments;
 
 import java.util.Calendar;
+
+import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.R.id;
+import com.orangegames.gasmilagejournal.R.layout;
+import com.orangegames.gasmilagejournal.fillup.FillUp;
 
 import android.content.Context;
 import android.os.Bundle;

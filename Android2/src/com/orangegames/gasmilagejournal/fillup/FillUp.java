@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal;
+package com.orangegames.gasmilagejournal.fillup;
 
 import java.util.Date;
 
@@ -34,6 +34,9 @@ public class FillUp
 	
 	@DatabaseField(canBeNull = false)
 	int carId = 0;
+	
+	@DatabaseField(canBeNull = false)
+	private boolean deleted;
 	
 	public FillUp() {
 
@@ -84,6 +87,9 @@ public class FillUp
 
 	public double getMPG() { return mpg; }
 	public void setMPG(double value) { this.mpg = value; }
+	
+	public boolean isDeleted() { return deleted; }
+	public void setDeleted(boolean value) { this.deleted = value; }
 
 	public double round(double value, int places)
 	{

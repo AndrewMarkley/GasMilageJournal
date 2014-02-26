@@ -8,18 +8,23 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
+import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
+import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
+import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
+import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
 
 public class MainActivity extends FragmentActivity
 {
 
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
 	ViewPager mViewPager;
+	
+	private CarDatabaseHelper carDatabaseHelper = null;
+	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -66,7 +71,7 @@ public class MainActivity extends FragmentActivity
 					fragment = new CarsViewFragment();
 					break;
 				case 3:
-					fragment = new FillUpViewFragment();
+					fragment = new StatisticsViewFragment();
 					break;
 				default:
 					break;
@@ -98,5 +103,61 @@ public class MainActivity extends FragmentActivity
 			return null;
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		/*
+		 * You'll need this in your class to release the helper when done.
+		 */
+		if (carDatabaseHelper != null) {
+			carDatabaseHelper.close();
+			carDatabaseHelper = null;
+		}
+		if (fillUpDatabaseHelper != null) {
+			fillUpDatabaseHelper.close();
+			fillUpDatabaseHelper = null;
+		}
+	}
+	
+	/**
+	 * You'll need this in your class to get the helper from the manager once per class.
+	 */
+	private CarDatabaseHelper getCarDatabaseHelper() {
+		if (carDatabaseHelper == null) {
+			carDatabaseHelper = carDatabaseHelper.getHelper(this);
+		}
+		return carDatabaseHelper;
+	}
+
+	/**
+	 * You'll need this in your class to get the helper from the manager once per class.
+	 */
+	private FillUpDatabaseHelper getFillUpDatabaseHelper() {
+		if (fillUpDatabaseHelper == null) {
+			fillUpDatabaseHelper = fillUpDatabaseHelper.getHelper(this);
+		}
+		return fillUpDatabaseHelper;
+	}
+
+//	/**
+//	 * Do our sample database stuff as an example.
+//	 */
+//	private void doSampleDatabaseStuff(String action, TextView tv) {
+//		try {
+//			// our string builder for building the content-view
+//			StringBuilder sb = new StringBuilder();
+//			doSimpleDatabaseStuff(action, sb);
+//			sb.append("------------------------------------------\n");
+//			doComplexDatabaseStuff(action, sb);
+//			tv.setText(sb.toString());
+//			Log.i(LOG_TAG, "Done with page at " + System.currentTimeMillis());
+//		} catch (SQLException e) {
+//			Log.e(LOG_TAG, "Database exception", e);
+//			tv.setText("Database exeption: " + e);
+//			return;
+//		}
+//	}
 
 }

@@ -1,4 +1,9 @@
-package com.orangegames.gasmilagejournal;
+package com.orangegames.gasmilagejournal.fragments;
+
+import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.R.id;
+import com.orangegames.gasmilagejournal.R.layout;
+import com.orangegames.gasmilagejournal.car.Car;
 
 import android.content.Context;
 import android.os.Bundle;

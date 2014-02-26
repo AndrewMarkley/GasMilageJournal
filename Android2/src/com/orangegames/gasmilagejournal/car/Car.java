@@ -1,9 +1,10 @@
-package com.orangegames.gasmilagejournal;
+package com.orangegames.gasmilagejournal.car;
 
 import java.util.ArrayList;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.orangegames.gasmilagejournal.fillup.FillUp;
 
 @DatabaseTable(tableName = "Cars")
 public class Car
@@ -31,6 +32,9 @@ public class Car
 	
 	@DatabaseField(canBeNull = false)
 	ArrayList<FillUp> fillUps = new ArrayList<FillUp>();
+	
+	@DatabaseField(canBeNull = false)
+	private boolean deleted;
 
 	public Car()
 	{
@@ -84,6 +88,9 @@ public class Car
 	public ArrayList<FillUp> getFillUps() { return fillUps; }
 	public void setFillUps(ArrayList<FillUp> value) { fillUps = value; }
 	public void addFillUp(FillUp value) { fillUps.add(value); }
+	
+	public boolean isDeleted() { return deleted; }
+	public void setDeleted(boolean value) { this.deleted = value; }
 
 	@Override
 	public String toString()
