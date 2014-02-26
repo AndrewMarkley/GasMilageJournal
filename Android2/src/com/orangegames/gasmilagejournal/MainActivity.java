@@ -1,4 +1,4 @@
-package andrews.gas.milage.journal;
+package com.orangegames.gasmilagejournal;
 
 import java.util.Locale;
 
@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public Fragment getItem(int position)
 		{
-			Fragment fragment = new DummySectionFragment();
+			Fragment fragment = new CarsViewFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 			fragment.setArguments(args);

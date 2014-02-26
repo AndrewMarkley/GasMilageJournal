@@ -1,4 +1,4 @@
-package andrews.gas.milage.journal;
+package com.orangegames.gasmilagejournal;
 
 import java.util.ArrayList;
 
