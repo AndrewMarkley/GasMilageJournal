@@ -2,6 +2,7 @@ package andrews.gas.milage.journal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -412,5 +413,17 @@ public class showCarProfile extends Activity
 		carComparator comparator = new carComparator( );
 		Collections.sort( x , comparator );
 		return x;
+	}
+	
+	private class carComparator implements Comparator<Car>
+	{
+
+		@Override
+		public int compare(Car one, Car two)
+		{
+			String d1 = one.getName ( );
+			String d2 = two.getName ( );
+			return d1.compareTo ( d2 );
+		}
 	}
 }

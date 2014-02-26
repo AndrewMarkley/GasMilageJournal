@@ -8,11 +8,9 @@ import android.view.View;
 
 public class AdmobActivity extends Activity {
 
-		AdView ad = null;
-    	/*AdRequest adRequest = new AdRequest();
-    	adRequest.setTesting(true);
-    	ad.loadAd(adRequest);*/
-	  protected void showAds(View root) {
+	AdView ad = null;
+		
+	protected void showAds(View root) {
 	    AdRequest request = new AdRequest();
 	    request.addTestDevice(AdRequest.TEST_EMULATOR);
 	    ad.loadAd(request); 

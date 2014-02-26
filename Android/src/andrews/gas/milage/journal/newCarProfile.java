@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 public class newCarProfile extends Activity
 {
-	TextView naam, mak, mod, odom, jaar;
+	TextView name, make, model, odometer, year;
 	Button save, cancel, plus, minus;
 	CarDatabaseHandler db = null;
 	int mYear = 0;
 	Context ct = this;
-	boolean ans = false;
-	boolean edit = false;
+	boolean newCar = false;
+	boolean editCar = false;
 	String[] values = new String[5];
 	Car temp = null;
 	Intent in;
@@ -29,172 +29,166 @@ public class newCarProfile extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate( savedInstanceState );
-		setContentView( R.layout.new_car_form );
-		in = getIntent( );
-		ans = in.getBooleanExtra( "new" , ans );
-		edit = in.getBooleanExtra( "edit" , edit );
-		if ( ans ) {
-			show( );
-			in.putExtra( "new" , false );
-		}
-		naam = (TextView) findViewById( R.id.car_nick_name_input ); // name
-																	// field
-		mak = (TextView) findViewById( R.id.make_input ); // make field
-		mod = (TextView) findViewById( R.id.model_input ); // model field
-		odom = (TextView) findViewById( R.id.odometer_input ); // odometer field
-		jaar = (TextView) findViewById( R.id.year_input ); // year button
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.new_car_form);
+		in = getIntent();
+		newCar = in.getBooleanExtra("new", newCar);
+		editCar = in.getBooleanExtra("edit", editCar);
 
-		save = (Button) findViewById( R.id.save ); // save button
-		cancel = (Button) findViewById( R.id.cancel ); // cancel button
-		plus = (Button) findViewById( R.id.plus ); // save button
-		minus = (Button) findViewById( R.id.minus ); // cancel button
-
-		db = new CarDatabaseHandler( this ); // SQLLite database of fill up logs
-
-		jaar.setText( "" + Calendar.getInstance( ).get( Calendar.YEAR ) );
-
-		if ( edit ) {
-			save.setText( "Save Car" );
-			values = in.getStringArrayExtra( "values" );
-			naam.setText( values[0] );
-			jaar.setText( values[1] );
-			mak.setText( values[2] );
-			mod.setText( values[3] );
-			odom.setText( values[4] );
-			temp = new Car( values[0], Integer.parseInt( values[1] ),
-					values[2], values[3], Double.parseDouble( values[4] ) );
+		if ( newCar ) {
+			show();
+			in.putExtra("new", false);
 		}
 
-		cancel.setOnClickListener( new View.OnClickListener( )
+		name = (TextView) findViewById(R.id.car_nick_name_input);
+		make = (TextView) findViewById(R.id.make_input);
+		model = (TextView) findViewById(R.id.model_input);
+		odometer = (TextView) findViewById(R.id.odometer_input);
+		year = (TextView) findViewById(R.id.year_input);
+
+		save = (Button) findViewById(R.id.save);
+		cancel = (Button) findViewById(R.id.cancel);
+		plus = (Button) findViewById(R.id.plus);
+		minus = (Button) findViewById(R.id.minus);
+
+		db = new CarDatabaseHandler(this);
+
+		year.setText("" + Calendar.getInstance().get(Calendar.YEAR));
+
+		if ( editCar ) {
+			save.setText("Save Car");
+			values = in.getStringArrayExtra("values");
+			name.setText(values[0]);
+			year.setText(values[1]);
+			make.setText(values[2]);
+			model.setText(values[3]);
+			odometer.setText(values[4]);
+			temp = new Car(values[0], Integer.parseInt(values[1]), values[2], values[3], Double.parseDouble(values[4]));
+		}
+
+		cancel.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = getIntent( );
+				Intent i = getIntent();
 				// return 0 for failure!
-				if ( ans ) {
-					Intent returnIntent = new Intent( );
-					returnIntent.putExtra( "added" , false );
-					setResult( RESULT_OK , returnIntent );
+				if ( newCar ) {
+					Intent returnIntent = new Intent();
+					returnIntent.putExtra("added", false);
+					setResult(RESULT_OK, returnIntent);
 				}
-				finish( );
+				finish();
 			}
-		} );
-		save.setOnClickListener( new View.OnClickListener( )
+		});
+		save.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
 				Car c = null;
 				try {
-					CharSequence x = jaar.getText( );
-					int y = ( Integer.parseInt( x.toString( ) ) );
-					x = odom.getText( );
-					double z = ( Double.parseDouble( x.toString( ) ) );
-					c = new Car( naam.getText( ).toString( ), y, mak.getText( )
-							.toString( ), mod.getText( ).toString( ), z );
-					if ( ! edit )
-						db.addCar( c );
-					else {
-						int val = 0;
-						val = in.getIntExtra( "pos" , val );
-						db.deleteCar( temp , val );
-						db.addCar( c );
+					CharSequence var = year.getText();
+					int year = ( Integer.parseInt(var.toString()) );
+
+					var = odometer.getText();
+					double odometer = ( Double.parseDouble(var.toString()) );
+
+					c = new Car(name.getText().toString(), year, make.getText().toString(), model.getText().toString(), odometer);
+
+					if ( ! editCar ) {
+						db.addCar(c);
+					} else {
+						int val = in.getIntExtra("pos", 0);
+						db.deleteCar(temp, val);
+						db.addCar(c);
 					}
-					Intent i = getIntent( );
-					// return 0 for failure!
-					i.putExtra( "change" , c.toOutputFileString( )
-							.split( " , " ) );
-					i.putExtra( "ogName" , temp.getName( ) );
-					setResult( 10 );
-					finish( );
+
+					Intent i = getIntent();
+					i.putExtra("change", c.toOutputFileString().split(" , "));
+					i.putExtra("ogName", temp.getName());
+					setResult(10);
+					finish();
+
 				} catch (Exception e) {
-					e.printStackTrace( );
+
+					e.printStackTrace();
 					CharSequence text = "Please fill in all blank spaces!";
-					Toast toast = Toast.makeText( getApplicationContext( ) ,
-							text , Toast.LENGTH_LONG );
-					toast.show( );
+					Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+					toast.show();
+
 				}
 			}
-		} );
-		plus.setOnClickListener( new View.OnClickListener( )
+		});
+		plus.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				jaar.setText( ""
-						+ ( Integer.parseInt( jaar.getText( ).toString( ) ) + 1 ) );
+				year.setText("" + ( Integer.parseInt(year.getText().toString()) + 1 ));
 			}
-		} );
-		minus.setOnClickListener( new View.OnClickListener( )
+		});
+		minus.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				jaar.setText( ""
-						+ ( Integer.parseInt( jaar.getText( ).toString( ) ) - 1 ) );
+				year.setText("" + ( Integer.parseInt(year.getText().toString()) - 1 ));
 			}
-		} );
+		});
 
 	}
 
 	public void onClick(View v)
 	{
-		if ( v.getId( ) == naam.getId( )
-				&& naam.getText( ).toString( ).length( ) > 0 )
-			naam.setText( naam.getText( ).toString( ) );
+		if ( v.getId() == name.getId() && name.getText().toString().length() > 0 )
+			name.setText(name.getText().toString());
 
-		if ( v.getId( ) == mak.getId( )
-				&& mak.getText( ).toString( ).length( ) > 0 )
-			mak.setText( mak.getText( ).toString( ) );
+		if ( v.getId() == make.getId() && make.getText().toString().length() > 0 )
+			make.setText(make.getText().toString());
 
-		if ( v.getId( ) == mod.getId( )
-				&& mod.getText( ).toString( ).length( ) > 0 )
-			mod.setText( mod.getText( ).toString( ) );
+		if ( v.getId() == model.getId() && model.getText().toString().length() > 0 )
+			model.setText(model.getText().toString());
 
-		if ( v.getId( ) == odom.getId( )
-				&& odom.getText( ).toString( ).length( ) > 0 ) {
-			System.out.println( "odometer before: " + odom.getText( ) );
-			odom.setText( odom.getText( ).toString( ) );
-			System.out.println( "odometer after: " + odom.getText( ) );
+		if ( v.getId() == odometer.getId() && odometer.getText().toString().length() > 0 ) {
+			System.out.println("odometer before: " + odometer.getText());
+			odometer.setText(odometer.getText().toString());
+			System.out.println("odometer after: " + odometer.getText());
 		}
 
-		if ( v.getId( ) == jaar.getId( )
-				&& jaar.getText( ).toString( ).length( ) > 0 )
-			jaar.setText( jaar.getText( ).toString( ) );
+		if ( v.getId() == year.getId() && year.getText().toString().length() > 0 )
+			year.setText(year.getText().toString());
 	}
 
 	public void show()
 	{
-		AlertDialog.Builder builder = new AlertDialog.Builder( ct );
-		builder.setTitle( "Enter a Car" );
-		builder.setMessage( "You must have atleast 1 car profile before continuing.\n" );
-		builder.setPositiveButton( "Ok" , new DialogInterface.OnClickListener( )
+		AlertDialog.Builder builder = new AlertDialog.Builder(ct);
+		builder.setTitle("Enter a Car");
+		builder.setMessage("You must have atleast 1 car profile before continuing.\n");
+		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
 			@Override
 			public void onClick(DialogInterface dialog, int id)
 			{
 				// Action for 'Ok' Button
 			}
-		} );
-		builder.setNegativeButton( "Cancel" ,
-				new DialogInterface.OnClickListener( )
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int id)
-					{
-						dialog.cancel( );
-					}
-				} );
-		builder.create( );
-		builder.show( );
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int id)
+			{
+				dialog.cancel();
+			}
+		});
+		builder.create();
+		builder.show();
 	}
 
 	@Override
 	public void onBackPressed()
 	{
-		if ( ! ans )
-			finish( );
+		if ( ! newCar )
+			finish();
 	}
 }

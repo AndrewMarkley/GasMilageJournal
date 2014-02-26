@@ -47,70 +47,29 @@ public class Car
 		return name;
 	}
 
-	public void setMilage(double x)
-	{
-		milage = x;
-	}
+	public void setMilage(double x) { milage = x; }
+	
+	public int getYear() { return year; } 
+	public void setYear(int value) { year = value; }
 
-	public void setYear(int x)
-	{
-		year = x;
-	}
+	public String getMake() { return make; }
+	public void setMake(String value) { make = value; }
 
-	public void setMake(String x)
-	{
-		make = x;
-	}
+	public String getModel() { return model; }
+	public void setModel(String value) { model = value; }
 
-	public void setModel(String x)
-	{
-		model = x;
-	}
+	public double getEngineSize() { return engineSize; }
+	public void setEngineSize(double value) { engineSize = value; }
 
-	public void setEngineSize(double x)
-	{
-		engineSize = x;
-	}
-
-	public void setFillUps(ArrayList<FillUp> x)
-	{
-		fillUps = x;
-	}
-
-	public void addFillUp(FillUp x)
-	{
-		fillUps.add ( x );
-	}
-
-	public int getYear()
-	{
-		return year;
-	}
-
-	public String getMake()
-	{
-		return make;
-	}
-
-	public String getModel()
-	{
-		return model;
-	}
-
-	public double getEngineSize()
-	{
-		return engineSize;
-	}
-
-	public ArrayList<FillUp> getFillUps()
-	{
-		return fillUps;
-	}
-
-	public double getMilage()
-	{
-		return milage;
-	}
+	public double getMilage() { return milage; }
+	public void setMilage(int value) { milage = value; }
+	
+	
+	public void setFillUps(ArrayList<FillUp> value) { fillUps = value; }
+	
+	public ArrayList<FillUp> getFillUps() { return fillUps; }
+	public void addFillUp(FillUp value) { fillUps.add ( value ); }
+	
 
 	@Override
 	public String toString()
