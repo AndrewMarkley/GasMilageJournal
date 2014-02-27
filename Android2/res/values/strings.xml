@@ -6,5 +6,6 @@
     <string name="title_section1">Fill Ups</string>
     <string name="title_section2">Stats</string>
     <string name="title_section3">Cars</string>
+    <string name="detailed_car_form_car_name">Car Nickname: </string>
 
 </resources>

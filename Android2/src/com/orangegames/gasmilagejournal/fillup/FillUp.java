@@ -1,14 +1,17 @@
 package com.orangegames.gasmilagejournal.fillup;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "FillUps")
-public class FillUp
+public class FillUp implements Serializable
 {
-	@DatabaseField(id = true)
+	private static final long serialVersionUID = 1L;
+
+	@DatabaseField(generatedId = true)
 	private int id = 0;
 	
 	@DatabaseField(canBeNull = false)
@@ -35,14 +38,12 @@ public class FillUp
 	@DatabaseField(canBeNull = false)
 	int carId = 0;
 	
-	@DatabaseField(canBeNull = false)
-	private boolean deleted;
-	
 	public FillUp() {
 
 	}
 
-	public FillUp(int carId, double distance, double gas, double price, Date date, String comments) {
+	public FillUp(int id, int carId, double distance, double gas, double price, Date date, String comments) {
+		this.id = id;
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -53,7 +54,8 @@ public class FillUp
 		this.carId = carId;
 	}
 
-	public FillUp(int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
+	public FillUp(int id, int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
+		this.id = id;
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -64,6 +66,9 @@ public class FillUp
 		this.carId = carId;
 	}
 
+	public int getId() { return id; }
+	public void setId(int value) { this.id = value; }
+	
 	public int getCarId() { return carId; }
 	public void setCarId(int value) { this.carId = value; }
 
@@ -87,9 +92,6 @@ public class FillUp
 
 	public double getMPG() { return mpg; }
 	public void setMPG(double value) { this.mpg = value; }
-	
-	public boolean isDeleted() { return deleted; }
-	public void setDeleted(boolean value) { this.deleted = value; }
 
 	public double round(double value, int places)
 	{

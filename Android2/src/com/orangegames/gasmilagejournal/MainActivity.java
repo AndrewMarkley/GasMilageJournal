@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity
 					fragment = new CarsViewFragment();
 					break;
 				case 3:
-					fragment = new StatisticsViewFragment();
+					fragment = new StatisticsViewFragment(); 
 					break;
 				default:
 					break;
@@ -121,22 +121,16 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 	
-	/**
-	 * You'll need this in your class to get the helper from the manager once per class.
-	 */
 	private CarDatabaseHelper getCarDatabaseHelper() {
 		if (carDatabaseHelper == null) {
-			carDatabaseHelper = carDatabaseHelper.getHelper(this);
+			this.carDatabaseHelper = CarDatabaseHelper.getHelper(getApplicationContext());
 		}
 		return carDatabaseHelper;
 	}
 
-	/**
-	 * You'll need this in your class to get the helper from the manager once per class.
-	 */
 	private FillUpDatabaseHelper getFillUpDatabaseHelper() {
 		if (fillUpDatabaseHelper == null) {
-			fillUpDatabaseHelper = fillUpDatabaseHelper.getHelper(this);
+			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(getApplicationContext());
 		}
 		return fillUpDatabaseHelper;
 	}

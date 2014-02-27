@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detailed_car_form"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/detailed_car_form_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create a New Car!"
+            android:textSize="10pt" />
+
+        <EditText
+            android:id="@+id/detailed_car_form_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Car Nickname"
+            android:inputType="textPersonName" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/detailed_car_form_make"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Car Make"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/detailed_car_form_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Car Model"
+            android:inputType="textEmailAddress" >
+        </EditText>
+
+        <Spinner
+            android:id="@+id/detailed_car_form_year"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:prompt="@string/detailed_car_form_car_name" >
+        </Spinner>
+
+        <EditText
+            android:id="@+id/detailed_car_form_odometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Odometer"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/detailed_car_form_comments"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:hint="Comments"
+            android:inputType="textMultiLine"
+            android:lines="5" >
+        </EditText>
+
+        <Button
+            android:id="@+id/detailed_car_form_save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="sendFeedback"
+            android:text="Save!" >
+        </Button>
+    </LinearLayout>
+
+</ScrollView>

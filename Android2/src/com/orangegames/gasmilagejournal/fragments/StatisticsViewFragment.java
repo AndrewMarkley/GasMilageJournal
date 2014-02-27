@@ -29,12 +29,12 @@ public class StatisticsViewFragment extends Fragment
 	{
 		View rootView = inflater.inflate(R.layout.statistics_view_fragment, container, false);
 
-		ListView listView = (ListView) rootView.findViewById(R.id.fill_view_fragment_list);
+		ListView listView = (ListView) rootView.findViewById(R.id.statistics_view_fragment_list);
 		
 		Statistics[] statistics = {new Statistics(1, 1, 1, 1, 1, 1, 1), new Statistics(1, 1, 1, 1, 1, 1, 1)};
 		statisticsArrayAdapter adapter = new statisticsArrayAdapter(getActivity(), statistics);
 
-		listView = (ListView) rootView.findViewById(R.id.fill_view_fragment_list);
+		listView = (ListView) rootView.findViewById(R.id.statistics_view_fragment_list);
 		listView.setAdapter(adapter);
 
 		return rootView;

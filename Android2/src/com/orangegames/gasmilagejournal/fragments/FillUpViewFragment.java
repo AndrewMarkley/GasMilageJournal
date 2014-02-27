@@ -1,12 +1,10 @@
 package com.orangegames.gasmilagejournal.fragments;
 
+import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.List;
 
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.R.id;
-import com.orangegames.gasmilagejournal.R.layout;
-import com.orangegames.gasmilagejournal.fillup.FillUp;
-
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +15,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.car.Car;
+import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
+import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
+import com.orangegames.gasmilagejournal.fillup.FillUp;
+
 public class FillUpViewFragment extends Fragment
 {
+	private CarDatabaseHelper carDatabaseHelper = null;
+	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+	
 	public FillUpViewFragment() {}
 
 	@Override
@@ -28,7 +35,19 @@ public class FillUpViewFragment extends Fragment
 
 		ListView listView = (ListView) rootView.findViewById(R.id.fill_view_fragment_list);
 		
-		FillUp[] fillups = {new FillUp(1, 300, 20.5, 2.99, Calendar.getInstance().getTime(), "comments")};
+		FillUp[] fillups = {new FillUp(1, 1, 300, 20.5, 2.99, Calendar.getInstance().getTime(), "comments")};
+		
+		List<FillUp> temp = null;
+		try {
+			temp = fillUpDatabaseHelper.getFillUpDao().queryForAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(!temp.isEmpty()) {
+			temp.toArray(fillups);
+		}
+		
 		FillUpArrayAdapter adapter = new FillUpArrayAdapter(getActivity(), fillups);
 
 		listView = (ListView) rootView.findViewById(R.id.fill_view_fragment_list);
@@ -72,4 +91,18 @@ public class FillUpViewFragment extends Fragment
 			return rowView;
 		}
 	}
+	
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		if (fillUpDatabaseHelper == null) {
+			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(activity);
+		}
+		
+		if ( carDatabaseHelper == null ) {
+			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
+		}
+	}
+	
 }
