@@ -19,7 +19,7 @@
             android:id="@+id/car_view_fragment_new_car_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add new Car" />
+            android:text="@string/add_new_car" />
         
         <ListView
             android:id="@+id/car_view_fragment_list"

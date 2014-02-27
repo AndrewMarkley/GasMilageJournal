@@ -8,14 +8,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/detailed_car_form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create a New Car!"
+            android:text="@string/create_a_new_car"
             android:textSize="10pt" />
 
         <EditText
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Car Nickname"
+            android:hint="@string/car_nickname"
             android:inputType="textPersonName" >
 
             <requestFocus />
@@ -34,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Car Make"
+            android:hint="@string/car_make"
             android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/detailed_car_form_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Car Model"
+            android:hint="@string/car_model"
             android:inputType="textEmailAddress" >
         </EditText>
 
@@ -57,14 +57,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Odometer"
+            android:hint="@string/odometer"
             android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/detailed_car_form_comments"
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:hint="Comments"
+            android:hint="@string/comments"
             android:inputType="textMultiLine"
             android:lines="5" >
         </EditText>
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="sendFeedback"
-            android:text="Save!" >
+            android:text="@string/save_" >
         </Button>
     </LinearLayout>
 

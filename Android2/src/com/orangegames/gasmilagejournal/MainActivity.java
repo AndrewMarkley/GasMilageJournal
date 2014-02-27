@@ -36,6 +36,8 @@ public class MainActivity extends FragmentActivity
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		
+		mViewPager.setCurrentItem(2, false);
 
 	}
 
@@ -60,20 +62,20 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public Fragment getItem(int position)
 		{
-			Fragment fragment = new FillUpViewFragment();
+			Fragment fragment = null;
 			Bundle args = new Bundle();
 			args.putInt("section_number", position + 1);
 			switch (position) {
+				case 0:
+					fragment = new StatisticsViewFragment();
+					break;
 				case 1:
 					fragment = new FillUpViewFragment();
 					break;
 				case 2:
-					fragment = new CarsViewFragment();
+					fragment = new CarsViewFragment(); 
 					break;
-				case 3:
-					fragment = new StatisticsViewFragment(); 
-					break;
-				default:
+				default: fragment = new Fragment();
 					break;
 			}
 			
@@ -103,55 +105,4 @@ public class MainActivity extends FragmentActivity
 			return null;
 		}
 	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-		/*
-		 * You'll need this in your class to release the helper when done.
-		 */
-		if (carDatabaseHelper != null) {
-			carDatabaseHelper.close();
-			carDatabaseHelper = null;
-		}
-		if (fillUpDatabaseHelper != null) {
-			fillUpDatabaseHelper.close();
-			fillUpDatabaseHelper = null;
-		}
-	}
-	
-	private CarDatabaseHelper getCarDatabaseHelper() {
-		if (carDatabaseHelper == null) {
-			this.carDatabaseHelper = CarDatabaseHelper.getHelper(getApplicationContext());
-		}
-		return carDatabaseHelper;
-	}
-
-	private FillUpDatabaseHelper getFillUpDatabaseHelper() {
-		if (fillUpDatabaseHelper == null) {
-			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(getApplicationContext());
-		}
-		return fillUpDatabaseHelper;
-	}
-
-//	/**
-//	 * Do our sample database stuff as an example.
-//	 */
-//	private void doSampleDatabaseStuff(String action, TextView tv) {
-//		try {
-//			// our string builder for building the content-view
-//			StringBuilder sb = new StringBuilder();
-//			doSimpleDatabaseStuff(action, sb);
-//			sb.append("------------------------------------------\n");
-//			doComplexDatabaseStuff(action, sb);
-//			tv.setText(sb.toString());
-//			Log.i(LOG_TAG, "Done with page at " + System.currentTimeMillis());
-//		} catch (SQLException e) {
-//			Log.e(LOG_TAG, "Database exception", e);
-//			tv.setText("Database exeption: " + e);
-//			return;
-//		}
-//	}
-
 }

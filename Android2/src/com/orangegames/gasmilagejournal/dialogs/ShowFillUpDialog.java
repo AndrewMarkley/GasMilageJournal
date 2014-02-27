@@ -81,14 +81,13 @@ public class ShowFillUpDialog extends Activity
 			title.setText("Add a Fill Up!");
 		} else {
 			title.setText("Modify a Fill Up!");
-			save.setText("Save Car");
+			save.setText("Save Fill Up");
 			fillUp = (FillUp) in.getSerializableExtra("fillUp");
 			comments.setText(fillUp.getComments());
 			pricePerGallon.setText("" + fillUp.getPrice());
 			gallonsPurchased.setText("" + fillUp.getGas());
 			milesTraveled.setText("" + fillUp.getDistance());
 			date.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(fillUp.getDate()));
-			
 		}
 		
 		Calendar c = Calendar.getInstance();
@@ -184,10 +183,10 @@ public class ShowFillUpDialog extends Activity
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(R.layout.car_view_fragment_list_view, parent, false);
+			View rowView = inflater.inflate(R.layout.fillup_view_fragment_list_view, parent, false);
 
-			TextView title = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_title);
-			TextView description = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_description);
+			TextView title = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_title);
+			TextView description = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_description);
 
 			if ( values[position] == null ) {
 				title.setText("default");

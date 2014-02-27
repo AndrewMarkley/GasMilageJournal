@@ -6,18 +6,18 @@ public class Statistics
 	private double avgMPG = 0;
 	private double avgFuelCosts = 0;
 	private double avgMilesPerDollar = 0;
-	private double avgTimeBetweenstatisticss = 0;
-	private double avgMilesBetweenstatisticss = 0;
+	private double avgTimeBetweenFillUps = 0;
+	private double avgMilesBetweenFillUps = 0;
 	private double avgDollarPerDay = 0;
 	
-	public Statistics(int carId, double avgMPG, double avgFuelCosts, double avgMilesPerDollar, double avgTimeBetweenstatisticss, double avgMilesBetweenstatisticss, double avgDollarPerDay)
+	public Statistics(int carId, double avgMPG, double avgFuelCosts, double avgMilesPerDollar, double avgTimeBetweenFillUps, double avgMilesBetweenFillUps, double avgDollarPerDay)
 	{
 		this.carId = carId;
 		this.avgMPG = avgMPG;
 		this.avgFuelCosts = avgFuelCosts;
 		this.avgMilesPerDollar = avgMilesPerDollar;
-		this.avgTimeBetweenstatisticss = avgTimeBetweenstatisticss;
-		this.avgMilesBetweenstatisticss = avgMilesBetweenstatisticss;
+		this.avgTimeBetweenFillUps = avgTimeBetweenFillUps;
+		this.avgMilesBetweenFillUps = avgMilesBetweenFillUps;
 		this.avgDollarPerDay = avgDollarPerDay;
 	}
 	
@@ -33,11 +33,11 @@ public class Statistics
 	public double getAvgMilesPerDollar() { return avgMilesPerDollar; }
 	public void setAvgMilesPerDollar(double value) { this.avgMilesPerDollar = value; }
 	
-	public double getAvgTimeBetweenstatisticss() { return avgTimeBetweenstatisticss; }
-	public void setAvgTimeBetweenstatisticss(double value) { this.avgTimeBetweenstatisticss = value; }
+	public double getAvgTimeBetweenstatisticss() { return avgTimeBetweenFillUps; }
+	public void setAvgTimeBetweenstatisticss(double value) { this.avgTimeBetweenFillUps = value; }
 	
-	public double getAvgMilesBetweenstatisticss() { return avgMilesBetweenstatisticss; }
-	public void setAvgMilesBetweenstatisticss(double value) { this.avgMilesBetweenstatisticss = value; }
+	public double getAvgMilesBetweenstatisticss() { return avgMilesBetweenFillUps; }
+	public void setAvgMilesBetweenstatisticss(double value) { this.avgMilesBetweenFillUps = value; }
 	
 	public double getAvgDollarPerDay() { return avgDollarPerDay; }
 	public void setAvgDollarPerDay(double value) { this.avgDollarPerDay = value; }

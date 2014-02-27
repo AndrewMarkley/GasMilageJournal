@@ -5,29 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.ContextMenu;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.dialogs.ShowCarDialog;
 import com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog;
 import com.orangegames.gasmilagejournal.fillup.FillUp;
 
@@ -35,26 +33,27 @@ public class FillUpViewFragment extends Fragment
 {
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
-	
-	ListView listView = null;
+
+	ListView fillUpListView = null;
 	List<FillUp> fillUps = new ArrayList<FillUp>();
 	FillUpArrayAdapter fillUpArrayAdapter = null;
 	Button newFillUp = null;
+	View rootView = null;
 	
 	public FillUpViewFragment() {}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fillup_view_fragment, container, false);
-		listView = (ListView) rootView.findViewById(R.id.fill_view_fragment_list);
+		rootView = inflater.inflate(R.layout.fillup_view_fragment, container, false);
+		fillUpListView = (ListView) rootView.findViewById(R.id.fillup_view_fragment_list);
 		newFillUp = (Button) rootView.findViewById(R.id.fillup_view_fragment_new_fillup_button);
-		
+
 		refreshFillUpsList();
-		
+
 		newFillUp.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
@@ -63,7 +62,54 @@ public class FillUpViewFragment extends Fragment
 			}
 		});
 		
-		registerForContextMenu(listView);
+		fillUpListView.setLongClickable(true);
+		fillUpListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long arg3)
+			{
+				rootView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				final FillUp selectedFillUp = (FillUp) adapterView.getAdapter().getItem(pos);
+				final int positionInList = pos;
+				
+				final CharSequence[] items = {"Edit", "Delete", "Cancel"};
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle("Select an Option!");
+				
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int item) {
+				    	switch (item) {
+							case 0:
+								Intent intent = new Intent(getActivity(), ShowFillUpDialog.class);
+								intent.putExtra("newFillUp", false);
+								intent.putExtra("fillUp", selectedFillUp);
+								startActivityForResult(intent, 1);
+								break;
+							case 1:
+								try {
+									fillUpDatabaseHelper.getFillUpDao().delete(selectedFillUp);
+									fillUps.remove(positionInList);
+									refreshFillUpsList();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+								break;
+							case 2:
+								break;
+							default:
+						}
+				    }
+				});
+				
+				AlertDialog alert = builder.create();
+				alert.show();
+				
+				
+				return false;
+			}
+			
+		});
 
 		return rootView;
 	}
@@ -84,12 +130,12 @@ public class FillUpViewFragment extends Fragment
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.fillup_view_fragment_list_view, parent, false);
-			
+
 			TextView title = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_title);
 			TextView description = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_description);
-			
-			title.setText("car name");
-			description.setText(values[position].getComments());
+
+			title.setText("Fill Up List");
+			description.setText("Fill Up List");
 
 			// if (s.equals("WindowsMobile")) {
 			// imageView.setImageResource(R.drawable.windowsmobile_logo);
@@ -104,40 +150,38 @@ public class FillUpViewFragment extends Fragment
 			return rowView;
 		}
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		if (fillUpDatabaseHelper == null) {
+		if ( fillUpDatabaseHelper == null ) {
 			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(activity);
 		}
-		
+
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
 		}
 	}
-	
-	public void refreshFillUpsList() {
+
+	public void refreshFillUpsList()
+	{
 		try {
 			fillUps = fillUpDatabaseHelper.getFillUpDao().queryForAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		if ( fillUps == null ) {
-			// Force creation of a new car
-			Intent i = new Intent(getActivity(), ShowCarDialog.class);
-			startActivityForResult(i, 1);
-		} else {
-			FillUp[] temp = new FillUp[fillUps.size()]; 
-			fillUps.toArray(temp);
-
-			fillUpArrayAdapter = new FillUpArrayAdapter(getActivity(), temp);
-			listView.setAdapter(fillUpArrayAdapter);
+		if(fillUps.isEmpty()) {
+			return;
 		}
+		FillUp[] temp = new FillUp[fillUps.size()];
+		fillUps.toArray(temp);
+
+		fillUpArrayAdapter = new FillUpArrayAdapter(getActivity().getBaseContext(), temp);
+		fillUpListView.setAdapter(fillUpArrayAdapter);
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
@@ -149,44 +193,17 @@ public class FillUpViewFragment extends Fragment
 	}
 	
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		if ( v.getId() == R.id.fill_view_fragment_list ) {
-			menu.setHeaderTitle("Select an Option");
+	public void onDestroy() {
+		super.onDestroy();
 
-			String[] menuItems = { "Edit", "Delete", "Cancel" };
-			for ( int i = 0; i < menuItems.length; i++ ) {
-				menu.add(Menu.NONE, i, i, menuItems[i]);
-			}
+		if (carDatabaseHelper != null) {
+			carDatabaseHelper.close();
+			carDatabaseHelper = null;
+		}
+		if (fillUpDatabaseHelper != null) {
+			fillUpDatabaseHelper.close();
+			fillUpDatabaseHelper = null;
 		}
 	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		int menuItemIndex = item.getItemId();
-		FillUp selectedFillUp = fillUps.get(info.position);
-		
-		//{ "Edit", "Delete", "Cancel" }
-		switch(menuItemIndex) {
-			case 0: Intent intent = new Intent(getActivity(), ShowFillUpDialog.class);
-					intent.putExtra("newFillUp", false);
-					intent.putExtra("fillUp", selectedFillUp);
-					startActivityForResult(intent, 1);
-				break;
-			case 1: try {
-					fillUpDatabaseHelper.getFillUpDao().delete(selectedFillUp);
-					fillUps.remove(info.position);
-					refreshFillUpsList();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 2:
-				break;
-			default:
-		}
-		return true;
-	}
 }

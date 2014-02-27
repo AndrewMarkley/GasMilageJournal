@@ -150,4 +150,15 @@ public class ShowCarDialog extends Activity
 		}
 		return carDatabaseHelper;
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (carDatabaseHelper != null) {
+			carDatabaseHelper.close();
+			carDatabaseHelper = null;
+		}
+	}
+
 }

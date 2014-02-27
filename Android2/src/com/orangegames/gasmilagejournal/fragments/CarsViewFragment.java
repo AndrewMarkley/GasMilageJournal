@@ -5,19 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,7 +34,7 @@ public class CarsViewFragment extends Fragment
 {
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
-	ListView listView = null;
+	ListView carListView = null;
 	View rootView = null;
 	CarArrayAdapter carArrayAdapter = null;
 	List<Car> cars = new ArrayList<Car>();
@@ -45,7 +46,7 @@ public class CarsViewFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		rootView = inflater.inflate(R.layout.car_view_fragment, container, false);
-		listView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
+		carListView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
 		newCarButton = (Button) rootView.findViewById(R.id.car_view_fragment_new_car_button);
 
 		newCarButton.setOnClickListener(new OnClickListener()
@@ -53,6 +54,7 @@ public class CarsViewFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
+				Log.i("info", "Launching ShowCarDialog as an intent inside CarsViewFragment");
 				Intent i = new Intent(getActivity().getApplicationContext(), ShowCarDialog.class);
 				i.putExtra("new", true);
 				startActivityForResult(i, 1);
@@ -60,8 +62,52 @@ public class CarsViewFragment extends Fragment
 		});
 
 		refreshCarList();
-		registerForContextMenu(listView);
+		carListView.setLongClickable(true);
+		carListView.setOnItemLongClickListener(new OnItemLongClickListener()
+		{
 
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long arg3)
+			{
+				rootView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				final Car selectedCar = (Car) adapterView.getAdapter().getItem(pos);
+				final int positionInList = pos;
+				
+				final CharSequence[] items = {"Edit", "Delete", "Cancel"};
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle("Select an Option!");
+				
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int item) {
+				    	switch(item) {
+							case 0: Intent intent = new Intent(getActivity(), ShowCarDialog.class);
+									intent.putExtra("new", false);
+									intent.putExtra("car", selectedCar);
+									startActivityForResult(intent, 1);
+								break;
+							case 1: try {
+									carDatabaseHelper.getCarDao().delete(selectedCar);
+									cars.remove(positionInList);
+									refreshCarList();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+								break;
+							case 2:
+								break;
+							default:
+						}
+				    }
+				});
+				
+				AlertDialog alert = builder.create();
+				alert.show();
+				
+				
+				return false;
+			}
+			
+		});
 		return rootView;
 	}
 
@@ -90,7 +136,7 @@ public class CarsViewFragment extends Fragment
 				description.setText("default");
 			} else {
 				title.setText(values[position].getName());
-				description.setText(values[position].getName());
+				description.setText("Car List");
 			}
 
 			// if (s.equals("WindowsMobile")) {
@@ -146,51 +192,22 @@ public class CarsViewFragment extends Fragment
 			Car[] temp = new Car[cars.size()];
 			cars.toArray(temp);
 
-			carArrayAdapter = new CarArrayAdapter(getActivity(), temp);
-			listView.setAdapter(carArrayAdapter);
+			carArrayAdapter = new CarArrayAdapter(getActivity().getBaseContext(), temp);
+			carListView.setAdapter(carArrayAdapter);
 		}
 	}
-
+	
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
-		if ( v.getId() == R.id.car_view_fragment_list ) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			menu.setHeaderTitle("Select an Option");
+	public void onDestroy() {
+		super.onDestroy();
 
-			String[] menuItems = { "Edit", "Delete", "Cancel" };
-			for ( int i = 0; i < menuItems.length; i++ ) {
-				menu.add(Menu.NONE, i, i, menuItems[i]);
-			}
+		if (carDatabaseHelper != null) {
+			carDatabaseHelper.close();
+			carDatabaseHelper = null;
 		}
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		int menuItemIndex = item.getItemId();
-		Car selectedCar = cars.get(info.position);
-		
-		//{ "Edit", "Delete", "Cancel" }
-		switch(menuItemIndex) {
-			case 0: Intent intent = new Intent(getActivity(), ShowCarDialog.class);
-					intent.putExtra("new", false);
-					intent.putExtra("car", selectedCar);
-					startActivityForResult(intent, 1);
-				break;
-			case 1: try {
-					carDatabaseHelper.getCarDao().delete(selectedCar);
-					cars.remove(info.position);
-					refreshCarList();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 2:
-				break;
-			default:
+		if (fillUpDatabaseHelper != null) {
+			fillUpDatabaseHelper.close();
+			fillUpDatabaseHelper = null;
 		}
-		return true;
 	}
 }

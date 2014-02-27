@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -16,7 +16,7 @@
             android:id="@+id/detailed_fillup_form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add a Fill Up!"
+            android:text="@string/add_a_fill_up"
             android:textSize="10pt" />
 
         <Spinner
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Miles Traveled"
+            android:hint="@string/miles_traveled"
             android:inputType="numberDecimal" >
 
             <requestFocus />
@@ -41,14 +41,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Gallons Purchased"
+            android:hint="@string/gallons_purchased"
             android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/detailed_fillup_form_price_of_gas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Price per Gallon"
+            android:hint="@string/price_per_gallon"
             android:inputType="numberDecimal" >
         </EditText>
 
@@ -56,13 +56,13 @@
             android:id="@+id/detailed_fillup_form_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date" />
+            android:text="@string/date" />
 
         <EditText
             android:id="@+id/detailed_fillup_form_comments"
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:hint="Comments"
+            android:hint="@string/comments"
             android:inputType="textMultiLine"
             android:lines="5">
         </EditText>
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="sendFeedback"
-            android:text="Add Fill Up" >
+            android:text="@string/add_fill_up" >
         </Button>
     </LinearLayout>
 

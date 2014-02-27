@@ -27,7 +27,7 @@ public class CarDatabaseHelper extends OrmLiteSqliteOpenHelper
 	private static final String DATABASE_NAME = "CarDatabaseHelper.db";
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
-	private static final int DATABASE_VERSION = 15;
+	private static final int DATABASE_VERSION = 19;
 
 	// the DAO object we use to access the Car table
 	private Dao<Car, Integer> complexDao = null;

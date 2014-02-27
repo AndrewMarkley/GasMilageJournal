@@ -129,6 +129,7 @@ public class showFillUps extends Activity
 			}
 
 		});
+		
 		listView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 

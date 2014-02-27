@@ -1,5 +1,12 @@
 package com.orangegames.gasmilagejournal.fragments;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,31 +18,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.car.Car;
+import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
+import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
+import com.orangegames.gasmilagejournal.fillup.FillUp;
 import com.orangegames.gasmilagejournal.statistics.Statistics;
 
 public class StatisticsViewFragment extends Fragment
 {
 	public StatisticsViewFragment() {}
-	
-	private double avgMPG = 0;
-	private double avgFuelCosts = 0;
-	private double avgMilesPerDollar = 0;
-	private double avgTimeBetweenstatisticss = 0;
-	private double avgMilesBetweenstatisticss = 0;
-	private double avgDollarPerDay = 0;
+
+	private CarDatabaseHelper carDatabaseHelper = null;
+	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+
+	ListView listView = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.statistics_view_fragment, container, false);
 
-		ListView listView = (ListView) rootView.findViewById(R.id.statistics_view_fragment_list);
-		
-		Statistics[] statistics = {new Statistics(1, 1, 1, 1, 1, 1, 1), new Statistics(1, 1, 1, 1, 1, 1, 1)};
-		statisticsArrayAdapter adapter = new statisticsArrayAdapter(getActivity(), statistics);
-
 		listView = (ListView) rootView.findViewById(R.id.statistics_view_fragment_list);
-		listView.setAdapter(adapter);
+
+		refreshStatisticsList();
 
 		return rootView;
 	}
@@ -62,17 +67,75 @@ public class StatisticsViewFragment extends Fragment
 			TextView tv = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_description);
 			tv.setText("test stat");
 
-			// if (s.equals("WindowsMobile")) {
-			// imageView.setImageResource(R.drawable.windowsmobile_logo);
-			// } else if (s.equals("iOS")) {
-			// imageView.setImageResource(R.drawable.ios_logo);
-			// } else if (s.equals("Blackberry")) {
-			// imageView.setImageResource(R.drawable.blackberry_logo);
-			// } else {
-			// imageView.setImageResource(R.drawable.android_logo);
-			// }
-
 			return rowView;
 		}
+	}
+
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		if ( fillUpDatabaseHelper == null ) {
+			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(activity);
+		}
+
+		if ( carDatabaseHelper == null ) {
+			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
+		}
+	}
+
+	public void refreshStatisticsList()
+	{
+		List<Car> cars = null;
+		List<FillUp> fillUps = null;
+
+		try {
+			cars = carDatabaseHelper.getCarDao().queryForAll();
+			fillUps = fillUpDatabaseHelper.getFillUpDao().queryForAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Statistics[] statistics = new Statistics[cars.size()];
+		List<Statistics> stats = new ArrayList<Statistics>();
+
+		for ( Car car : cars ) {
+			double gallons = 0;
+			double distance = 0;
+			double spent = 0;
+			int numberOfFillUps = 0;
+
+			Date earliestDate = new Date();
+
+			for ( FillUp fu : fillUps ) {
+				if ( fu.getCarId() == car.getId() ) {
+					if ( earliestDate.after(fu.getDate()) ) {
+						earliestDate = fu.getDate();
+					}
+					gallons += fu.getGas();
+					distance += fu.getDistance();
+					spent += fu.getPrice();
+					numberOfFillUps++;
+				}
+			}
+			if ( numberOfFillUps > 0 ) {
+				int diffInDays = (int) ( ( Calendar.getInstance().getTime().getTime() - earliestDate.getTime() ) / ( 1000 * 60 * 60 * 24 ) );
+				double avgMPG = gallons / distance;
+				double avgFuelCosts = spent / diffInDays;
+				double avgMilesPerDollar = distance / spent;
+				double avgDollarPerDay = diffInDays / spent;
+				double avgTimeBetweenFillUps = diffInDays / numberOfFillUps;
+				double avgMilesBetweenFillUps = distance / numberOfFillUps;
+				stats.add(new Statistics(car.getId(), avgMPG, avgFuelCosts, avgMilesPerDollar, avgTimeBetweenFillUps, avgMilesBetweenFillUps, avgDollarPerDay));
+			} else {
+				stats.add(new Statistics(car.getId(), 0, 0, 0, 0, 0, 0));
+			}
+		}
+
+		stats.toArray(statistics);
+
+		statisticsArrayAdapter adapter = new statisticsArrayAdapter(getActivity(), statistics);
+
+		listView.setAdapter(adapter);
 	}
 }
