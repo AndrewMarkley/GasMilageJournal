@@ -83,6 +83,12 @@ public class ShowFillUpDialog extends Activity
 			title.setText("Modify a Fill Up!");
 			save.setText("Save Car");
 			fillUp = (FillUp) in.getSerializableExtra("fillUp");
+			comments.setText(fillUp.getComments());
+			pricePerGallon.setText("" + fillUp.getPrice());
+			gallonsPurchased.setText("" + fillUp.getGas());
+			milesTraveled.setText("" + fillUp.getDistance());
+			date.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(fillUp.getDate()));
+			
 		}
 		
 		Calendar c = Calendar.getInstance();
@@ -116,7 +122,9 @@ public class ShowFillUpDialog extends Activity
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString());
 						getFillUpDatabaseHelper().getFillUpDao().create(fillUp);
 					} else {
+						int fId = fillUp.getId();
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString());
+						fillUp.setId(fId);
 						getFillUpDatabaseHelper().getFillUpDao().update(fillUp);
 					}
 

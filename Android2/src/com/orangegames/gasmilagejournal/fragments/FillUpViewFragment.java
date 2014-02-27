@@ -9,16 +9,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.dialogs.ShowCarDialog;
@@ -56,6 +62,8 @@ public class FillUpViewFragment extends Fragment
 				startActivityForResult(intent, 1);
 			}
 		});
+		
+		registerForContextMenu(listView);
 
 		return rootView;
 	}
@@ -138,5 +146,47 @@ public class FillUpViewFragment extends Fragment
 			success = data.getBooleanExtra("success", success);
 		}
 		refreshFillUpsList();
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	{
+		if ( v.getId() == R.id.fill_view_fragment_list ) {
+			menu.setHeaderTitle("Select an Option");
+
+			String[] menuItems = { "Edit", "Delete", "Cancel" };
+			for ( int i = 0; i < menuItems.length; i++ ) {
+				menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item)
+	{
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		FillUp selectedFillUp = fillUps.get(info.position);
+		
+		//{ "Edit", "Delete", "Cancel" }
+		switch(menuItemIndex) {
+			case 0: Intent intent = new Intent(getActivity(), ShowFillUpDialog.class);
+					intent.putExtra("newFillUp", false);
+					intent.putExtra("fillUp", selectedFillUp);
+					startActivityForResult(intent, 1);
+				break;
+			case 1: try {
+					fillUpDatabaseHelper.getFillUpDao().delete(selectedFillUp);
+					fillUps.remove(info.position);
+					refreshFillUpsList();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				break;
+			case 2:
+				break;
+			default:
+		}
+		return true;
 	}
 }
