@@ -70,12 +70,10 @@ public class FillUpDatabaseHelper extends OrmLiteSqliteOpenHelper
 			Dao<FillUp, Integer> dao = getFillUpDao();
 			long millis = System.currentTimeMillis();
 			// create some entries in the onCreate
-			
-			int id = getNextId();
 
-			FillUp fillUp = new FillUp(id, 1, 300, 20.5, 2.99, Calendar.getInstance().getTime(), "comments");
+			FillUp fillUp = new FillUp(1, 300, 20.5, 2.99, Calendar.getInstance().getTime(), "comments");
 			dao.create(fillUp);
-			fillUp = new FillUp(id, 1, 301, 20.6, 2.98, Calendar.getInstance().getTime(), "comments1");
+			fillUp = new FillUp(1, 301, 20.6, 2.98, Calendar.getInstance().getTime(), "comments1");
 			dao.update(fillUp);
 			Log.i(FillUpDatabaseHelper.class.getName(), "created new FillUp entries in onCreate: " + millis);
 		} catch (SQLException e) {

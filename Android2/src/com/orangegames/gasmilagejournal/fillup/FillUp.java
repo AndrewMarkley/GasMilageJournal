@@ -42,8 +42,7 @@ public class FillUp implements Serializable
 
 	}
 
-	public FillUp(int id, int carId, double distance, double gas, double price, Date date, String comments) {
-		this.id = id;
+	public FillUp(int carId, double distance, double gas, double price, Date date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -54,8 +53,7 @@ public class FillUp implements Serializable
 		this.carId = carId;
 	}
 
-	public FillUp(int id, int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
-		this.id = id;
+	public FillUp(int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);

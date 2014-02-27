@@ -26,6 +26,10 @@
 			android:name="com.orangegames.gasmilagejournal.dialogs.ShowCarDialog"
 			android:screenOrientation="portrait" >
 		</activity>
+		<activity
+			android:name="com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog"
+			android:screenOrientation="portrait" >
+		</activity>
     </application>
 
 </manifest>

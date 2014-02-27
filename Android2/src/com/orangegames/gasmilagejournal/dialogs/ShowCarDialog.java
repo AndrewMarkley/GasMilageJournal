@@ -63,6 +63,12 @@ public class ShowCarDialog extends Activity
 			title.setText("Modify your Car!");
 			save.setText("Save Car");
 			car = (Car) in.getSerializableExtra("car");
+			nickname.setText(car.getName());
+			make.setText(car.getMake());
+			model.setText(car.getModel());
+			odometer.setText(""+car.getMilage());
+			year.setSelection((car.getYear() - 1960));
+			
 		}
 
 		save.setOnClickListener(new View.OnClickListener()
@@ -81,7 +87,9 @@ public class ShowCarDialog extends Activity
 						car = new Car(nickname.getText().toString(), year, make.getText().toString(), model.getText().toString(), odometer);
 						getCarDatabaseHelper().getCarDao().create(car);
 					} else {
+						int carId = car.getId();
 						car = new Car(nickname.getText().toString(), year, make.getText().toString(), model.getText().toString(), odometer);
+						car.setId(carId);
 						getCarDatabaseHelper().getCarDao().update(car);
 					}
 
@@ -100,35 +108,6 @@ public class ShowCarDialog extends Activity
 		});
 
 	}
-
-	// public void onClick(View v)
-	// {
-	// if ( v.getId() == nickname.getId() &&
-	// nickname.getText().toString().length() > 0 ) {
-	// nickname.setText(nickname.getText().toString());
-	// }
-	//
-	// if ( v.getId() == make.getId() && make.getText().toString().length() > 0
-	// ) {
-	// make.setText(make.getText().toString());
-	// }
-	//
-	// if ( v.getId() == model.getId() && model.getText().toString().length() >
-	// 0 ) {
-	// model.setText(model.getText().toString());
-	// }
-	//
-	// if ( v.getId() == odometer.getId() &&
-	// odometer.getText().toString().length() > 0 ) {
-	// System.out.println("odometer before: " + odometer.getText());
-	// odometer.setText(odometer.getText().toString());
-	// System.out.println("odometer after: " + odometer.getText());
-	// }
-	//
-	// if ( v.getId() == year.getId() && year.getText().toString().length() > 0
-	// )
-	// year.setText(year.getText().toString());
-	// }
 
 	public void noCarExistsAlert()
 	{

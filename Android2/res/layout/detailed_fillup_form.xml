@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/detailed_car_form"
+    android:id="@+id/detailed_fillup_form"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:scrollbars="vertical">
@@ -9,72 +9,70 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/detailed_car_form_title"
+            android:id="@+id/detailed_fillup_form_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create a New Car!"
+            android:text="Add a Fill Up!"
             android:textSize="10pt" />
 
+        <Spinner
+            android:id="@+id/detailed_fillup_form_car"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:prompt="@string/detailed_car_form_car_name" />
+
         <EditText
-            android:id="@+id/detailed_car_form_nickname"
+            android:id="@+id/detailed_fillup_form_miles_traveled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Car Nickname"
-            android:inputType="textPersonName" >
+            android:hint="Miles Traveled"
+            android:inputType="numberDecimal" >
 
             <requestFocus />
         </EditText>
 
         <EditText
-            android:id="@+id/detailed_car_form_make"
+            android:id="@+id/detailed_fillup_form_gallons_purchased"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Car Make"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/detailed_car_form_model"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Car Model"
-            android:inputType="textEmailAddress" >
-        </EditText>
-
-        <Spinner
-            android:id="@+id/detailed_car_form_year"
-            android:layout_width="match_parent"
-            android:layout_height="61dp"
-            android:prompt="@string/detailed_car_form_car_name" >
-        </Spinner>
-
-        <EditText
-            android:id="@+id/detailed_car_form_odometer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Odometer"
+            android:hint="Gallons Purchased"
             android:inputType="numberDecimal" />
 
         <EditText
-            android:id="@+id/detailed_car_form_comments"
+            android:id="@+id/detailed_fillup_form_price_of_gas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price per Gallon"
+            android:inputType="numberDecimal" >
+        </EditText>
+
+        <Button
+            android:id="@+id/detailed_fillup_form_date_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date" />
+
+        <EditText
+            android:id="@+id/detailed_fillup_form_comments"
             android:layout_width="310dp"
             android:layout_height="wrap_content"
             android:hint="Comments"
             android:inputType="textMultiLine"
-            android:lines="5" >
+            android:lines="5">
         </EditText>
 
         <Button
-            android:id="@+id/detailed_car_form_save_button"
+            android:id="@+id/detailed_fillup_form_save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="sendFeedback"
-            android:text="Save!" >
+            android:text="Add Fill Up" >
         </Button>
     </LinearLayout>
 

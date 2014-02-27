@@ -9,10 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,7 +38,7 @@ public class CarsViewFragment extends Fragment
 	CarArrayAdapter carArrayAdapter = null;
 	List<Car> cars = new ArrayList<Car>();
 	Button newCarButton = null;
-	
+
 	public CarsViewFragment() {}
 
 	@Override
@@ -53,9 +58,10 @@ public class CarsViewFragment extends Fragment
 				startActivityForResult(i, 1);
 			}
 		});
-		
+
 		refreshCarList();
-		
+		registerForContextMenu(listView);
+
 		return rootView;
 	}
 
@@ -75,11 +81,11 @@ public class CarsViewFragment extends Fragment
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.car_view_fragment_list_view, parent, false);
-			
+
 			TextView title = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_title);
 			TextView description = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_description);
-			
-			if(values[position] == null) {
+
+			if ( values[position] == null ) {
 				title.setText("default");
 				description.setText("default");
 			} else {
@@ -105,10 +111,10 @@ public class CarsViewFragment extends Fragment
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		if (fillUpDatabaseHelper == null) {
+		if ( fillUpDatabaseHelper == null ) {
 			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(activity);
 		}
-		
+
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
 		}
@@ -123,8 +129,9 @@ public class CarsViewFragment extends Fragment
 		}
 		refreshCarList();
 	}
-	
-	public void refreshCarList() {
+
+	public void refreshCarList()
+	{
 		try {
 			cars = carDatabaseHelper.getCarDao().queryForAll();
 		} catch (SQLException e) {
@@ -136,13 +143,54 @@ public class CarsViewFragment extends Fragment
 			Intent i = new Intent(getActivity(), ShowCarDialog.class);
 			startActivityForResult(i, 1);
 		} else {
-			Car[] temp = new Car[cars.size()]; 
+			Car[] temp = new Car[cars.size()];
 			cars.toArray(temp);
 
 			carArrayAdapter = new CarArrayAdapter(getActivity(), temp);
 			listView.setAdapter(carArrayAdapter);
 		}
 	}
-	
-	
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	{
+		if ( v.getId() == R.id.car_view_fragment_list ) {
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+			menu.setHeaderTitle("Select an Option");
+
+			String[] menuItems = { "Edit", "Delete", "Cancel" };
+			for ( int i = 0; i < menuItems.length; i++ ) {
+				menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item)
+	{
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		Car selectedCar = cars.get(info.position);
+		
+		//{ "Edit", "Delete", "Cancel" }
+		switch(menuItemIndex) {
+			case 0: Intent intent = new Intent(getActivity(), ShowCarDialog.class);
+					intent.putExtra("new", false);
+					intent.putExtra("car", selectedCar);
+					startActivityForResult(intent, 1);
+				break;
+			case 1: try {
+					carDatabaseHelper.getCarDao().delete(selectedCar);
+					cars.remove(info.position);
+					refreshCarList();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				break;
+			case 2:
+				break;
+			default:
+		}
+		return true;
+	}
 }
