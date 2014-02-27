@@ -1,6 +1,7 @@
 package com.orangegames.gasmilagejournal.fragments;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -28,20 +29,22 @@ public class CarsViewFragment extends Fragment
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
 	ListView listView = null;
-
+	View rootView = null;
+	CarArrayAdapter carArrayAdapter = null;
+	List<Car> cars = new ArrayList<Car>();
+	Button newCarButton = null;
+	
 	public CarsViewFragment() {}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.car_view_fragment, container, false);
-
+		rootView = inflater.inflate(R.layout.car_view_fragment, container, false);
 		listView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
-		Button newCarButton = (Button) rootView.findViewById(R.id.car_view_fragment_new_car_button);
+		newCarButton = (Button) rootView.findViewById(R.id.car_view_fragment_new_car_button);
 
 		newCarButton.setOnClickListener(new OnClickListener()
 		{
-
 			@Override
 			public void onClick(View v)
 			{
@@ -51,28 +54,8 @@ public class CarsViewFragment extends Fragment
 			}
 		});
 		
-		fillUpDatabaseHelper.getWritableDatabase();
-		List<Car> cars = null;
-		try {
-			cars = carDatabaseHelper.getCarDao().queryForAll();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		if ( cars == null ) {
-			// Force creation of a new car
-			Intent i = new Intent(getActivity(), ShowCarDialog.class);
-			startActivityForResult(i, 1);
-		} else {
-			Car[] temp = new Car[cars.size()]; 
-			cars.toArray(temp);
-			System.err.println(temp.length);
-			CarArrayAdapter adapter = new CarArrayAdapter(getActivity(), temp);
-
-			listView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
-			listView.setAdapter(adapter);
-		}
-
+		refreshCarList();
+		
 		return rootView;
 	}
 
@@ -92,10 +75,9 @@ public class CarsViewFragment extends Fragment
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.car_view_fragment_list_view, parent, false);
+			
 			TextView title = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_title);
 			TextView description = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_description);
-			
-			System.err.println("position = " + position);
 			
 			if(values[position] == null) {
 				title.setText("default");
@@ -138,18 +120,29 @@ public class CarsViewFragment extends Fragment
 		if ( requestCode == android.app.Activity.RESULT_OK ) {
 			boolean success = false;
 			success = data.getBooleanExtra("success", success);
-			if(success) {
-				List<Car> cars = null;
-				try {
-					cars = carDatabaseHelper.getCarDao().queryForAll();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-				CarArrayAdapter adapter = new CarArrayAdapter(getActivity(), (Car[]) cars.toArray());
-				listView.setAdapter(adapter);
-			}
+		}
+		refreshCarList();
+	}
+	
+	public void refreshCarList() {
+		try {
+			cars = carDatabaseHelper.getCarDao().queryForAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
+		if ( cars == null ) {
+			// Force creation of a new car
+			Intent i = new Intent(getActivity(), ShowCarDialog.class);
+			startActivityForResult(i, 1);
+		} else {
+			Car[] temp = new Car[cars.size()]; 
+			cars.toArray(temp);
+
+			carArrayAdapter = new CarArrayAdapter(getActivity(), temp);
+			listView.setAdapter(carArrayAdapter);
+		}
 	}
+	
+	
 }
