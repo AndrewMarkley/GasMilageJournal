@@ -1,5 +1,7 @@
 package com.orangegames.gasmilagejournal.dialogs;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -45,10 +47,10 @@ public class ShowCarDialog extends Activity
 		year = (Spinner) findViewById(R.id.detailed_car_form_year);
 		save = (Button) findViewById(R.id.detailed_car_form_save_button);
 
-		String[] yearSpan = new String[74];
-
-		for ( int ctr = 1960; ctr < 2014; ctr++ ) {
-			yearSpan[ctr - 1960] = ""+ctr;
+		String[] yearSpan = new String[Calendar.getInstance().getTime().getYear() + 1901 - 1960];
+		int i = 1960;
+		for ( int ctr = yearSpan.length - 1; ctr >= 0; ctr-- ) {
+			yearSpan[ctr] = "" + i++;
 		}
 
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearSpan);

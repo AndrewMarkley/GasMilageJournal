@@ -128,16 +128,14 @@ public class CarsViewFragment extends Fragment
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.car_view_fragment_list_view, parent, false);
 
-			TextView title = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_title);
-			TextView description = (TextView) rowView.findViewById(R.id.car_view_fragment_list_view_description);
+			TextView title = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_name);
+			TextView info = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_info);
+			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_odometer);
 
-			if ( values[position] == null ) {
-				title.setText("default");
-				description.setText("default");
-			} else {
-				title.setText(values[position].getName());
-				description.setText("Car List");
-			}
+			Car c = values[position];
+			title.setText(c.getName());
+			info.setText(c.getYear() + " " + c.getMake() + " " + c.getModel());
+			odometer.setText("" + c.getMilage());
 
 			// if (s.equals("WindowsMobile")) {
 			// imageView.setImageResource(R.drawable.windowsmobile_logo);

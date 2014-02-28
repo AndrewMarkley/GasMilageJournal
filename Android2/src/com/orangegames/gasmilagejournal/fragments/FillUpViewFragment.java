@@ -1,8 +1,10 @@
 package com.orangegames.gasmilagejournal.fragments;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -131,21 +133,13 @@ public class FillUpViewFragment extends Fragment
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.fillup_view_fragment_list_view, parent, false);
 
-			TextView title = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_title);
-			TextView description = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_description);
+			TextView date = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_date);
+			TextView fillUpInfo = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_info);
+			TextView mpg = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_mpg);
 
-			title.setText("Fill Up List");
-			description.setText("Fill Up List");
-
-			// if (s.equals("WindowsMobile")) {
-			// imageView.setImageResource(R.drawable.windowsmobile_logo);
-			// } else if (s.equals("iOS")) {
-			// imageView.setImageResource(R.drawable.ios_logo);
-			// } else if (s.equals("Blackberry")) {
-			// imageView.setImageResource(R.drawable.blackberry_logo);
-			// } else {
-			// imageView.setImageResource(R.drawable.android_logo);
-			// }
+			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(values[position].getDate()));
+			fillUpInfo.setText("Gallons: " + values[position].getGas() + " Distance: " + values[position].getDistance());
+			mpg.setText("MPG: " + values[position] + " Cost: " + (values[position].getPrice() * values[position].getGas()));
 
 			return rowView;
 		}

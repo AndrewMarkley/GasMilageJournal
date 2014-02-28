@@ -62,11 +62,28 @@ public class StatisticsViewFragment extends Fragment
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			View rowView = inflater.inflate(R.layout.statistics_view_fragment_list_view, parent, false);
-			TextView textView = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_title);
-			textView.setText("car name");
-			TextView tv = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_description);
-			tv.setText("test stat");
+			TextView carName = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_car_name);
+			TextView avgMpg = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_mpg);
+			TextView avgMilesBetweenFillups = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_miles_between_fillups);
+			TextView avgDollarsPerDay = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_dolalrs_per_day);
+			TextView avgMilesPerDollar = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_miles_per_dollar);
+			TextView avgFuelCost = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_fuel_cost);
+			TextView avgTimeBetween = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_time_between_fillups);
 
+			Statistics temp = values[position];
+			
+			try {
+				carName.setText(carDatabaseHelper.getCarDao().queryForId(temp.getCarId()).getName());
+			} catch (SQLException e) {
+				carName.setText("Car");
+			}
+			avgMpg.setText("Avg MPG: " + temp.getAvgMPG());
+			avgMilesBetweenFillups.setText("Avg Miles Between Fill Ups: " + temp.getAvgMilesBetweenFillUps());
+			avgDollarsPerDay.setText("Avg Dollars Per Day: " + temp.getAvgDollarPerDay());
+			avgMilesPerDollar.setText("Avg Miles Per Dollar: " + temp.getAvgMilesPerDollar());
+			avgFuelCost.setText("Avg Fuel Cost: " + temp.getAvgFuelCosts());
+			avgTimeBetween.setText("Avg Time Between Fill Ups: " + temp.getAvgTimeBetweenFillUps());
+			
 			return rowView;
 		}
 	}

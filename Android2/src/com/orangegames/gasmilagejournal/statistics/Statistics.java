@@ -33,11 +33,11 @@ public class Statistics
 	public double getAvgMilesPerDollar() { return avgMilesPerDollar; }
 	public void setAvgMilesPerDollar(double value) { this.avgMilesPerDollar = value; }
 	
-	public double getAvgTimeBetweenstatisticss() { return avgTimeBetweenFillUps; }
-	public void setAvgTimeBetweenstatisticss(double value) { this.avgTimeBetweenFillUps = value; }
+	public double getAvgTimeBetweenFillUps() { return avgTimeBetweenFillUps; }
+	public void setAvgTimeBetweenFillUps(double value) { this.avgTimeBetweenFillUps = value; }
 	
-	public double getAvgMilesBetweenstatisticss() { return avgMilesBetweenFillUps; }
-	public void setAvgMilesBetweenstatisticss(double value) { this.avgMilesBetweenFillUps = value; }
+	public double getAvgMilesBetweenFillUps() { return avgMilesBetweenFillUps; }
+	public void setAvgMilesBetweenFillUps(double value) { this.avgMilesBetweenFillUps = value; }
 	
 	public double getAvgDollarPerDay() { return avgDollarPerDay; }
 	public void setAvgDollarPerDay(double value) { this.avgDollarPerDay = value; }

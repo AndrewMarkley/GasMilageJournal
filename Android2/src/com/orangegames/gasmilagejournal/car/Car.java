@@ -1,11 +1,10 @@
 package com.orangegames.gasmilagejournal.car;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.orangegames.gasmilagejournal.fillup.FillUp;
 
 @DatabaseTable(tableName = "Cars")
 public class Car implements Serializable
@@ -28,7 +27,7 @@ public class Car implements Serializable
 	private String model = "";
 	
 	@DatabaseField(canBeNull = false)
-	private double milage = 0;
+	private double milage = 0;	
 
 	public Car()
 	{
@@ -64,12 +63,7 @@ public class Car implements Serializable
 	@Override
 	public String toString()
 	{
-		return "Year: " + year + " make: " + make + " model: " + model + " mileage: " + milage + " name: " + name;
-	}
-
-	public String toOutputFileString()
-	{
-		return "" + name + " , " + year + " , " + make + " , " + model + " , " + milage;
+		return name + " " + year + " " + make + " " + model + " " + " miles: " + milage;
 	}
 
 }

@@ -89,13 +89,13 @@ public class ShowFillUpDialog extends Activity
 			milesTraveled.setText("" + fillUp.getDistance());
 			date.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(fillUp.getDate()));
 		}
-		
+
 		Calendar c = Calendar.getInstance();
 		int mYear = c.get(Calendar.YEAR);
 		int mMonth = c.get(Calendar.MONTH);
 		int mDay = c.get(Calendar.DAY_OF_MONTH);
 		final DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
-		
+
 		date.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -183,29 +183,11 @@ public class ShowFillUpDialog extends Activity
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(R.layout.fillup_view_fragment_list_view, parent, false);
+			View rowView = inflater.inflate(R.layout.spinner_view, parent, false);
 
-			TextView title = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_title);
-			TextView description = (TextView) rowView.findViewById(R.id.fillup_view_fragment_list_view_description);
-
-			if ( values[position] == null ) {
-				title.setText("default");
-				description.setText("default");
-			} else {
-				title.setText(values[position].getName());
-				description.setText(values[position].getName());
-			}
-
-			// if (s.equals("WindowsMobile")) {
-			// imageView.setImageResource(R.drawable.windowsmobile_logo);
-			// } else if (s.equals("iOS")) {
-			// imageView.setImageResource(R.drawable.ios_logo);
-			// } else if (s.equals("Blackberry")) {
-			// imageView.setImageResource(R.drawable.blackberry_logo);
-			// } else {
-			// imageView.setImageResource(R.drawable.android_logo);
-			// }
-
+			TextView title = (TextView) rowView.findViewById(R.id.spinner_title);
+			title.setText(values[position].getName());
+			
 			return rowView;
 		}
 	}
@@ -215,7 +197,7 @@ public class ShowFillUpDialog extends Activity
 		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day)
 		{
-			date.setText(month+1 + "/" + day + "/" + year);
+			date.setText(month + 1 + "/" + day + "/" + year);
 		}
 	};
 }
