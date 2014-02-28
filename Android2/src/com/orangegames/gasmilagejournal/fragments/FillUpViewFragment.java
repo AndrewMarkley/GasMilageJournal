@@ -137,9 +137,10 @@ public class FillUpViewFragment extends Fragment
 			TextView fillUpInfo = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_info);
 			TextView mpg = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_mpg);
 
-			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(values[position].getDate()));
-			fillUpInfo.setText("Gallons: " + values[position].getGas() + " Distance: " + values[position].getDistance());
-			mpg.setText("MPG: " + values[position] + " Cost: " + (values[position].getPrice() * values[position].getGas()));
+			FillUp temp = values[position];
+			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(temp.getDate()));
+			fillUpInfo.setText("Gallons: " + temp.getGas() + " Distance: " + temp.getDistance());
+			mpg.setText("MPG: " + temp.getMPG()  + " Cost: " + (values[position].getPrice() * temp.getGas()));
 
 			return rowView;
 		}

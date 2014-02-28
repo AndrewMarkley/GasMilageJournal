@@ -137,12 +137,12 @@ public class StatisticsViewFragment extends Fragment
 			}
 			if ( numberOfFillUps > 0 ) {
 				int diffInDays = (int) ( ( Calendar.getInstance().getTime().getTime() - earliestDate.getTime() ) / ( 1000 * 60 * 60 * 24 ) );
-				double avgMPG = gallons / distance;
-				double avgFuelCosts = spent / diffInDays;
-				double avgMilesPerDollar = distance / spent;
-				double avgDollarPerDay = diffInDays / spent;
-				double avgTimeBetweenFillUps = diffInDays / numberOfFillUps;
-				double avgMilesBetweenFillUps = distance / numberOfFillUps;
+				double avgMPG = round(gallons / distance);
+				double avgFuelCosts = round(spent / (diffInDays + 1));
+				double avgMilesPerDollar = round(distance / spent);
+				double avgDollarPerDay = round(diffInDays / spent);
+				double avgTimeBetweenFillUps = round(diffInDays / numberOfFillUps);
+				double avgMilesBetweenFillUps = round(distance / numberOfFillUps);
 				stats.add(new Statistics(car.getId(), avgMPG, avgFuelCosts, avgMilesPerDollar, avgTimeBetweenFillUps, avgMilesBetweenFillUps, avgDollarPerDay));
 			} else {
 				stats.add(new Statistics(car.getId(), 0, 0, 0, 0, 0, 0));
@@ -154,5 +154,9 @@ public class StatisticsViewFragment extends Fragment
 		statisticsArrayAdapter adapter = new statisticsArrayAdapter(getActivity(), statistics);
 
 		listView.setAdapter(adapter);
+	}
+	
+	private double round(double x) {
+		return ((int)(x * 100)) / 100.0;
 	}
 }
