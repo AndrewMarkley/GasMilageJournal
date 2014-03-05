@@ -3,6 +3,7 @@ package com.orangegames.gasmilagejournal.fillup;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -38,11 +39,14 @@ public class FillUp implements Serializable
 	@DatabaseField(canBeNull = false)
 	int carId = 0;
 	
+	@DatabaseField(dataType = DataType.BYTE_ARRAY)
+	byte[] receipt;
+	
 	public FillUp() {
 
 	}
 
-	public FillUp(int carId, double distance, double gas, double price, Date date, String comments) {
+	public FillUp(int carId, double distance, double gas, double price, Date date, String comments, byte[] receipt) {
 		this.distance = distance;
 		this.gas = gas;
 		this.price = round(price, 2);
@@ -51,6 +55,7 @@ public class FillUp implements Serializable
 		this.totalCost = gas * price;
 		this.date = date;
 		this.carId = carId;
+		this.receipt = receipt;
 	}
 
 	public FillUp(int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
@@ -90,6 +95,9 @@ public class FillUp implements Serializable
 
 	public double getMPG() { return mpg; }
 	public void setMPG(double value) { this.mpg = value; }
+	
+	public byte[] getReceipt() { return receipt; }
+	public void setReceipt(byte[] value) { this.receipt = value; }
 
 	public double round(double value, int places)
 	{

@@ -168,11 +168,16 @@ public class FillUpViewFragment extends Fragment
 		}
 
 		if(fillUps.isEmpty()) {
+			fillUpListView.invalidate();
+			fillUpListView.setVisibility(View.GONE);
 			return;
+		} else {
+			fillUpListView.setVisibility(View.VISIBLE);
 		}
 		FillUp[] temp = new FillUp[fillUps.size()];
 		fillUps.toArray(temp);
 
+		fillUpListView.invalidate();
 		fillUpArrayAdapter = new FillUpArrayAdapter(getActivity().getBaseContext(), temp);
 		fillUpListView.setAdapter(fillUpArrayAdapter);
 	}
@@ -181,8 +186,7 @@ public class FillUpViewFragment extends Fragment
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if ( requestCode == android.app.Activity.RESULT_OK ) {
-			boolean success = false;
-			success = data.getBooleanExtra("success", success);
+
 		}
 		refreshFillUpsList();
 	}

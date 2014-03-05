@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/detailed_fillup_form"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:scrollbars="vertical">
+    android:scrollbars="vertical"
+    android:visibility="visible" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,13 +58,29 @@
             android:layout_height="wrap_content"
             android:text="@string/date" />
 
+        <Button
+            android:id="@+id/detailed_fill_up_receipt_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_a_picture_of_receipt"
+            android:textSize="6pt" >
+        </Button>
+
+        <view
+            android:id="@+id/detailed_fill_up_receipt_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitEnd"
+            android:adjustViewBounds="true"
+            class="ImageView" />
+
         <EditText
             android:id="@+id/detailed_fillup_form_comments"
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/comments"
             android:inputType="textMultiLine"
-            android:lines="5">
+            android:lines="5" >
         </EditText>
 
         <Button

@@ -1,5 +1,6 @@
 package com.orangegames.gasmilagejournal.dialogs;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,16 +10,23 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,13 +39,16 @@ import com.orangegames.gasmilagejournal.fillup.FillUp;
 
 public class ShowFillUpDialog extends Activity
 {
+	public static final int CAMERA_REQUEST = 1888;
 	Intent in;
 	boolean success = false;
 	boolean newFillUp = true;
 	TextView milesTraveled, gallonsPurchased, pricePerGallon, comments, title;
 	Spinner carList;
-	Button save, date;
+	Button saveButton, dateButton, receiptButton;
 	FillUp fillUp;
+	ImageView receiptView;
+	byte[] receiptImage = null;
 
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
@@ -52,15 +63,17 @@ public class ShowFillUpDialog extends Activity
 
 		// initialize all the fields
 		title = (TextView) findViewById(R.id.detailed_fillup_form_title);
-		date = (Button) findViewById(R.id.detailed_fillup_form_date_button);
+		dateButton = (Button) findViewById(R.id.detailed_fillup_form_date_button);
 		milesTraveled = (TextView) findViewById(R.id.detailed_fillup_form_miles_traveled);
 		gallonsPurchased = (TextView) findViewById(R.id.detailed_fillup_form_gallons_purchased);
 		pricePerGallon = (TextView) findViewById(R.id.detailed_fillup_form_price_of_gas);
 		comments = (TextView) findViewById(R.id.detailed_fillup_form_comments);
 		carList = (Spinner) findViewById(R.id.detailed_fillup_form_car);
-		save = (Button) findViewById(R.id.detailed_fillup_form_save_button);
+		saveButton = (Button) findViewById(R.id.detailed_fillup_form_save_button);
+		receiptButton = (Button) findViewById(R.id.detailed_fill_up_receipt_button);
+		receiptView = (ImageView) findViewById(R.id.detailed_fill_up_receipt_view);
 
-		date.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(Calendar.getInstance().getTime()));
+		dateButton.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(Calendar.getInstance().getTime()));
 
 		List<Car> cars = new ArrayList<Car>();
 		try {
@@ -76,18 +89,22 @@ public class ShowFillUpDialog extends Activity
 		carArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		carList.setAdapter(carArrayAdapter);
 
-		// Adjust the title based on the action being done
 		if ( newFillUp ) {
 			title.setText("Add a Fill Up!");
 		} else {
 			title.setText("Modify a Fill Up!");
-			save.setText("Save Fill Up");
+			saveButton.setText("Save Fill Up");
 			fillUp = (FillUp) in.getSerializableExtra("fillUp");
 			comments.setText(fillUp.getComments());
 			pricePerGallon.setText("" + fillUp.getPrice());
 			gallonsPurchased.setText("" + fillUp.getGas());
 			milesTraveled.setText("" + fillUp.getDistance());
-			date.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(fillUp.getDate()));
+			dateButton.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(fillUp.getDate()));
+
+			if ( fillUp.getReceipt() != null ) {
+				Bitmap photo = BitmapFactory.decodeByteArray(fillUp.getReceipt(), 0, fillUp.getReceipt().length);
+				receiptView.setImageBitmap(photo);
+			}
 		}
 
 		Calendar c = Calendar.getInstance();
@@ -96,7 +113,52 @@ public class ShowFillUpDialog extends Activity
 		int mDay = c.get(Calendar.DAY_OF_MONTH);
 		final DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
 
-		date.setOnClickListener(new View.OnClickListener()
+		receiptView.setOnLongClickListener(new OnLongClickListener()
+		{
+
+			@Override
+			public boolean onLongClick(View v)
+			{
+				final CharSequence[] items = { "Delete Image", "Retake Image", "Cancel" };
+				AlertDialog.Builder builder = new AlertDialog.Builder(ShowFillUpDialog.this);
+				builder.setTitle("Select an Option!");
+
+				builder.setItems(items, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int item)
+					{
+						switch (item) {
+							case 0:
+								receiptImage = null;
+								receiptView.invalidate();
+								receiptView.setImageBitmap(null);
+								receiptView.setVisibility(View.GONE);
+								break;
+							case 1:
+								receiptButton.performClick();
+								break;
+							default:
+						}
+					}
+				});
+
+				AlertDialog alert = builder.create();
+				alert.show();
+				return false;
+			}
+		});
+
+		receiptButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(cameraIntent, CAMERA_REQUEST);
+			}
+		});
+
+		dateButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -105,7 +167,7 @@ public class ShowFillUpDialog extends Activity
 			}
 		});
 
-		save.setOnClickListener(new View.OnClickListener()
+		saveButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -115,14 +177,14 @@ public class ShowFillUpDialog extends Activity
 					Double distance = Double.parseDouble(milesTraveled.getText().toString());
 					Double price = Double.parseDouble(pricePerGallon.getText().toString());
 					Double gallons = Double.parseDouble(gallonsPurchased.getText().toString());
-					Date time = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(date.getText().toString());
+					Date time = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(dateButton.getText().toString());
 
 					if ( newFillUp ) {
-						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString());
+						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
 						getFillUpDatabaseHelper().getFillUpDao().create(fillUp);
 					} else {
 						int fId = fillUp.getId();
-						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString());
+						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
 						fillUp.setId(fId);
 						getFillUpDatabaseHelper().getFillUpDao().update(fillUp);
 					}
@@ -148,7 +210,7 @@ public class ShowFillUpDialog extends Activity
 	{
 		Intent returnIntent = new Intent();
 		returnIntent.putExtra("success", false);
-		setResult(RESULT_OK, returnIntent);
+		setResult(RESULT_CANCELED, returnIntent);
 		finish();
 	}
 
@@ -187,8 +249,29 @@ public class ShowFillUpDialog extends Activity
 
 			TextView title = (TextView) rowView.findViewById(R.id.spinner_title);
 			title.setText(values[position].getName());
-			
+
 			return rowView;
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if ( resultCode == RESULT_OK ) {
+
+			if ( requestCode == CAMERA_REQUEST ) {
+				Bitmap photo = (Bitmap) data.getExtras().get("data");
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+				receiptImage = bytes.toByteArray();
+				receiptView.setImageBitmap(photo);
+				receiptView.setVisibility(View.VISIBLE);
+			}
+
+		}
+
+		if ( resultCode == Activity.RESULT_CANCELED ) {
+
 		}
 	}
 
@@ -197,7 +280,7 @@ public class ShowFillUpDialog extends Activity
 		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day)
 		{
-			date.setText(month + 1 + "/" + day + "/" + year);
+			dateButton.setText(month + 1 + "/" + day + "/" + year);
 		}
 	};
 }

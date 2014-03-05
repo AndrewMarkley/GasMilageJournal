@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
 import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
@@ -21,9 +19,6 @@ public class MainActivity extends FragmentActivity
 
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
-	
-	private CarDatabaseHelper carDatabaseHelper = null;
-	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
 
 
 	@Override
@@ -37,7 +32,7 @@ public class MainActivity extends FragmentActivity
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		
-		mViewPager.setCurrentItem(2, false);
+		mViewPager.setCurrentItem(1, false);
 
 	}
 
@@ -86,7 +81,6 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public int getCount()
 		{
-			// Show 3 total pages.
 			return 3;
 		}
 

@@ -6,6 +6,7 @@
     <string name="title_section1">Statistics</string>
     <string name="title_section2">Fill Ups</string>
     <string name="title_section3">Cars</string>
+    <string name="title_section4">Trip Tracker</string>
     <string name="detailed_car_form_car_name">Car Nickname: </string>
     <string name="add_new_fill_up">Add new Fill Up</string>
     <string name="add_new_car">Add new Car</string>
@@ -25,5 +26,6 @@
     <string name="description">Description</string>
     <string name="example_application">Example application</string>
     <string name="todo">TODO</string>
+    <string name="add_a_picture_of_receipt">Add a picture of the receipt!</string>
 
 </resources>
