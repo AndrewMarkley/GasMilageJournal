@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.HapticFeedbackConstants;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -72,7 +72,6 @@ public class ShowFillUpDialog extends Activity
 		saveButton = (Button) findViewById(R.id.detailed_fillup_form_save_button);
 		receiptButton = (Button) findViewById(R.id.detailed_fill_up_receipt_button);
 		receiptView = (ImageView) findViewById(R.id.detailed_fill_up_receipt_view);
-
 		dateButton.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(Calendar.getInstance().getTime()));
 
 		List<Car> cars = new ArrayList<Car>();
@@ -119,6 +118,8 @@ public class ShowFillUpDialog extends Activity
 			@Override
 			public boolean onLongClick(View v)
 			{
+				Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				vibrator.vibrate(100);
 				final CharSequence[] items = { "Delete Image", "Retake Image", "Cancel" };
 				AlertDialog.Builder builder = new AlertDialog.Builder(ShowFillUpDialog.this);
 				builder.setTitle("Select an Option!");
@@ -261,8 +262,9 @@ public class ShowFillUpDialog extends Activity
 
 			if ( requestCode == CAMERA_REQUEST ) {
 				Bitmap photo = (Bitmap) data.getExtras().get("data");
+			    
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+				photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 				receiptImage = bytes.toByteArray();
 				receiptView.setImageBitmap(photo);
 				receiptView.setVisibility(View.VISIBLE);

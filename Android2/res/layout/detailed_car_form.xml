@@ -39,7 +39,7 @@
             android:layout_gravity="center_vertical"
             android:ems="10"
             android:hint="@string/car_make"
-            android:inputType="textEmailAddress" />
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/detailed_car_form_model"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:hint="@string/car_model"
-            android:inputType="textEmailAddress" >
+            android:inputType="textPersonName" >
         </EditText>
 
         <Spinner
@@ -65,7 +65,7 @@
             android:layout_gravity="center_vertical"
             android:ems="10"
             android:hint="@string/odometer"
-            android:inputType="numberDecimal" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/detailed_car_form_comments"

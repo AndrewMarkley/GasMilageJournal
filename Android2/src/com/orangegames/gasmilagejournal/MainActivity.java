@@ -13,6 +13,7 @@ import android.view.Menu;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
 import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
+import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment2;
 
 public class MainActivity extends FragmentActivity
 {
@@ -62,7 +63,7 @@ public class MainActivity extends FragmentActivity
 			args.putInt("section_number", position + 1);
 			switch (position) {
 				case 0:
-					fragment = new StatisticsViewFragment();
+					fragment = new StatisticsViewFragment2();
 					break;
 				case 1:
 					fragment = new FillUpViewFragment();
