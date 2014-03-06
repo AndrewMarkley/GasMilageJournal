@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
@@ -49,6 +51,10 @@ public class CarsViewFragment extends Fragment
 		carListView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
 		newCarButton = (Button) rootView.findViewById(R.id.car_view_fragment_new_car_button);
 
+		AdView adView = (AdView)rootView.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("89C5255F42662D2FCFD03698061CF86D").build();
+		adView.loadAd(adRequest);
+		
 		newCarButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -72,20 +78,24 @@ public class CarsViewFragment extends Fragment
 				rootView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				final Car selectedCar = (Car) adapterView.getAdapter().getItem(pos);
 				final int positionInList = pos;
-				
-				final CharSequence[] items = {"Edit", "Delete", "Cancel"};
+
+				final CharSequence[] items = { "Edit", "Delete", "Cancel" };
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Select an Option!");
-				
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
-				    	switch(item) {
-							case 0: Intent intent = new Intent(getActivity(), ShowCarDialog.class);
-									intent.putExtra("new", false);
-									intent.putExtra("car", selectedCar);
-									startActivityForResult(intent, 1);
+
+				builder.setItems(items, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int item)
+					{
+						switch (item) {
+							case 0:
+								Intent intent = new Intent(getActivity(), ShowCarDialog.class);
+								intent.putExtra("new", false);
+								intent.putExtra("car", selectedCar);
+								startActivityForResult(intent, 1);
 								break;
-							case 1: try {
+							case 1:
+								try {
 									carDatabaseHelper.getCarDao().delete(selectedCar);
 									cars.remove(positionInList);
 									refreshCarList();
@@ -97,16 +107,15 @@ public class CarsViewFragment extends Fragment
 								break;
 							default:
 						}
-				    }
+					}
 				});
-				
+
 				AlertDialog alert = builder.create();
 				alert.show();
-				
-				
+
 				return false;
 			}
-			
+
 		});
 		return rootView;
 	}
@@ -194,18 +203,19 @@ public class CarsViewFragment extends Fragment
 			carListView.setAdapter(carArrayAdapter);
 		}
 	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 
-		if (carDatabaseHelper != null) {
+	@Override
+	public void onDestroy()
+	{
+		if ( carDatabaseHelper != null ) {
 			carDatabaseHelper.close();
 			carDatabaseHelper = null;
 		}
-		if (fillUpDatabaseHelper != null) {
+		if ( fillUpDatabaseHelper != null ) {
 			fillUpDatabaseHelper.close();
 			fillUpDatabaseHelper = null;
 		}
+		super.onDestroy();
 	}
+
 }

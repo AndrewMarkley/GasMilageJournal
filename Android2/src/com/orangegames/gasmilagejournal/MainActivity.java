@@ -12,7 +12,6 @@ import android.view.Menu;
 
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
-import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment2;
 
 public class MainActivity extends FragmentActivity
@@ -20,7 +19,6 @@ public class MainActivity extends FragmentActivity
 
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -32,9 +30,8 @@ public class MainActivity extends FragmentActivity
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		
-		mViewPager.setCurrentItem(1, false);
 
+		mViewPager.setCurrentItem(1, false);
 	}
 
 	@Override
@@ -69,12 +66,13 @@ public class MainActivity extends FragmentActivity
 					fragment = new FillUpViewFragment();
 					break;
 				case 2:
-					fragment = new CarsViewFragment(); 
+					fragment = new CarsViewFragment();
 					break;
-				default: fragment = new Fragment();
+				default:
+					fragment = new Fragment();
 					break;
 			}
-			
+
 			fragment.setArguments(args);
 			return fragment;
 		}
@@ -99,5 +97,23 @@ public class MainActivity extends FragmentActivity
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
 	}
 }

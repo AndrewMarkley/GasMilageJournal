@@ -22,9 +22,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
@@ -41,7 +46,7 @@ public class FillUpViewFragment extends Fragment
 	FillUpArrayAdapter fillUpArrayAdapter = null;
 	Button newFillUp = null;
 	View rootView = null;
-	
+
 	public FillUpViewFragment() {}
 
 	@Override
@@ -51,6 +56,10 @@ public class FillUpViewFragment extends Fragment
 		fillUpListView = (ListView) rootView.findViewById(R.id.fillup_view_fragment_list);
 		newFillUp = (Button) rootView.findViewById(R.id.fillup_view_fragment_new_fillup_button);
 
+		AdView adView = (AdView)rootView.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("89C5255F42662D2FCFD03698061CF86D").build();
+		adView.loadAd(adRequest);
+		
 		refreshFillUpsList();
 
 		newFillUp.setOnClickListener(new OnClickListener()
@@ -63,7 +72,7 @@ public class FillUpViewFragment extends Fragment
 				startActivityForResult(intent, 1);
 			}
 		});
-		
+
 		fillUpListView.setLongClickable(true);
 		fillUpListView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
@@ -74,14 +83,16 @@ public class FillUpViewFragment extends Fragment
 				rootView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				final FillUp selectedFillUp = (FillUp) adapterView.getAdapter().getItem(pos);
 				final int positionInList = pos;
-				
-				final CharSequence[] items = {"Edit", "Delete", "Cancel"};
+
+				final CharSequence[] items = { "Edit", "Delete", "Cancel" };
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Select an Option!");
-				
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
-				    	switch (item) {
+
+				builder.setItems(items, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int item)
+					{
+						switch (item) {
 							case 0:
 								Intent intent = new Intent(getActivity(), ShowFillUpDialog.class);
 								intent.putExtra("newFillUp", false);
@@ -101,16 +112,15 @@ public class FillUpViewFragment extends Fragment
 								break;
 							default:
 						}
-				    }
+					}
 				});
-				
+
 				AlertDialog alert = builder.create();
 				alert.show();
-				
-				
+
 				return false;
 			}
-			
+
 		});
 
 		return rootView;
@@ -140,7 +150,7 @@ public class FillUpViewFragment extends Fragment
 			FillUp temp = values[position];
 			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(temp.getDate()));
 			fillUpInfo.setText("Gallons: " + temp.getGas() + " Distance: " + temp.getDistance());
-			mpg.setText("MPG: " + temp.getMPG()  + " Cost: " + (values[position].getPrice() * temp.getGas()));
+			mpg.setText("MPG: " + temp.getMPG() + " Cost: " + ( values[position].getPrice() * temp.getGas() ));
 
 			return rowView;
 		}
@@ -167,7 +177,7 @@ public class FillUpViewFragment extends Fragment
 			e.printStackTrace();
 		}
 
-		if(fillUps.isEmpty()) {
+		if ( fillUps.isEmpty() ) {
 			fillUpListView.invalidate();
 			fillUpListView.setVisibility(View.GONE);
 			return;
@@ -190,19 +200,32 @@ public class FillUpViewFragment extends Fragment
 		}
 		refreshFillUpsList();
 	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 
-		if (carDatabaseHelper != null) {
+	@Override
+	public void onDestroy()
+	{
+		if ( carDatabaseHelper != null ) {
 			carDatabaseHelper.close();
 			carDatabaseHelper = null;
 		}
-		if (fillUpDatabaseHelper != null) {
+		if ( fillUpDatabaseHelper != null ) {
 			fillUpDatabaseHelper.close();
 			fillUpDatabaseHelper = null;
 		}
+
+		super.onDestroy();
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 	}
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fillup_layout_linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom|top"
@@ -21,14 +22,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_new_fill_up" />
-        
+
         <ListView
             android:id="@+id/fillup_view_fragment_list"
             android:layout_width="match_parent"
             android:layout_height="438dp"
-            android:background="#00000000" >
+            android:background="#00000000" />
 
-    </ListView>
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a1507a731497aa5" />
 
     </LinearLayout>
 

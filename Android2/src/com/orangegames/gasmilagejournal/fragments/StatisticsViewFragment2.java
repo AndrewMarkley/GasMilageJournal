@@ -48,10 +48,10 @@ public class StatisticsViewFragment2 extends Fragment
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{	
+	{
 		View rootView = inflater.inflate(R.layout.statistics_view_fragment2, container, false);
 		carList = (Spinner) rootView.findViewById(R.id.statistics_view_fragment_car_spinner);
-		chartView = (LinearLayout) rootView.findViewById(R.id.chart_container);		
+		chartView = (LinearLayout) rootView.findViewById(R.id.chart_container);
 		
 		List<Car> cars = new ArrayList<Car>();
 		try {
@@ -66,9 +66,9 @@ public class StatisticsViewFragment2 extends Fragment
 
 		carArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		carList.setAdapter(carArrayAdapter);
-		
+
 		chartView.addView(getGraphicalView());
-		
+
 		carList.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
 
@@ -84,11 +84,11 @@ public class StatisticsViewFragment2 extends Fragment
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
+
 		return rootView;
 	}
 
@@ -109,11 +109,11 @@ public class StatisticsViewFragment2 extends Fragment
 	{
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		TimeSeries series = new TimeSeries("Date");
-		
-		if(carList.getSelectedItem() != null) {
+
+		if ( carList.getSelectedItem() != null ) {
 			Car car = (Car) carList.getSelectedItem();
 			List<FillUp> fillUps = null;
-			
+
 			try {
 				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
 				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
@@ -123,14 +123,14 @@ public class StatisticsViewFragment2 extends Fragment
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			int x = 0;
-			for(FillUp fu : fillUps) {
+			for ( FillUp fu : fillUps ) {
 				series.add(x++, fu.getMPG());
-				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() +")");
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
 			}
 		}
-		
+
 		dataset.addSeries(series);
 		return dataset;
 	}
@@ -152,8 +152,7 @@ public class StatisticsViewFragment2 extends Fragment
 		r.setFillBelowLine(false);
 		r.setFillPoints(true);
 		renderer.addSeriesRenderer(r);
-		
-		
+
 		XYMultipleSeriesDataset ds = getDemoDataset();
 		setChartSettings(renderer, ds.getSeriesAt(0).getMaxX(), ds.getSeriesAt(0).getMaxY(), "Date Filled Up", "MPG");
 		gview = ChartFactory.getLineChartView(getActivity(), ds, renderer);
@@ -174,7 +173,7 @@ public class StatisticsViewFragment2 extends Fragment
 		renderer.setShowGrid(true);
 		renderer.setZoomEnabled(false);
 		renderer.setInScroll(true);
-		
+
 		renderer.setXAxisMin(0);
 		renderer.setXAxisMax(xRange + 0.5);
 		renderer.setYAxisMin(0);
@@ -186,7 +185,7 @@ public class StatisticsViewFragment2 extends Fragment
 		super.onResume();
 		gview.repaint();
 	}
-	
+
 	private CarDatabaseHelper getCarDatabaseHelper()
 	{
 		if ( carDatabaseHelper == null ) {
@@ -222,7 +221,7 @@ public class StatisticsViewFragment2 extends Fragment
 
 			TextView title = (TextView) rowView.findViewById(R.id.spinner_title);
 			title.setText(values[position].getName());
-			
+
 			chartView.invalidate();
 			chartView.addView(getGraphicalView());
 			gview.repaint();
