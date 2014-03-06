@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="C:/Users/Andrew/Documents/libs/ormlite-android-4.48.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Andrew/Documents/libs/ormlite-core-4.48.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Andrew/Documents/libs/achartengine-1.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Andrew/Desktop/adt-bundle-windows-x86_64-20131030/adt-bundle-windows-x86_64-20131030/sdk/extras/google/google-play-services_lib/libs/google-play-services.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -11,6 +11,16 @@ import com.j256.ormlite.table.DatabaseTable;
 public class FillUp implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+	public static final String COLUMN_ID = "id";
+	public static final String COLUMN_DISTANCE = "distance";
+	public static final String COLUMN_GAS = "gas";
+	public static final String COLUMN_PRICE = "price";
+	public static final String COLUMN_TOTAL_COST = "totalCost";
+	public static final String COLUMN_MPG = "mpg";
+	public static final String COLUMN_COMMENTS = "comments";
+	public static final String COLUMN_DATE = "date";
+	public static final String COLUMN_CAR_ID = "carid";
+	public static final String COLUMN_RECEIPT = "receipt";
 
 	@DatabaseField(generatedId = true)
 	private int id = 0;
