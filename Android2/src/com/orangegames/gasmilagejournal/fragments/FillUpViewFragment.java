@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.HapticFeedbackConstants;
@@ -146,6 +147,22 @@ public class FillUpViewFragment extends Fragment
 			TextView mpg = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_mpg);
 			TextView cost = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_cost);
 			TextView distance = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_distance);
+			
+			if(position % 2 == 0) {
+				rowView.setBackgroundColor(Color.WHITE);
+				date.setTextColor(Color.BLACK);
+				carName.setTextColor(Color.BLACK);
+				mpg.setTextColor(Color.BLACK);
+				cost.setTextColor(Color.BLACK);
+				distance.setTextColor(Color.BLACK);
+			} else {
+				rowView.setBackgroundColor(Color.BLACK);
+				date.setTextColor(Color.WHITE);
+				carName.setTextColor(Color.WHITE);
+				mpg.setTextColor(Color.WHITE);
+				cost.setTextColor(Color.WHITE);
+				distance.setTextColor(Color.WHITE);
+			}
 
 			FillUp temp = values[position]; 
 			Car car = null;
