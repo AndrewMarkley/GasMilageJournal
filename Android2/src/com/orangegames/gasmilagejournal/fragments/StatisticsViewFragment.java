@@ -126,7 +126,7 @@ public class StatisticsViewFragment extends Fragment
 
 			for ( FillUp fu : fillUps ) {
 				if ( fu.getCarId() == car.getId() ) {
-					if ( earliestDate.after(fu.getDate()) ) {
+					if ( earliestDate.after(fu.getDate()) )  {
 						earliestDate = fu.getDate();
 					}
 					gallons += fu.getGas();

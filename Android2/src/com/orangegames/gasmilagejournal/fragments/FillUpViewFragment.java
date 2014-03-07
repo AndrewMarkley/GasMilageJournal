@@ -22,15 +22,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog;
@@ -144,13 +142,26 @@ public class FillUpViewFragment extends Fragment
 			View rowView = inflater.inflate(R.layout.fillup_view_fragment_list_view, parent, false);
 
 			TextView date = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_date);
-			TextView fillUpInfo = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_info);
+			TextView carName = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_car_name);
 			TextView mpg = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_mpg);
+			TextView cost = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_cost);
+			TextView distance = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_distance);
 
-			FillUp temp = values[position];
+			FillUp temp = values[position]; 
+			Car car = null;
+			try {
+				car = carDatabaseHelper.getCarDao().queryForId(temp.getCarId());
+				if(car != null) {
+					carName.setText(car.getName());
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(temp.getDate()));
-			fillUpInfo.setText("Gallons: " + temp.getGas() + " Distance: " + temp.getDistance());
-			mpg.setText("MPG: " + temp.getMPG() + " Cost: " + ( values[position].getPrice() * temp.getGas() ));
+			mpg.setText("" + round(temp.getMPG()));
+			cost.setText("$" + round(temp.getPrice() * temp.getGas()));
+			distance.setText(round(temp.getDistance()) + "mi");
 
 			return rowView;
 		}
@@ -226,6 +237,10 @@ public class FillUpViewFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
+	}
+	
+	private double round(double x) {
+		return ((int)(x * 100)) / 100.0;
 	}
 
 }

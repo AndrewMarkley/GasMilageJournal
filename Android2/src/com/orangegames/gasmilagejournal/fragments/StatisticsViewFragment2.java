@@ -77,7 +77,6 @@ public class StatisticsViewFragment2 extends Fragment
 			{
 				chartView.removeAllViews();
 				chartView.addView(getGraphicalView());
-				Log.i("info", "Repainting");
 			}
 
 			@Override
