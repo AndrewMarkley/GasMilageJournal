@@ -137,25 +137,18 @@ public class CarsViewFragment extends Fragment
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.car_view_fragment_list_view, parent, false);
 
-			TextView title = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_name);
-			TextView info = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_info);
-			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_odometer);
+			TextView carName = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_name);
+			TextView year = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_year);
+			TextView make = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_make);
+			TextView model = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_model);
+			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_odometer);
 
 			Car c = values[position];
-			title.setText(c.getName());
-			info.setText(c.getYear() + " " + c.getMake() + " " + c.getModel());
+			carName.setText(c.getName());
+			year.setText("" + c.getYear());
+			make.setText(c.getMake());
+			model.setText(c.getModel());
 			odometer.setText("" + c.getMilage());
-
-			// if (s.equals("WindowsMobile")) {
-			// imageView.setImageResource(R.drawable.windowsmobile_logo);
-			// } else if (s.equals("iOS")) {
-			// imageView.setImageResource(R.drawable.ios_logo);
-			// } else if (s.equals("Blackberry")) {
-			// imageView.setImageResource(R.drawable.blackberry_logo);
-			// } else {
-			// imageView.setImageResource(R.drawable.android_logo);
-			// }
-
 			return rowView;
 		}
 	}
