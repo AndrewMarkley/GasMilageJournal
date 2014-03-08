@@ -57,7 +57,7 @@
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.orangegames.gasmilagejournal.activities.ExportActivity"
+            android:name="com.orangegames.gasmilagejournal.activities.ShowMaintenanceDialog"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>

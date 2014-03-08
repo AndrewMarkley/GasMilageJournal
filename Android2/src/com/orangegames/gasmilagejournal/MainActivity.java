@@ -36,7 +36,8 @@ import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.fillup.FillUp;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
-import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment2;
+import com.orangegames.gasmilagejournal.fragments.MaintenanceLogViewFragment;
+import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
 
 public class MainActivity extends FragmentActivity
 {
@@ -118,10 +119,6 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter
 	{
 
@@ -137,13 +134,16 @@ public class MainActivity extends FragmentActivity
 			args.putInt("section_number", position + 1);
 			switch (position) {
 				case 0:
-					fragment = new StatisticsViewFragment2();
+					fragment = new StatisticsViewFragment();
 					break;
 				case 1:
 					fragment = new FillUpViewFragment();
 					break;
 				case 2:
 					fragment = new CarsViewFragment();
+					break;
+				case 3:
+					fragment = new MaintenanceLogViewFragment();
 					break;
 				default:
 					break;
@@ -156,7 +156,7 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public int getCount()
 		{
-			return 3;
+			return 4;
 		}
 
 		@Override
@@ -170,6 +170,8 @@ public class MainActivity extends FragmentActivity
 					return getString(R.string.title_section2).toUpperCase(l);
 				case 2:
 					return getString(R.string.title_section3).toUpperCase(l);
+				case 3:
+					return getString(R.string.title_section4).toUpperCase(l);
 			}
 			return null;
 		}

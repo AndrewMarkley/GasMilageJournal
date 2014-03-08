@@ -2,27 +2,42 @@ package com.orangegames.gasmilagejournal.fragments;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.chart.PointStyle;
+import org.achartengine.model.TimeSeries;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.fillup.FillUp;
-import com.orangegames.gasmilagejournal.statistics.Statistics;
 
 public class StatisticsViewFragment extends Fragment
 {
@@ -30,62 +45,73 @@ public class StatisticsViewFragment extends Fragment
 
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+	private Spinner carList = null;
 
-	ListView listView = null;
+	LinearLayout chartList = null;
+
+	GraphicalView gviewMPG = null;
+	GraphicalView gviewPricePerGallon = null;
+	GraphicalView gviewMonthlyFuelCosts = null;
+	GraphicalView gviewCostPerMile = null;
+	GraphicalView gviewMilagePerDollar = null;
+	GraphicalView gviewMonthlyMilage = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.statistics_view_fragment, container, false);
+		carList = (Spinner) rootView.findViewById(R.id.statistics_view_fragment_car_spinner);
+		chartList = (LinearLayout) rootView.findViewById(R.id.chart_list);
 
-		listView = (ListView) rootView.findViewById(R.id.statistics_view_fragment_list);
+		gviewMPG = getMPGGraph();
+		gviewPricePerGallon = getPPGGraph();
+		gviewMonthlyFuelCosts = getMFCGraph();
+		gviewCostPerMile = getCPMGraph();
+		gviewMilagePerDollar = getMPDGraph();
+		gviewMonthlyMilage = getMMGraph();
 
-		refreshStatisticsList();
+		addAllGraphViews();
+
+		AdView adView = (AdView) rootView.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("89C5255F42662D2FCFD03698061CF86D").build();
+		adView.loadAd(adRequest);
+
+		List<Car> cars = new ArrayList<Car>();
+		try {
+			cars = getCarDatabaseHelper().getCarDao().queryForAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Car[] carArray = new Car[cars.size()];
+		cars.toArray(carArray);
+
+		CarArrayAdapter carArrayAdapter = new CarArrayAdapter(getActivity(), carArray);
+
+		carArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		carList.setAdapter(carArrayAdapter);
+
+		addAllGraphViews();
+
+		carList.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+			{
+				removeAllGraphViews();
+				addAllGraphViews();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 
 		return rootView;
-	}
-
-	class statisticsArrayAdapter extends ArrayAdapter<Statistics>
-	{
-		private final Context context;
-		private final Statistics[] values;
-
-		public statisticsArrayAdapter(Context context, Statistics[] values) {
-			super(context, R.layout.statistics_view_fragment_list_view, values);
-			this.context = context;
-			this.values = values;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-			View rowView = inflater.inflate(R.layout.statistics_view_fragment_list_view, parent, false);
-			TextView carName = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_car_name);
-			TextView avgMpg = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_mpg);
-			TextView avgMilesBetweenFillups = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_miles_between_fillups);
-			TextView avgDollarsPerDay = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_dolalrs_per_day);
-			TextView avgMilesPerDollar = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_miles_per_dollar);
-			TextView avgFuelCost = (TextView) rowView.findViewById(R.id.statistics_view_frament_list_view_fuel_cost);
-			TextView avgTimeBetween = (TextView) rowView.findViewById(R.id.statistics_view_fragment_list_view_time_between_fillups);
-
-			Statistics temp = values[position];
-			
-			try {
-				carName.setText(carDatabaseHelper.getCarDao().queryForId(temp.getCarId()).getName());
-			} catch (SQLException e) {
-				carName.setText("Car");
-			}
-			avgMpg.setText("Avg MPG: " + temp.getAvgMPG());
-			avgMilesBetweenFillups.setText("Avg Miles Between Fill Ups: " + temp.getAvgMilesBetweenFillUps());
-			avgDollarsPerDay.setText("Avg Dollars Per Day: " + temp.getAvgDollarPerDay());
-			avgMilesPerDollar.setText("Avg Miles Per Dollar: " + temp.getAvgMilesPerDollar());
-			avgFuelCost.setText("Avg Fuel Cost: " + temp.getAvgFuelCosts());
-			avgTimeBetween.setText("Avg Time Between Fill Ups: " + temp.getAvgTimeBetweenFillUps());
-			
-			return rowView;
-		}
 	}
 
 	@Override
@@ -101,62 +127,486 @@ public class StatisticsViewFragment extends Fragment
 		}
 	}
 
-	public void refreshStatisticsList()
+	public void onResume()
 	{
-		List<Car> cars = null;
-		List<FillUp> fillUps = null;
+		super.onResume();
+		repaintGraphs();
+	}
 
-		try {
-			cars = carDatabaseHelper.getCarDao().queryForAll();
-			fillUps = fillUpDatabaseHelper.getFillUpDao().queryForAll();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	private CarDatabaseHelper getCarDatabaseHelper()
+	{
+		if ( carDatabaseHelper == null ) {
+			this.carDatabaseHelper = CarDatabaseHelper.getHelper(getActivity());
+		}
+		return carDatabaseHelper;
+	}
+
+	private FillUpDatabaseHelper getFillUpDatabaseHelper()
+	{
+		if ( fillUpDatabaseHelper == null ) {
+			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(getActivity());
+		}
+		return fillUpDatabaseHelper;
+	}
+
+	class CarArrayAdapter extends ArrayAdapter<Car>
+	{
+		private final Context context;
+		private final Car[] values;
+
+		public CarArrayAdapter(Context context, Car[] values) {
+			super(context, R.layout.car_view_fragment_list_view, values);
+			this.context = context;
+			this.values = values;
 		}
 
-		Statistics[] statistics = new Statistics[cars.size()];
-		List<Statistics> stats = new ArrayList<Statistics>();
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(R.layout.spinner_view, parent, false);
 
-		for ( Car car : cars ) {
-			double gallons = 0;
-			double distance = 0;
-			double spent = 0;
-			int numberOfFillUps = 0;
+			TextView title = (TextView) rowView.findViewById(R.id.spinner_title);
+			title.setText(values[position].getName());
 
-			Date earliestDate = new Date();
+			repaintGraphs();
 
+			return rowView;
+		}
+	}
+
+	public void addAllGraphViews()
+	{
+		chartList.addView(getMPGGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		chartList.addView(getPPGGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		chartList.addView(getMFCGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		chartList.addView(getCPMGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		chartList.addView(getMPDGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		chartList.addView(getMMGraph(), new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	}
+
+	public void removeAllGraphViews()
+	{
+		chartList.removeAllViews();
+	}
+
+	public void repaintGraphs()
+	{
+		gviewMPG.repaint();
+		gviewPricePerGallon.repaint();
+		gviewMonthlyFuelCosts.repaint();
+		gviewCostPerMile.repaint();
+		gviewMilagePerDollar.repaint();
+		gviewMonthlyMilage.repaint();
+
+	}
+
+	public GraphicalView getMPGGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
 			for ( FillUp fu : fillUps ) {
-				if ( fu.getCarId() == car.getId() ) {
-					if ( earliestDate.after(fu.getDate()) )  {
-						earliestDate = fu.getDate();
-					}
-					gallons += fu.getGas();
-					distance += fu.getDistance();
-					spent += fu.getPrice();
-					numberOfFillUps++;
-				}
-			}
-			if ( numberOfFillUps > 0 ) {
-				int diffInDays = (int) ( ( Calendar.getInstance().getTime().getTime() - earliestDate.getTime() ) / ( 1000 * 60 * 60 * 24 ) );
-				double avgMPG = round(gallons / distance);
-				double avgFuelCosts = round(spent / (diffInDays + 1));
-				double avgMilesPerDollar = round(distance / spent);
-				double avgDollarPerDay = round(diffInDays / spent);
-				double avgTimeBetweenFillUps = round(diffInDays / numberOfFillUps);
-				double avgMilesBetweenFillUps = round(distance / numberOfFillUps);
-				stats.add(new Statistics(car.getId(), avgMPG, avgFuelCosts, avgMilesPerDollar, avgTimeBetweenFillUps, avgMilesBetweenFillUps, avgDollarPerDay));
-			} else {
-				stats.add(new Statistics(car.getId(), 0, 0, 0, 0, 0, 0));
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
 			}
 		}
 
-		stats.toArray(statistics);
+		dataset.addSeries(series);
 
-		statisticsArrayAdapter adapter = new statisticsArrayAdapter(getActivity(), statistics);
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
 
-		listView.setAdapter(adapter);
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
 	}
-	
-	private double round(double x) {
-		return ((int)(x * 100)) / 100.0;
+
+	public GraphicalView getPPGGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
+			for ( FillUp fu : fillUps ) {
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
+			}
+		}
+
+		dataset.addSeries(series);
+
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
 	}
+
+	public GraphicalView getMFCGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
+			for ( FillUp fu : fillUps ) {
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
+			}
+		}
+
+		dataset.addSeries(series);
+
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
+	}
+
+	public GraphicalView getCPMGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
+			for ( FillUp fu : fillUps ) {
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
+			}
+		}
+
+		dataset.addSeries(series);
+
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
+	}
+
+	public GraphicalView getMPDGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
+			for ( FillUp fu : fillUps ) {
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
+			}
+		}
+
+		dataset.addSeries(series);
+
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
+	}
+
+	public GraphicalView getMMGraph()
+	{
+		GraphicalView gview = null;
+
+		// Create the dataset
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		TimeSeries series = new TimeSeries("Date");
+
+		if ( carList.getSelectedItem() != null ) {
+			Car car = (Car) carList.getSelectedItem();
+			List<FillUp> fillUps = null;
+
+			try {
+				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
+				Log.i("info", "querying for car id: " + car.getId());
+				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
+				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			int x = 0;
+			for ( FillUp fu : fillUps ) {
+				series.add(x++, fu.getMPG());
+				Log.i("info", "adding point: (" + x + ", " + fu.getMPG() + ")");
+			}
+		}
+
+		dataset.addSeries(series);
+
+		// Setup the renderers
+		XYSeriesRenderer r = new XYSeriesRenderer();
+		r.setColor(Color.YELLOW);
+		r.setPointStyle(PointStyle.DIAMOND);
+		r.setFillBelowLine(false);
+		r.setFillPoints(true);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		renderer.setAxisTitleTextSize(35);
+		renderer.setChartTitleTextSize(50);
+		renderer.setLabelsTextSize(35);
+		renderer.setPointSize(5f);
+		renderer.setZoomEnabled(false, false);
+		// top, left, bottom, right
+		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		renderer.setChartTitle("MPG");
+		renderer.setXTitle("Time");
+		renderer.setYTitle("MPG");
+		renderer.setApplyBackgroundColor(false);
+		renderer.setRange(new double[] { 0, 6, 0, 40 });
+		renderer.setFitLegend(false);
+		renderer.setPanEnabled(false, false);
+		renderer.setZoomEnabled(false, false);
+		renderer.setAxesColor(Color.RED);
+		renderer.setShowGrid(true);
+		renderer.setZoomEnabled(false);
+		renderer.setInScroll(true);
+		renderer.addSeriesRenderer(r);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + 0.5);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 0.5);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
+		return gview;
+	}
+
 }
