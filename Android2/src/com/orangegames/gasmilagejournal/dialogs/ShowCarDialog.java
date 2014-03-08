@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
+import com.orangegames.gasmilagejournal.entities.Car;
 
 public class ShowCarDialog extends Activity
 {

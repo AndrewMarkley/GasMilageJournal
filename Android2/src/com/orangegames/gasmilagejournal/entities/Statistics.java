@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.statistics;
+package com.orangegames.gasmilagejournal.entities;
 
 public class Statistics
 {

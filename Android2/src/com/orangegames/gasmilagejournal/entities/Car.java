@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.car;
+package com.orangegames.gasmilagejournal.entities;
 
 import java.io.Serializable;
 

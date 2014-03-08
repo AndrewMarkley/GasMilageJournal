@@ -34,10 +34,10 @@ import com.google.android.gms.ads.AdView;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.fillup.FillUp;
+import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gasmilagejournal.entities.FillUp;
 
 public class StatisticsViewFragment extends Fragment
 {

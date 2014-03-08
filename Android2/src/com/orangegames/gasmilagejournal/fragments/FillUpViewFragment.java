@@ -31,11 +31,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
 import com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog;
-import com.orangegames.gasmilagejournal.fillup.FillUp;
+import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gasmilagejournal.entities.FillUp;
 
 public class FillUpViewFragment extends Fragment
 {

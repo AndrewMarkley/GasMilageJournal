@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.fillup;
+package com.orangegames.gasmilagejournal.entities;
 
 import java.io.Serializable;
 import java.util.Date;

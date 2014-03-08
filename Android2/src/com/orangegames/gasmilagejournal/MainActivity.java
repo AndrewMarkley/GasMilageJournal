@@ -33,7 +33,7 @@ import com.orangegames.gasmilagejournal.activities.AboutActivity;
 import com.orangegames.gasmilagejournal.activities.SettingsActivity;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.fillup.FillUp;
+import com.orangegames.gasmilagejournal.entities.FillUp;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
 import com.orangegames.gasmilagejournal.fragments.MaintenanceLogViewFragment;

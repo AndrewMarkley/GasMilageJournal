@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.internal.de;
 import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.car.Car;
+import com.orangegames.gasmilagejournal.entities.Car;
 
 public class ExportActivity extends Activity
 {
