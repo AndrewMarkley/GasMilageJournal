@@ -27,5 +27,9 @@
     <string name="example_application">Example application</string>
     <string name="todo">TODO</string>
     <string name="add_a_picture_of_receipt">Add a picture of the receipt!</string>
+    <string name="preference_file_key">com.orangegames.gasmilagejournal</string>
+    <string name="measurement">measurement</string>
+    <string name="date_format">date_format</string>
+    <string name="currency">currency</string>
 
 </resources>

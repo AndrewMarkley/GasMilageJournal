@@ -60,7 +60,6 @@ public class CarsViewFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				Log.i("info", "Launching ShowCarDialog as an intent inside CarsViewFragment");
 				Intent i = new Intent(getActivity().getApplicationContext(), ShowCarDialog.class);
 				i.putExtra("new", true);
 				startActivityForResult(i, 1);

@@ -2,8 +2,11 @@ package com.orangegames.gasmilagejournal;
 
 import java.util.Locale;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 
 import com.orangegames.gasmilagejournal.activities.AboutActivity;
 import com.orangegames.gasmilagejournal.activities.ExportActivity;
+import com.orangegames.gasmilagejournal.activities.SettingsActivity;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
 import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment2;
@@ -23,6 +27,10 @@ public class MainActivity extends FragmentActivity
 
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
+	
+	public static final String MEASUREMENT_KEY = "measurement";
+	public static final String DATE_FORMAT_KEY = "date_format";
+	public static final String CURRENCY_KEY = "currency";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -36,6 +44,23 @@ public class MainActivity extends FragmentActivity
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 		mViewPager.setCurrentItem(1, false);
+		
+		//check shared preference keys
+		Context context = getApplicationContext();
+		SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
+		if(!sharedPref.contains(MEASUREMENT_KEY)) {
+			editor.putString(MEASUREMENT_KEY, "US");
+		}
+		if(!sharedPref.contains(DATE_FORMAT_KEY)) {
+			editor.putString(DATE_FORMAT_KEY, "mm/dd/yyyy");
+		}
+		if(!sharedPref.contains(CURRENCY_KEY)) {
+			editor.putString(CURRENCY_KEY, "$");
+		}
+		
+		editor.commit();
 	}
 
 	@Override
@@ -47,6 +72,8 @@ public class MainActivity extends FragmentActivity
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(100);
 	    switch (item.getItemId()) {
 	    case R.id.action_export:
 	    	Intent intent = new Intent(this, ExportActivity.class);
@@ -57,7 +84,7 @@ public class MainActivity extends FragmentActivity
             startActivity(intent);
 	        return true;
 	    case R.id.action_settings:
-	    	intent = new Intent(this, ExportActivity.class);
+	    	intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
 	        return true;
 	    default:
