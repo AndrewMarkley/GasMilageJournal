@@ -22,6 +22,8 @@ public class ExportActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.options_exporter);
+		
+		
 	}
 
 }
