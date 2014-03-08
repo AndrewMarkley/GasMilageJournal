@@ -42,7 +42,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/car_view_frament_list_view_car_model"
+            android:id="@+id/fillup_view_frament_list_view_car_units"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medium Text"

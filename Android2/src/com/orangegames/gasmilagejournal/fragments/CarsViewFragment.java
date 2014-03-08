@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
@@ -51,10 +53,10 @@ public class CarsViewFragment extends Fragment
 		carListView = (ListView) rootView.findViewById(R.id.car_view_fragment_list);
 		newCarButton = (Button) rootView.findViewById(R.id.car_view_fragment_new_car_button);
 
-		AdView adView = (AdView)rootView.findViewById(R.id.adView);
+		AdView adView = (AdView) rootView.findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().addTestDevice("89C5255F42662D2FCFD03698061CF86D").build();
 		adView.loadAd(adRequest);
-		
+
 		newCarButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -139,15 +141,23 @@ public class CarsViewFragment extends Fragment
 			TextView carName = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_name);
 			TextView year = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_year);
 			TextView make = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_make);
-			TextView model = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_model);
+			TextView model = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_car_units);
 			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_odometer);
+
+			SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+			String units = "";
+			if ( sharedPref.getString(MainActivity.MEASUREMENT_KEY, "").equals("US") ) {
+				units = " mi";
+			} else {
+				units = " km";
+			}
 
 			Car c = values[position];
 			carName.setText(c.getName());
 			year.setText("" + c.getYear());
 			make.setText(c.getMake());
 			model.setText(c.getModel());
-			odometer.setText("" + c.getMilage());
+			odometer.setText("" + c.getMilage() + units);
 			return rowView;
 		}
 	}
@@ -210,4 +220,9 @@ public class CarsViewFragment extends Fragment
 		super.onDestroy();
 	}
 
+	public void onResume()
+	{
+		super.onResume();
+		refreshCarList();
+	}
 }

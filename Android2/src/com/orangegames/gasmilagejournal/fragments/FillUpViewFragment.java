@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.car.Car;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
@@ -55,10 +57,10 @@ public class FillUpViewFragment extends Fragment
 		fillUpListView = (ListView) rootView.findViewById(R.id.fillup_view_fragment_list);
 		newFillUp = (Button) rootView.findViewById(R.id.fillup_view_fragment_new_fillup_button);
 
-		AdView adView = (AdView)rootView.findViewById(R.id.adView);
+		AdView adView = (AdView) rootView.findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().addTestDevice("89C5255F42662D2FCFD03698061CF86D").build();
 		adView.loadAd(adRequest);
-		
+
 		refreshFillUpsList();
 
 		newFillUp.setOnClickListener(new OnClickListener()
@@ -147,8 +149,13 @@ public class FillUpViewFragment extends Fragment
 			TextView mpg = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_mpg);
 			TextView cost = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_cost);
 			TextView distance = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_purchase_distance);
-			
-			if(position % 2 == 0) {
+			TextView units = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_car_units);
+
+			SharedPreferences sharedPref = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+			String measurementSystem = sharedPref.getString(MainActivity.MEASUREMENT_KEY, "");
+			String currencySymbol = sharedPref.getString(MainActivity.CURRENCY_KEY, "");
+
+			if ( position % 2 == 0 ) {
 				rowView.setBackgroundColor(Color.WHITE);
 				date.setTextColor(Color.BLACK);
 				carName.setTextColor(Color.BLACK);
@@ -164,21 +171,28 @@ public class FillUpViewFragment extends Fragment
 				distance.setTextColor(Color.WHITE);
 			}
 
-			FillUp temp = values[position]; 
+			FillUp temp = values[position];
 			Car car = null;
 			try {
 				car = carDatabaseHelper.getCarDao().queryForId(temp.getCarId());
-				if(car != null) {
+				if ( car != null ) {
 					carName.setText(car.getName());
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+
+			if ( measurementSystem.equals("US") ) {
+				units.setText("MPG");
+				distance.setText(round(temp.getDistance()) + "mi");
+			} else {
+				units.setText("Km\\L");
+				distance.setText(round(temp.getDistance()) + "km");
+			}
 			
-			date.setText(new SimpleDateFormat("MM/dd/yy", Locale.US).format(temp.getDate()));
+			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(temp.getDate()));
 			mpg.setText("" + round(temp.getMPG()));
-			cost.setText("$" + round(temp.getPrice() * temp.getGas()));
-			distance.setText(round(temp.getDistance()) + "mi");
+			cost.setText(currencySymbol + round(temp.getPrice() * temp.getGas()));
 
 			return rowView;
 		}
@@ -254,10 +268,12 @@ public class FillUpViewFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
+		refreshFillUpsList();
 	}
-	
-	private double round(double x) {
-		return ((int)(x * 100)) / 100.0;
+
+	private double round(double x)
+	{
+		return ( (int) ( x * 100 ) ) / 100.0;
 	}
 
 }

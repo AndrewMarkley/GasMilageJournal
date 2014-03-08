@@ -102,15 +102,15 @@ public class SettingsActivity extends Activity
 							{
 								switch (item) {
 									case 0:
-										editor.putString(MainActivity.DATE_FORMAT_KEY, i[sp]);
+										editor.putString(MainActivity.DATE_FORMAT_KEY, "MM/dd/yyyy");
 										editor.commit();
 										break;
 									case 1:
-										editor.putString(MainActivity.DATE_FORMAT_KEY, i[sp]);
+										editor.putString(MainActivity.DATE_FORMAT_KEY, "dd/MM/yyyy");
 										editor.commit();
 										break;
 									case 2:
-										editor.putString(MainActivity.DATE_FORMAT_KEY, i[sp]);
+										editor.putString(MainActivity.DATE_FORMAT_KEY, "MM/dd");
 										editor.commit();
 										break;
 									default:

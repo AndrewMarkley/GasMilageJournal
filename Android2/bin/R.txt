@@ -66,7 +66,6 @@ int id car_layout_linear 0x7f060007
 int id car_view_fragment_list 0x7f060009
 int id car_view_fragment_new_car_button 0x7f060008
 int id car_view_frament_list_view_car_make 0x7f06000d
-int id car_view_frament_list_view_car_model 0x7f06000e
 int id car_view_frament_list_view_car_name 0x7f06000b
 int id car_view_frament_list_view_car_odometer 0x7f060010
 int id car_view_frament_list_view_car_year 0x7f06000c
@@ -95,6 +94,7 @@ int id fillup_layout_linear 0x7f060025
 int id fillup_view_fragment_list 0x7f060027
 int id fillup_view_fragment_new_fillup_button 0x7f060026
 int id fillup_view_frament_list_view_car_name 0x7f06002a
+int id fillup_view_frament_list_view_car_units 0x7f06000e
 int id fillup_view_frament_list_view_cost 0x7f06002c
 int id fillup_view_frament_list_view_date 0x7f060028
 int id fillup_view_frament_list_view_mpg 0x7f06002b
