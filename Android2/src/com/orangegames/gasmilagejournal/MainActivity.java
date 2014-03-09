@@ -107,11 +107,10 @@ public class MainActivity extends FragmentActivity
 				displayExporterDialog();
 				return true;
 			case R.id.action_about:
-				Intent intent = new Intent(this, AboutActivity.class);
-				startActivity(intent);
+				displayAboutDialog();
 				return true;
 			case R.id.action_settings:
-				intent = new Intent(this, SettingsActivity.class);
+				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivity(intent);
 				return true;
 			default:
@@ -291,6 +290,13 @@ public class MainActivity extends FragmentActivity
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
+	}
+	
+	public void displayAboutDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		builder.setMessage("Gas Milage Journal\nDeveloped by Orange Games\nVersion 2.0").setPositiveButton("Ok", null);
+		builder.create().show();
 	}
 
 	@Override
