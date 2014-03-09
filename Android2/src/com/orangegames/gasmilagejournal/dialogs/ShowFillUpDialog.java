@@ -174,7 +174,8 @@ public class ShowFillUpDialog extends Activity
 			public void onClick(View v)
 			{
 				try {
-					int carId = ( (Car) carList.getSelectedItem() ).getId();
+					Car car = ( (Car) carList.getSelectedItem() );
+					int carId = car.getId();
 					Double distance = Double.parseDouble(milesTraveled.getText().toString());
 					Double price = Double.parseDouble(pricePerGallon.getText().toString());
 					Double gallons = Double.parseDouble(gallonsPurchased.getText().toString());
@@ -183,11 +184,15 @@ public class ShowFillUpDialog extends Activity
 					if ( newFillUp ) {
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
 						getFillUpDatabaseHelper().getFillUpDao().create(fillUp);
+						car.setMilage(car.getMilage() + fillUp.getDistance());
+						getCarDatabaseHelper().getCarDao().update(car);
 					} else {
 						int fId = fillUp.getId();
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
-						fillUp.setId(fId);
+						fillUp.setId(fId);						
 						getFillUpDatabaseHelper().getFillUpDao().update(fillUp);
+						car.setMilage(car.getMilage() + fillUp.getDistance());
+						getCarDatabaseHelper().getCarDao().update(car);
 					}
 
 					Intent i = getIntent();
@@ -262,7 +267,7 @@ public class ShowFillUpDialog extends Activity
 
 			if ( requestCode == CAMERA_REQUEST ) {
 				Bitmap photo = (Bitmap) data.getExtras().get("data");
-			    
+
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 				receiptImage = bytes.toByteArray();
