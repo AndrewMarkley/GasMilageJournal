@@ -19,7 +19,7 @@ public class MaintenanceLogDatabaseHelper extends OrmLiteSqliteOpenHelper
 
 	private static final String DATABASE_NAME = "MaintenanceLogDatabaseHelper.db";
 
-	private static final int DATABASE_VERSION = 21;
+	private static final int DATABASE_VERSION = 23;
 
 	private Dao<MaintenanceLog, Integer> complexDao = null;
 
@@ -49,11 +49,11 @@ public class MaintenanceLogDatabaseHelper extends OrmLiteSqliteOpenHelper
 			Dao<MaintenanceLog, Integer> dao = getMaintenanceLogDao();
 			long millis = System.currentTimeMillis();
 
-			MaintenanceLog MaintenanceLog = new MaintenanceLog(1, Calendar.getInstance().getTime(), 10, 1000, "Oil Change", "Got the oil changed!", "Oil Change center", null);
-			dao.create(MaintenanceLog);
-			MaintenanceLog = new MaintenanceLog(1, Calendar.getInstance().getTime(), 1000, 100000, "Oil Change2", "Got the oil changed!", "Oil Change center", null);
-			dao.update(MaintenanceLog);
-			dao.delete(MaintenanceLog);
+			MaintenanceLog maintenanceLog = new MaintenanceLog(1, Calendar.getInstance().getTime(), 10, 1000, "Oil Change", "Got the oil changed!", "Oil Change center", null);
+			dao.create(maintenanceLog);
+			maintenanceLog.setTitle("Something Different!");
+			dao.update(maintenanceLog);
+			dao.delete(maintenanceLog);
 			Log.i(MaintenanceLogDatabaseHelper.class.getName(), "tested CRUD on a new MaintenanceLog entry in onCreate: " + millis);
 		} catch (SQLException e) {
 			Log.e(MaintenanceLogDatabaseHelper.class.getName(), "Can't create database", e);

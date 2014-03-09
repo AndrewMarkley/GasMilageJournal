@@ -53,6 +53,12 @@ public class MaintenanceLog implements Serializable
 		this.receipt = receipt;
 	}
 
+	public int getId() { return id; }
+	public void setId(int value) { this.id = value; }
+	
+	public int getCarId() { return carId; }
+	public void setCarId(int value) { this.carId = value; }
+	
 	public String getDescription() { return description; }
 	public void setDescription(String value) { this.description = value; }
 	
@@ -74,5 +80,8 @@ public class MaintenanceLog implements Serializable
 	public byte[] getReceipt() { return receipt; }
 	public void setReceipt(byte[] value) { this.receipt = value; }
 	
-	
+	public String toString()
+	{
+		return getTitle() + " " + getDescription() + " " + getCost() + " " + getDate();   
+	}
 }

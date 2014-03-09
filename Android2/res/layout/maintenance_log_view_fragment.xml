@@ -2,7 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <Button
+        android:id="@+id/maintenance_log_view_fragment_add_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Maintenance entry" 
+        android:layout_weight=".1"/>
+
+    <ListView
+        android:id="@+id/maintenance_log_view_fragment_list"
+        android:layout_width="match_parent"
+        android:layout_height="394dp"
+        android:layout_weight=".8" >
+    </ListView>
     
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="a1507a731497aa5"
+        android:layout_weight=".1" />
 
 </LinearLayout>

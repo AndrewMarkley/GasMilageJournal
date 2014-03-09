@@ -1,8 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detailed_maintenance_log_form"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:visibility="visible" >
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/detailed_maintenance_log_form_page_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Insert a Maintenance Log"
+            android:textSize="10pt" />
+
+        <Spinner
+            android:id="@+id/detailed_maintenance_log_form_car"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:prompt="@string/detailed_car_form_car_name" />
+
+        <EditText
+            android:id="@+id/detailed_maintenance_log_form_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="title"
+            android:inputType="textShortMessage" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/detailed_maintenance_log_form_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/description"
+            android:inputType="textMultiLine"
+            android:lines="5" />
+
+        <EditText
+            android:id="@+id/detailed_maintenance_log_form_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Maintenance Location"
+            android:inputType="textShortMessage" />
+
+        <EditText
+            android:id="@+id/detailed_maintenance_log_form_odometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Odometer Reading"
+            android:inputType="numberDecimal" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/detailed_maintenance_log_form_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Cost"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/detailed_maintenance_log_form_date_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date" />
+
+        <Button
+            android:id="@+id/detailed_maintenance_log_receipt_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_a_picture_of_receipt"
+            android:textSize="6pt" >
+        </Button>
+
+        <view
+            android:id="@+id/detailed_maintenance_log_receipt_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            class="ImageView"
+            android:adjustViewBounds="true"
+            android:scaleType="fitEnd" />
+
+        <Button
+            android:id="@+id/detailed_maintenance_log_form_save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="sendFeedback"
+            android:text="Save Maintenance Log" >
+        </Button>
+    </LinearLayout>
+
+</ScrollView>
