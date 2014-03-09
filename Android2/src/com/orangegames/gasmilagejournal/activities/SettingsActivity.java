@@ -26,8 +26,9 @@ import com.orangegames.gasmilagejournal.R;
 public class SettingsActivity extends Activity
 {
 	ListViewArrayAdapter listViewArrayAdapter = null;
-	private String[] titles = { "Measurement System", "Date Format", "Currency", "Contact Dev" };
-	private String[] descriptions = { "Choose from English, Imperial, or Metric units", "Change the date format used", "Change the currency used", "Questions or comments? email us!" };
+	private String[] titles = { "Measurement System", "Date Format", "Currency", "Contact Dev", "Change How Fillups work" };
+	private String[] descriptions = { "Choose from English, Imperial, or Metric units", "Change the date format used", "Change the currency used", "Questions or comments? email us!",
+			"Choose to specify the trip's milage or use the odometer's readings" };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -172,6 +173,38 @@ public class SettingsActivity extends Activity
 						emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 						startActivity(Intent.createChooser(emailIntent, ""));
+						break;
+					case 4:
+						final int selPos;
+						if ( sharedPref.getString(MainActivity.FILLUP_READING_KEY, "").equals("trip") ) {
+							selPos = 0;
+						}else {
+							selPos = 1;
+						}
+						final CharSequence[] it = { "Use Trip's Milage", "Use Odometer's Reading" };
+
+						builder.setTitle("Select an Option!");
+
+						builder.setSingleChoiceItems(it, selPos, new DialogInterface.OnClickListener()
+						{
+							public void onClick(DialogInterface dialog, int item)
+							{
+								switch (item) {
+									case 0:
+										editor.putString(MainActivity.FILLUP_READING_KEY, "trip");
+										editor.commit();
+										break;
+									case 1:
+										editor.putString(MainActivity.FILLUP_READING_KEY, "odometer");
+										editor.commit();
+										break;
+									default:
+								}
+								dialog.dismiss();
+							}
+						});
+						alert = builder.create();
+						alert.show();
 						break;
 					default:
 						break;

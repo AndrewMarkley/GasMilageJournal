@@ -14,7 +14,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.di;
+import com.orangegames.gasmilagejournal.MainActivity;
 import com.orangegames.gasmilagejournal.R;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
@@ -52,6 +56,7 @@ public class ShowFillUpDialog extends Activity
 
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+	private boolean useOdometerReading = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -60,6 +65,7 @@ public class ShowFillUpDialog extends Activity
 		setContentView(R.layout.detailed_fillup_form);
 		in = getIntent();
 		newFillUp = in.getBooleanExtra("newFillUp", newFillUp);
+		SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
 		// initialize all the fields
 		title = (TextView) findViewById(R.id.detailed_fillup_form_title);
@@ -73,6 +79,14 @@ public class ShowFillUpDialog extends Activity
 		receiptButton = (Button) findViewById(R.id.detailed_fill_up_receipt_button);
 		receiptView = (ImageView) findViewById(R.id.detailed_fill_up_receipt_view);
 		dateButton.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(Calendar.getInstance().getTime()));
+
+		if ( sharedPref.getString(MainActivity.FILLUP_READING_KEY, "trip").equals("trip") ) {
+			milesTraveled.setHint("Miles Traveled");
+			useOdometerReading = false;
+		} else {
+			milesTraveled.setHint("Odometer Reading");
+			useOdometerReading = newFillUp ? true: false;
+		}
 
 		List<Car> cars = new ArrayList<Car>();
 		try {
@@ -180,6 +194,10 @@ public class ShowFillUpDialog extends Activity
 					Double price = Double.parseDouble(pricePerGallon.getText().toString());
 					Double gallons = Double.parseDouble(gallonsPurchased.getText().toString());
 					Date time = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(dateButton.getText().toString());
+					
+					if(useOdometerReading) {
+						distance -= car.getMilage();
+					}
 
 					if ( newFillUp ) {
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
@@ -189,16 +207,11 @@ public class ShowFillUpDialog extends Activity
 					} else {
 						int fId = fillUp.getId();
 						fillUp = new FillUp(carId, distance, gallons, price, time, comments.getText().toString(), receiptImage);
-						fillUp.setId(fId);						
+						fillUp.setId(fId);
 						getFillUpDatabaseHelper().getFillUpDao().update(fillUp);
 						car.setMilage(car.getMilage() + fillUp.getDistance());
 						getCarDatabaseHelper().getCarDao().update(car);
 					}
-
-					Intent i = getIntent();
-					i.putExtra("success", success);
-					setResult(RESULT_OK, i);
-					finish();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -206,6 +219,21 @@ public class ShowFillUpDialog extends Activity
 					Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
 					toast.show();
 				}
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(ShowFillUpDialog.this);
+				builder.setMessage("Your MPG was " + round(fillUp.getMPG()) + "!").setPositiveButton("Ok", new OnClickListener()
+				{
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						Intent i = getIntent();
+						i.putExtra("success", success);
+						setResult(RESULT_OK, i);
+						finish();
+					}
+				});
+				builder.create().show();
 			}
 		});
 
@@ -290,4 +318,9 @@ public class ShowFillUpDialog extends Activity
 			dateButton.setText(month + 1 + "/" + day + "/" + year);
 		}
 	};
+	
+	public double round(double x)
+	{
+		return ((int)(x * 100))/100.0;
+	}
 }

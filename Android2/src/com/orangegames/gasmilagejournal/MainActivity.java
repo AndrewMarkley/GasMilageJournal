@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.orangegames.gasmilagejournal.activities.AboutActivity;
 import com.orangegames.gasmilagejournal.activities.SettingsActivity;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
@@ -50,6 +49,7 @@ public class MainActivity extends FragmentActivity
 	public static final String MEASUREMENT_KEY = "measurement";
 	public static final String DATE_FORMAT_KEY = "date_format";
 	public static final String CURRENCY_KEY = "currency";
+	public static final String FILLUP_READING_KEY = "fillup_reading";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -78,7 +78,9 @@ public class MainActivity extends FragmentActivity
 		if ( ! sharedPref.contains(CURRENCY_KEY) ) {
 			editor.putString(CURRENCY_KEY, "$");
 		}
-
+		if ( ! sharedPref.contains(FILLUP_READING_KEY) ) {
+			editor.putString(FILLUP_READING_KEY, "trip");
+		}
 		editor.commit();
 
 		if ( fillUpDatabaseHelper == null ) {
