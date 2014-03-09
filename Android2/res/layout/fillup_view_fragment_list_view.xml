@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="75dp"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:weightSum="3" >
@@ -9,39 +9,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="left"
+        android:gravity="left|center_vertical"
         android:orientation="vertical"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp" >
 
         <TextView
             android:id="@+id/fillup_view_frament_list_view_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="bottom"
-            android:layout_weight=".1" >
-
-            <TextView
-                android:id="@+id/fillup_view_frament_list_view_purchase_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
+            android:textSize="30sp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical|fill_horizontal"
+        android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical"
         android:layout_weight="1" >
 
@@ -49,9 +35,8 @@
             android:id="@+id/fillup_view_frament_list_view_car_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="34dp"
-            android:layout_marginRight="34dp"
             android:text="Medium Text"
+            android:textSize="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
@@ -62,12 +47,14 @@
         android:layout_gravity="right"
         android:gravity="right"
         android:orientation="vertical"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_marginRight="5dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right" >
+            android:gravity="right" 
+            android:layout_weight=".3">
 
             <TextView
                 android:id="@+id/fillup_view_frament_list_view_mpg"
@@ -88,8 +75,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom|right"
+            android:layout_weight=".3"
+            android:gravity="center_vertical|right"
             android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/fillup_view_frament_list_view_purchase_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|right"
+            android:orientation="vertical"
+            android:layout_weight=".3" >
 
             <TextView
                 android:id="@+id/fillup_view_frament_list_view_cost"

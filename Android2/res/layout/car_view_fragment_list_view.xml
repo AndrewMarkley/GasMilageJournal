@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Large Text"
+            android:textSize="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -53,14 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal" >
-
-        <TextView
-            android:id="@+id/options_settings_list_view_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Odometer:"
-            android:layout_marginRight="5dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/car_view_frament_list_view_car_odometer"

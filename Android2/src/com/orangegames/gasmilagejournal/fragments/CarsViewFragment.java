@@ -170,7 +170,7 @@ public class CarsViewFragment extends Fragment
 			year.setText("" + c.getYear());
 			make.setText(c.getMake());
 			model.setText(c.getModel());
-			odometer.setText("" + c.getMilage() + units);
+			odometer.setText("Odometer: " + c.getMilage() + units);
 			return rowView;
 		}
 	}

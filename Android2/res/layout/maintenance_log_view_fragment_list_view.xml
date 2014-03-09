@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical|center_horizontal"
             android:text="date"
+            android:textSize="30dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -28,15 +29,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical|center_horizontal" >
 
         <TextView
             android:id="@+id/maintenance_log_view_frament_list_view_car_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="34dp"
-            android:layout_marginRight="34dp"
             android:text="Car Name"
+            android:textSize="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -44,6 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="title"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -51,6 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="description"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -73,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Odometer"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </LinearLayout>
 
@@ -81,7 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom|right"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_weight=".1" >
 
             <TextView
                 android:id="@+id/maintenance_log_view_frament_list_view_cost"
@@ -89,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cost"
                 android:gravity="bottom|right"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </LinearLayout>
 
