@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	private CarDatabaseHelper carDatabaseHelper = null;
-	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+	private FillUpDatabaseHelper fillUpDatabaseHelper = null; 
 
 	public static final String MEASUREMENT_KEY = "measurement";
 	public static final String DATE_FORMAT_KEY = "date_format";
