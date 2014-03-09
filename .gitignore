@@ -2,10 +2,6 @@
 ## Eclipse
 #################
 
-*.pydevproject
-.project
-.metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -13,7 +9,6 @@ tmp/
 *~.nib
 local.properties
 .classpath
-.settings/
 .loadpath
 
 # External tool builders
@@ -39,7 +34,6 @@ local.properties
 *.class
 
 # Generated files
-bin/
 gen/
 
 # Gradle files
