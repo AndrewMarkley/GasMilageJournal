@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.HapticFeedbackConstants;
@@ -147,6 +148,20 @@ public class MaintenanceLogViewFragment extends Fragment
 			TextView odometer = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_list_view_odometer);
 			TextView carName = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_list_view_car_name);
 			
+			if ( position % 2 == 0 ) {
+				rowView.setBackgroundColor(Color.BLACK);
+			} else {
+				rowView.setBackgroundColor(Color.DKGRAY);
+			}
+			
+			title.setTextColor(Color.WHITE);
+			description.setTextColor(Color.WHITE);
+			cost.setTextColor(Color.WHITE);
+			date.setTextColor(Color.WHITE);
+			odometer.setTextColor(Color.WHITE);
+			carName.setTextColor(Color.WHITE);
+			
+			
 			SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 			String currencyUnits = sharedPref.getString(MainActivity.CURRENCY_KEY, "");
 			String distanceUnits = "";
@@ -155,8 +170,7 @@ public class MaintenanceLogViewFragment extends Fragment
 				distanceUnits = " mi";
 			} else {
 				distanceUnits = " km";
-			}
-			
+			}			
 
 			MaintenanceLog log = maintenanceLogs.get(position);
 			String name = "";

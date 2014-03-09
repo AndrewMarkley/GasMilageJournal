@@ -72,6 +72,7 @@ public class ShowMaintenanceDialog extends Activity
 		location = (TextView) findViewById(R.id.detailed_maintenance_log_form_location);
 
 		dateButton = (Button) findViewById(R.id.detailed_maintenance_log_form_date_button);
+		dateButton.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(Calendar.getInstance().getTime()));
 		receiptButton = (Button) findViewById(R.id.detailed_maintenance_log_receipt_button);
 		saveButton = (Button) findViewById(R.id.detailed_maintenance_log_form_save_button);
 

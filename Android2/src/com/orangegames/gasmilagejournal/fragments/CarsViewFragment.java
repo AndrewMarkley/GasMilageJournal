@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -143,6 +144,18 @@ public class CarsViewFragment extends Fragment
 			TextView make = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_make);
 			TextView model = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_car_units);
 			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_odometer);
+			
+			if ( position % 2 == 0 ) {
+				rowView.setBackgroundColor(Color.BLACK);
+			} else {
+				rowView.setBackgroundColor(Color.DKGRAY);
+			}
+			
+			carName.setTextColor(Color.WHITE);
+			year.setTextColor(Color.WHITE);
+			make.setTextColor(Color.WHITE);
+			model.setTextColor(Color.WHITE);
+			odometer.setTextColor(Color.WHITE);
 
 			SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 			String units = "";

@@ -156,20 +156,15 @@ public class FillUpViewFragment extends Fragment
 			String currencySymbol = sharedPref.getString(MainActivity.CURRENCY_KEY, "");
 
 			if ( position % 2 == 0 ) {
-				rowView.setBackgroundColor(Color.WHITE);
-				date.setTextColor(Color.BLACK);
-				carName.setTextColor(Color.BLACK);
-				mpg.setTextColor(Color.BLACK);
-				cost.setTextColor(Color.BLACK);
-				distance.setTextColor(Color.BLACK);
-			} else {
 				rowView.setBackgroundColor(Color.BLACK);
-				date.setTextColor(Color.WHITE);
-				carName.setTextColor(Color.WHITE);
-				mpg.setTextColor(Color.WHITE);
-				cost.setTextColor(Color.WHITE);
-				distance.setTextColor(Color.WHITE);
+			} else {
+				rowView.setBackgroundColor(Color.DKGRAY);
 			}
+			date.setTextColor(Color.WHITE);
+			carName.setTextColor(Color.WHITE);
+			mpg.setTextColor(Color.WHITE);
+			cost.setTextColor(Color.WHITE);
+			distance.setTextColor(Color.WHITE);
 
 			FillUp temp = values[position];
 			Car car = null;
