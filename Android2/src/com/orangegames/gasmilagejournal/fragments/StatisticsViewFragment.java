@@ -192,6 +192,7 @@ public class StatisticsViewFragment extends Fragment
 		WindowManager wm = (WindowManager) getActivity().getBaseContext().getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 		int yPx = (int)( display.getHeight() * 0.7);
+		removeAllGraphViews();
 		lMPG.addView(getMPGGraph(), new LayoutParams(LayoutParams.MATCH_PARENT, yPx));
 		lPPG.addView(getPPGGraph(), new LayoutParams(LayoutParams.MATCH_PARENT, yPx));
 		lMFC.addView(getMFCGraph(), new LayoutParams(LayoutParams.MATCH_PARENT, yPx));
