@@ -213,8 +213,8 @@ public class StatisticsViewFragment extends Fragment
 		h = (TextView) container2.findViewById(R.id.statistics_view_high_text);
 		l = (TextView) container2.findViewById(R.id.statistics_view_low_text);
 
-		h.setText("Best: " + getBestPPGRecord(fillups));
-		l.setText("Worst: " + getWorstPPGRecord(fillups));
+		h.setText("Best: " + getWorstPPGRecord(fillups));
+		l.setText("Worst: " + getBestPPGRecord(fillups));
 		lPPG.addView(container2);
 
 		h = (TextView) container3.findViewById(R.id.statistics_view_high_text);
@@ -258,7 +258,6 @@ public class StatisticsViewFragment extends Fragment
 
 	}
 
-	// LineChart
 	public GraphicalView getMPGGraph()
 	{
 		GraphicalView gview = null;
@@ -266,23 +265,30 @@ public class StatisticsViewFragment extends Fragment
 		// Create the dataset
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		TimeSeries series = new TimeSeries("Date");
-
+		ArrayList<DateValue> values = new ArrayList<StatisticsViewFragment.DateValue>();
 		if ( carList.getSelectedItem() != null ) {
 			Car car = (Car) carList.getSelectedItem();
 			List<FillUp> fillUps = null;
-
 			try {
 				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
 				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
 				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
 				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+
+				for ( FillUp fu : fillUps ) {
+					values.add(new DateValue(fu.getDate(), fu.getMPG()));
+				}
+
+				Collections.sort(values);
+
+				for ( DateValue result : values ) {
+					series.add(result.getDate(), result.getValue());
+				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			for ( FillUp fu : fillUps ) {
-				series.add(fu.getDate(), fu.getMPG());
-			}
 		}
 
 		dataset.addSeries(series);
@@ -303,8 +309,8 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false, false);
 		// top, left, bottom, right
 		renderer.setMargins(new int[] { 80, 80, 20, 0 });
-		renderer.setChartTitle("MPG");
-		renderer.setXTitle("Time");
+		renderer.setChartTitle("MPG Over Time");
+		renderer.setXTitle("Date");
 		renderer.setYTitle("MPG");
 		renderer.setApplyBackgroundColor(false);
 		renderer.setFitLegend(false);
@@ -315,12 +321,23 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false);
 		renderer.setInScroll(true);
 		renderer.addSeriesRenderer(r);
+		renderer.setXLabels(0);
+		renderer.setYAxisMin(dataset.getSeriesAt(0).getMinY() - 3);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 3);
+		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - ( 172800000 ));
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + ( 172800000 ));
 
-		gview = ChartFactory.getTimeChartView(getActivity(), dataset, renderer, "MMM-dd-yyyy");
+		for ( DateValue result : values ) {
+			renderer.addXTextLabel(result.getDate().getTime(), new SimpleDateFormat("MMM-dd", Locale.US).format(result.getDate()));
+		}
+
+		renderer.setXLabelsAlign(Align.CENTER);
+		renderer.setXLabelsPadding(10);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
 		return gview;
 	}
 
-	// Scatter Plot
 	public GraphicalView getPPGGraph()
 	{
 		GraphicalView gview = null;
@@ -328,25 +345,30 @@ public class StatisticsViewFragment extends Fragment
 		// Create the dataset
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		TimeSeries series = new TimeSeries("Date");
-
+		ArrayList<DateValue> values = new ArrayList<StatisticsViewFragment.DateValue>();
 		if ( carList.getSelectedItem() != null ) {
 			Car car = (Car) carList.getSelectedItem();
 			List<FillUp> fillUps = null;
-
 			try {
 				QueryBuilder<FillUp, Integer> queryBuilder = getFillUpDatabaseHelper().getFillUpDao().queryBuilder();
-				queryBuilder.distinct().where().eq(FillUp.COLUMN_CAR_ID, car.getId());
-
+				queryBuilder.where().eq(FillUp.COLUMN_CAR_ID, car.getId());
 				PreparedQuery<FillUp> preparedQuery = queryBuilder.prepare();
 				fillUps = getFillUpDatabaseHelper().getFillUpDao().query(preparedQuery);
+
+				for ( FillUp fu : fillUps ) {
+					values.add(new DateValue(fu.getDate(), fu.getPrice()));
+				}
+
+				Collections.sort(values);
+
+				for ( DateValue result : values ) {
+					series.add(result.getDate(), result.getValue());
+				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			for ( FillUp fu : fillUps ) {
-				series.add(fu.getDate(), fu.getPrice());
-
-			}
 		}
 
 		dataset.addSeries(series);
@@ -355,7 +377,7 @@ public class StatisticsViewFragment extends Fragment
 		XYSeriesRenderer r = new XYSeriesRenderer();
 		r.setColor(Color.parseColor("#33b5e5"));
 		r.setLineWidth(10);
-		r.setPointStyle(PointStyle.CIRCLE);
+		r.setPointStyle(PointStyle.DIAMOND);
 		r.setFillBelowLine(false);
 		r.setFillPoints(true);
 
@@ -363,13 +385,13 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setAxisTitleTextSize(35);
 		renderer.setChartTitleTextSize(60);
 		renderer.setLabelsTextSize(35);
-		renderer.setPointSize(10f);
+		renderer.setPointSize(5f);
 		renderer.setZoomEnabled(false, false);
 		// top, left, bottom, right
 		renderer.setMargins(new int[] { 80, 80, 20, 0 });
 		renderer.setChartTitle("Price Per Gallon");
 		renderer.setXTitle("Date");
-		renderer.setYTitle("Price");
+		renderer.setYTitle("Price Per Gallon");
 		renderer.setApplyBackgroundColor(false);
 		renderer.setFitLegend(false);
 		renderer.setPanEnabled(false, false);
@@ -379,12 +401,23 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false);
 		renderer.setInScroll(true);
 		renderer.addSeriesRenderer(r);
+		renderer.setXLabels(0);
+		renderer.setYAxisMin(dataset.getSeriesAt(0).getMinY() - 3);
+		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 3);
+		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - ( 172800000 ));
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + ( 172800000 ));
 
-		gview = ChartFactory.getTimeChartView(getActivity(), dataset, renderer, "MMM-dd-yyyy");
+		for ( DateValue result : values ) {
+			renderer.addXTextLabel(result.getDate().getTime(), new SimpleDateFormat("MMM-dd", Locale.US).format(result.getDate()));
+		}
+
+		renderer.setXLabelsAlign(Align.CENTER);
+		renderer.setXLabelsPadding(10);
+
+		gview = ChartFactory.getLineChartView(getActivity(), dataset, renderer);
 		return gview;
 	}
 
-	// Bar Graph
 	public GraphicalView getMFCGraph()
 	{
 		GraphicalView gview = null;
@@ -466,21 +499,20 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setXLabels(0);
 		renderer.setYAxisMin(dataset.getSeriesAt(0).getMinY() - 10);
 		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 10);
-		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - (1999000000));
-		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + (1999000000));
+		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - ( 1999000000 ));
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + ( 1999000000 ));
 
 		for ( DateValue result : values ) {
 			renderer.addXTextLabel(result.getDate().getTime(), new SimpleDateFormat("MMM-yy", Locale.US).format(result.getDate()));
-		}	
-		
-		 renderer.setXLabelsAlign(Align.CENTER);
-		 renderer.setXLabelsPadding(10);
+		}
+
+		renderer.setXLabelsAlign(Align.CENTER);
+		renderer.setXLabelsPadding(10);
 
 		gview = ChartFactory.getBarChartView(getActivity(), dataset, renderer, Type.DEFAULT);
 		return gview;
 	}
 
-	// BarGraph
 	public GraphicalView getMMGraph()
 	{
 		GraphicalView gview = null;
@@ -560,15 +592,15 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setXLabels(0);
 		renderer.setYAxisMin(dataset.getSeriesAt(0).getMinY() - 10);
 		renderer.setYAxisMax(dataset.getSeriesAt(0).getMaxY() + 10);
-		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - (1999000000));
-		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + (1999000000));
+		renderer.setXAxisMin(dataset.getSeriesAt(0).getMinX() - ( 1999000000 ));
+		renderer.setXAxisMax(dataset.getSeriesAt(0).getMaxX() + ( 1999000000 ));
 
 		for ( DateValue result : values ) {
 			renderer.addXTextLabel(result.getDate().getTime(), new SimpleDateFormat("MMM-yy", Locale.US).format(result.getDate()));
-		}	
-		
-		 renderer.setXLabelsAlign(Align.CENTER);
-		 renderer.setXLabelsPadding(10);
+		}
+
+		renderer.setXLabelsAlign(Align.CENTER);
+		renderer.setXLabelsPadding(10);
 
 		gview = ChartFactory.getBarChartView(getActivity(), dataset, renderer, Type.DEFAULT);
 		return gview;
@@ -647,10 +679,10 @@ public class StatisticsViewFragment extends Fragment
 			values[fu.getDate().getMonth()] += fu.getPrice() * fu.getGas();
 		}
 
-		double max = values[0];
+		double max = Double.MAX_VALUE;
 
 		for ( int i = 1; i < values.length; i++ ) {
-			if ( values[i] < max ) {
+			if ( values[i] < max && values[i] != 0) {
 				max = values[i];
 			}
 		}
@@ -687,10 +719,10 @@ public class StatisticsViewFragment extends Fragment
 			values[fu.getDate().getMonth()] += fu.getDistance();
 		}
 
-		double max = values[0];
+		double max = Double.MAX_VALUE;
 
 		for ( int i = 1; i < values.length; i++ ) {
-			if ( values[i] < max ) {
+			if ( values[i] < max && values[i] != 0) {
 				max = values[i];
 			}
 		}
@@ -700,7 +732,7 @@ public class StatisticsViewFragment extends Fragment
 
 	private double round(double x)
 	{
-		return ( (int) ( ( x * 100 ) / 100 ) );
+		return ( (int) ( x * 100 ) ) / 100.0;
 	}
 
 	private class DateValue implements Comparable<DateValue>
