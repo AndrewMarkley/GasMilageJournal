@@ -32,6 +32,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.orangegames.gasmilagejournal.activities.SettingsActivity;
 import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
 import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
+import com.orangegames.gasmilagejournal.database.OldCarDatabaseHandler;
+import com.orangegames.gasmilagejournal.database.OldFillUpDatabaseHandler;
+import com.orangegames.gasmilagejournal.entities.Car;
 import com.orangegames.gasmilagejournal.entities.FillUp;
 import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
 import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
@@ -44,7 +47,7 @@ public class MainActivity extends FragmentActivity
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	private CarDatabaseHelper carDatabaseHelper = null;
-	private FillUpDatabaseHelper fillUpDatabaseHelper = null; 
+	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
 
 	public static final String MEASUREMENT_KEY = "measurement";
 	public static final String DATE_FORMAT_KEY = "date_format";
@@ -83,12 +86,44 @@ public class MainActivity extends FragmentActivity
 		}
 		editor.commit();
 
+		//initialize databases
 		if ( fillUpDatabaseHelper == null ) {
 			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(this);
 		}
 
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
+		}
+
+		//migrate old database
+		try {
+			OldCarDatabaseHandler oldCarDB = new OldCarDatabaseHandler(this);
+			OldFillUpDatabaseHandler oldFillUpDB = new OldFillUpDatabaseHandler(this);
+			
+			if(oldCarDB.tableExists()) {
+				List<Car> cars = oldCarDB.getAllCars();
+				
+				for(Car car : cars) {
+					Log.i("Upgrading Car", "adding new car to new database: " + car.toString());
+					carDatabaseHelper.getCarDao().create(car);
+				}
+				
+				oldCarDB.dropTable();
+			}
+			
+			if ( oldFillUpDB.tableExists() ) {
+				List<Car> cars = carDatabaseHelper.getCarDao().queryForAll();
+				List<FillUp> fillUps = oldFillUpDB.getAllFillUps(cars);
+
+				for ( FillUp fu : fillUps ) {
+					Log.i("Upgrading FillUp", "adding new fillup to new database: " + fu.toString());
+					fillUpDatabaseHelper.getFillUpDao().create(fu);
+				}
+				
+				oldFillUpDB.dropTable();
+			}
+		} catch (Exception e) {
+			Log.i("exception", e.toString());
 		}
 	}
 
@@ -261,7 +296,7 @@ public class MainActivity extends FragmentActivity
 								try {
 									File file = new File(newFolder, fu.getId() + "_" + fu.getDate() + ".jpg");
 									file.createNewFile();
-									 fos = new FileOutputStream(file);
+									fos = new FileOutputStream(file);
 									Log.i("info", file.getAbsolutePath());
 								} catch (Exception ex) {
 								}
@@ -275,7 +310,7 @@ public class MainActivity extends FragmentActivity
 					}
 					success = true;
 				}
-				if(success) {
+				if ( success ) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 					builder.setMessage("Files were successfully exported to GasMialgeJournal folder on your SD Card").setPositiveButton("Ok", null);
 					builder.create().show();
@@ -293,7 +328,7 @@ public class MainActivity extends FragmentActivity
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
+
 	public void displayAboutDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

@@ -68,17 +68,6 @@ public class FillUp implements Serializable
 		this.receipt = receipt;
 	}
 
-	public FillUp(int carId, double distance, double gas, double price, double totalCost, double mpg, Date date, String comments) {
-		this.distance = distance;
-		this.gas = gas;
-		this.price = round(price, 2);
-		this.comments = comments;
-		this.mpg = round(mpg, 3);
-		this.totalCost = totalCost;
-		this.date = date;
-		this.carId = carId;
-	}
-
 	public int getId() { return id; }
 	public void setId(int value) { this.id = value; }
 	
