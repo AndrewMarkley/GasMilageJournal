@@ -329,7 +329,6 @@ public class MainActivity extends FragmentActivity
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
-		checkForAtLeastOneCar();
 	}
 
 	@Override

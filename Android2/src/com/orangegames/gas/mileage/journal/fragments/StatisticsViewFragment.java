@@ -287,6 +287,10 @@ public class StatisticsViewFragment extends Fragment
 			}
 
 		}
+		
+		if(series.getItemCount() == 0) {
+			series.add(0, 0);
+		}
 
 		dataset.addSeries(series);
 
@@ -366,6 +370,10 @@ public class StatisticsViewFragment extends Fragment
 				e.printStackTrace();
 			}
 
+		}
+		
+		if(series.getItemCount() == 0) {
+			series.add(0, 0);
 		}
 
 		dataset.addSeries(series);
@@ -463,6 +471,10 @@ public class StatisticsViewFragment extends Fragment
 
 		}
 
+		if(series.getItemCount() == 0) {
+			series.add(0, 0);
+		}
+		
 		dataset.addSeries(series);
 
 		// Setup the renderers
@@ -554,6 +566,10 @@ public class StatisticsViewFragment extends Fragment
 				e.printStackTrace();
 			}
 
+		}
+		
+		if(series.getItemCount() == 0) {
+			series.add(0, 0);
 		}
 
 		dataset.addSeries(series);
