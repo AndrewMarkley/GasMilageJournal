@@ -51,7 +51,7 @@ public class FillUpDatabaseHelper extends OrmLiteSqliteOpenHelper
 
 			FillUp fillUp = new FillUp(1, 300, 20.5, 2.99, Calendar.getInstance().getTime(), "comments", null);
 			dao.create(fillUp);
-			fillUp = new FillUp(1, 301, 20.6, 2.98, Calendar.getInstance().getTime(), "comments1", null);
+			fillUp.setDistance(1000000);
 			dao.update(fillUp);
 			dao.delete(fillUp);
 			Log.i(FillUpDatabaseHelper.class.getName(), "tested CRUD on a new FillUp entry in onCreate: " + millis);

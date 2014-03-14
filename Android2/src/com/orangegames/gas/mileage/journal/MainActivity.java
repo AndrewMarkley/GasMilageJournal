@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +35,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.orangegames.gas.mileage.journal.activities.SettingsActivity;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.dialogs.ShowCarDialog;
 import com.orangegames.gas.mileage.journal.entities.FillUp;
 import com.orangegames.gas.mileage.journal.fragments.CarsViewFragment;
 import com.orangegames.gas.mileage.journal.fragments.FillUpViewFragment;
@@ -83,7 +87,7 @@ public class MainActivity extends FragmentActivity
 		}
 		editor.commit();
 
-		//initialize databases
+		// initialize databases
 		if ( fillUpDatabaseHelper == null ) {
 			this.fillUpDatabaseHelper = FillUpDatabaseHelper.getHelper(this);
 		}
@@ -91,6 +95,9 @@ public class MainActivity extends FragmentActivity
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
+
+		checkForAtLeastOneCar();
+
 	}
 
 	@Override
@@ -319,12 +326,56 @@ public class MainActivity extends FragmentActivity
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
+		checkForAtLeastOneCar();
 	}
 
 	@Override
 	public void onDestroy()
 	{
 		super.onDestroy();
+	}
+
+	private void checkForAtLeastOneCar()
+	{
+		try {
+			if ( carDatabaseHelper.getCarDao().queryForAll().size() == 0 ) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setMessage("You Must have at least 1 car entered to use Gas Mileage Journal!").setPositiveButton("Add a Car", new OnClickListener()
+				{
+
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						Intent intent = new Intent(getBaseContext(), ShowCarDialog.class);
+						startActivityForResult(intent, 0);
+					}
+				}).setOnCancelListener(new OnCancelListener()
+				{
+					@Override
+					public void onCancel(DialogInterface dialog)
+					{
+						checkForAtLeastOneCar();
+					}
+				});
+				builder.create().show();
+
+			}
+		} catch (SQLException e) {
+
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		checkForAtLeastOneCar();
+		if ( resultCode == RESULT_OK ) {
+			//launch tutorial here
+		}
+
+		if ( resultCode == Activity.RESULT_CANCELED ) {
+			
+		}
 	}
 
 }

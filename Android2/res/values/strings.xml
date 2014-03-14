@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Gas Milage Journal</string>
+    <string name="app_name">Gas Mileage Journal</string>
     <string name="action_settings">Settings</string>
     <string name="title_section1">Statistics</string>
     <string name="title_section2">Fill Ups</string>
@@ -27,7 +27,7 @@
     <string name="example_application">Example application</string>
     <string name="todo">TODO</string>
     <string name="add_a_picture_of_receipt">Add a picture of the receipt!</string>
-    <string name="preference_file_key">com.orangegames.gasmilagejournal</string>
+    <string name="preference_file_key">com.orangegames.gas.mileage.journal</string>
     <string name="measurement">measurement</string>
     <string name="date_format">date_format</string>
     <string name="currency">currency</string>
