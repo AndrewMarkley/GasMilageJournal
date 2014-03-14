@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.orangegames.gas.mileage.journal.activities.SettingsActivity;
+import com.orangegames.gas.mileage.journal.apprater.AppRater;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
 import com.orangegames.gas.mileage.journal.dialogs.ShowCarDialog;
@@ -60,6 +61,8 @@ public class MainActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		AppRater.app_launched(this);
 
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 

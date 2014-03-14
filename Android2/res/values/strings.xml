@@ -31,6 +31,11 @@
     <string name="measurement">measurement</string>
     <string name="date_format">date_format</string>
     <string name="currency">currency</string>
+    <string name="dialog_title">Rate %s</string>
+    <string name="rate_message">If you enjoy using this app, please take a moment to rate it. Thanks for your support!</string>
+    <string name="rate">Rate Now</string>
+    <string name="later">Later</string>
+    <string name="no_thanks">No thanks</string>
 
 </resources>
 
