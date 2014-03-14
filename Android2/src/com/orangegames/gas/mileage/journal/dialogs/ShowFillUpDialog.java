@@ -65,6 +65,7 @@ public class ShowFillUpDialog extends Activity
 		setContentView(R.layout.detailed_fillup_form);
 		in = getIntent();
 		newFillUp = in.getBooleanExtra("newFillUp", newFillUp);
+		fillUp = (FillUp) in.getSerializableExtra("fillUp");
 		SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
 		// initialize all the fields
@@ -101,13 +102,18 @@ public class ShowFillUpDialog extends Activity
 
 		carArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		carList.setAdapter(carArrayAdapter);
+		
+		for(int ctr = 0; ctr < cars.size(); ctr++) {
+			if(fillUp!= null && cars.get(ctr).getId() == fillUp.getCarId()) {
+				carList.setSelection(ctr);
+			}
+		}
 
 		if ( newFillUp ) {
 			title.setText("Add a Fill Up!");
 		} else {
 			title.setText("Modify a Fill Up!");
 			saveButton.setText("Save Fill Up");
-			fillUp = (FillUp) in.getSerializableExtra("fillUp");
 			comments.setText(fillUp.getComments());
 			pricePerGallon.setText("" + fillUp.getPrice());
 			gallonsPurchased.setText("" + fillUp.getGas());

@@ -16,9 +16,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -190,6 +192,13 @@ public class FillUpViewFragment extends Fragment
 			mpg.setText("" + round(temp.getMPG()));
 			cost.setText(currencySymbol + round(temp.getPrice() * temp.getGas()));
 
+			WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+			Display display = wm.getDefaultDisplay();
+			int width = display.getWidth();  // deprecated
+			
+			carName.setMaxWidth((int)(width * .5));
+			carName.setMaxLines(1);
+			
 			return rowView;
 		}
 	}

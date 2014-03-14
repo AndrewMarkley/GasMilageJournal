@@ -92,6 +92,11 @@ public class ShowMaintenanceDialog extends Activity
 
 		carArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		carList.setAdapter(carArrayAdapter);
+		for(int ctr = 0; ctr < cars.size(); ctr++) {
+			if(log!= null && cars.get(ctr).getId() == log.getCarId()) {
+				carList.setSelection(ctr);
+			}
+		}
 
 		if ( newLog ) {
 			pageTitle.setText("Add a Maintenance Event!");
