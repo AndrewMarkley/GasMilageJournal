@@ -188,11 +188,13 @@ public class MaintenanceLogViewFragment extends Fragment
 
 			title.setText(log.getTitle());
 			title.setMaxWidth((int) (width * .5));
+			carName.setText(name);
+			carName.setMaxWidth((int) (width * .5));
+			carName.setMaxLines(1);
 //			description.setText(log.getDescription());
 			cost.setText(currencyUnits + round(log.getCost()));
 			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate()));
 			odometer.setText("" + round(log.getOdometer()) + distanceUnits);
-			carName.setText(name);
 			return rowView;
 		}
 	}
