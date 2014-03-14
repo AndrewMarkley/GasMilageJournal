@@ -605,6 +605,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getBestMPGRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		double best = 0.0;
 		for ( FillUp fu : fillups ) {
 			if ( best < fu.getMPG() ) {
@@ -616,6 +619,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getWorstMPGRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		double best = Double.MAX_VALUE;
 		for ( FillUp fu : fillups ) {
 			if ( best > fu.getMPG() ) {
@@ -627,6 +633,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getBestPPGRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		double best = 0.0;
 		for ( FillUp fu : fillups ) {
 			if ( best < fu.getPrice() ) {
@@ -638,6 +647,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getWorstPPGRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		double best = Double.MAX_VALUE;
 		for ( FillUp fu : fillups ) {
 			if ( best > fu.getPrice() ) {
@@ -649,6 +661,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getBestMFCRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		Double[] values = new Double[12];
 		Arrays.fill(values, 0.0);
 
@@ -669,6 +684,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getWorstMFCRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		Double[] values = new Double[12];
 		Arrays.fill(values, 0.0);
 
@@ -689,6 +707,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getBestMMRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		Double[] values = new Double[12];
 		Arrays.fill(values, 0.0);
 
@@ -709,6 +730,9 @@ public class StatisticsViewFragment extends Fragment
 
 	public double getWorstMMRecord(List<FillUp> fillups)
 	{
+		if(fillups.isEmpty()) {
+			return 0;
+		}
 		Double[] values = new Double[12];
 		Arrays.fill(values, 0.0);
 
