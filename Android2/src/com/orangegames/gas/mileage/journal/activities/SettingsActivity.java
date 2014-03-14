@@ -28,7 +28,7 @@ public class SettingsActivity extends Activity
 	ListViewArrayAdapter listViewArrayAdapter = null;
 	private String[] titles = { "Measurement System", "Date Format", "Currency", "Contact Dev", "Change How Fillups work" };
 	private String[] descriptions = { "Choose from English, Imperial, or Metric units", "Change the date format used", "Change the currency used", "Questions or comments? email us!",
-			"Choose to specify the trip's milage or use the odometer's readings" };
+			"Specify the trip's milage or use the odometer's readings" };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)

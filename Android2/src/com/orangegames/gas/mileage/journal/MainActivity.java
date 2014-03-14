@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,8 +37,10 @@ import com.orangegames.gas.mileage.journal.activities.SettingsActivity;
 import com.orangegames.gas.mileage.journal.apprater.AppRater;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.MaintenanceLogDatabaseHelper;
 import com.orangegames.gas.mileage.journal.dialogs.ShowCarDialog;
 import com.orangegames.gas.mileage.journal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.entities.MaintenanceLog;
 import com.orangegames.gas.mileage.journal.fragments.CarsViewFragment;
 import com.orangegames.gas.mileage.journal.fragments.FillUpViewFragment;
 import com.orangegames.gas.mileage.journal.fragments.MaintenanceLogViewFragment;
@@ -50,6 +53,7 @@ public class MainActivity extends FragmentActivity
 	private ViewPager mViewPager;
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
+	private MaintenanceLogDatabaseHelper maintenanceLogDatabaseHelper = null;
 
 	public static final String MEASUREMENT_KEY = "measurement";
 	public static final String DATE_FORMAT_KEY = "date_format";
@@ -97,6 +101,10 @@ public class MainActivity extends FragmentActivity
 
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
+		}
+		
+		if ( maintenanceLogDatabaseHelper == null ) {
+			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(this);
 		}
 
 		checkForAtLeastOneCar();
@@ -193,8 +201,8 @@ public class MainActivity extends FragmentActivity
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Select what data to export");
-		String[] items = { "Fill Ups as a CSV", "Receipt Images" };
-		final boolean[] checkedItems = { true, true };
+		String[] items = { "Fill Ups as a CSV", "Maintenance Logs as a CSV", "Receipt Images" };
+		final boolean[] checkedItems = { true, true, true };
 
 		builder.setTitle("Select an Option!");
 
@@ -212,26 +220,28 @@ public class MainActivity extends FragmentActivity
 			{
 				boolean success = false;
 				List<FillUp> fillups = null;
+				List<MaintenanceLog> logs = null;
 				try {
 					fillups = fillUpDatabaseHelper.getFillUpDao().queryForAll();
+					logs = maintenanceLogDatabaseHelper.getMaintenanceLogDao().queryForAll();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 				if ( checkedItems[0] ) {
 					CSVWriter writer = null;
 
-					File newFolder = new File(Environment.getExternalStorageDirectory(), "GasMilageJournal");
+					File newFolder = new File(Environment.getExternalStorageDirectory(), "GasMileageJournal");
 					if ( ! newFolder.exists() ) {
 						newFolder.mkdir();
 					}
 					try {
-						File file = new File(newFolder, "fillups.csv");
+						String date = new SimpleDateFormat("MM-dd-yyyy_HH:mm_", Locale.US).format(Calendar.getInstance().getTime());
+						File file = new File(newFolder, date + "fill_ups.csv");
 						file.createNewFile();
 						writer = new CSVWriter(new FileWriter(file));
-						Log.i("info", file.getAbsolutePath());
 					} catch (Exception ex) {
 					}
-					Log.i("info", "" + ( writer == null ));
+					
 					SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 					List<String[]> data = new ArrayList<String[]>();
 					String[] columns = { "CAR NAME", "MPG", "PRICE", "GALLONS", "DISTANCE", "DATE", "COMMENTS" };
@@ -261,11 +271,54 @@ public class MainActivity extends FragmentActivity
 					success = true;
 				}
 				if ( checkedItems[1] ) {
+					CSVWriter writer = null;
+
+					File newFolder = new File(Environment.getExternalStorageDirectory(), "GasMileageJournal");
+					if ( ! newFolder.exists() ) {
+						newFolder.mkdir();
+					}
+					try {
+						String date = new SimpleDateFormat("MM-dd-yyyy_HH:mm_", Locale.US).format(Calendar.getInstance().getTime());
+						File file = new File(newFolder, date + "maintenance_logs.csv");
+						file.createNewFile();
+						writer = new CSVWriter(new FileWriter(file));
+					} catch (Exception ex) {
+					}
+					
+					SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+					List<String[]> data = new ArrayList<String[]>();
+					String[] columns = { "CAR NAME", "TITLE", "DESCRIPTION", "COST", "ODOMETER", "DATE" };
+					for (MaintenanceLog log : logs ) {
+						try {
+							//public MaintenanceLog(int carId, Date date, double cost, double odometer, String title, String description, String location, byte[] receipt)
+							String[] values = new String[6];
+							values[0] = carDatabaseHelper.getCarDao().queryForId(log.getCarId()).getName();
+							values[1] = "" + log.getTitle();
+							values[2] = "" + log.getDescription();
+							values[3] = "" + log.getCost();
+							values[4] = "" + log.getOdometer();
+							values[5] = new SimpleDateFormat(sharedPref.getString(DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate());
+							data.add(values);
+						} catch (SQLException e) {
+							Log.i("erroe", e.toString());
+						}
+					}
+					writer.writeNext(columns);
+					writer.writeAll(data);
+
+					try {
+						writer.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					success = true;
+				}
+				if ( checkedItems[2] ) {
 					for ( FillUp fu : fillups ) {
 						if ( fu.getReceipt() != null && fu.getReceipt().length > 0 ) {
 							FileOutputStream fos = null;
 							try {
-								File newFolder = new File(Environment.getExternalStorageDirectory(), "GasMilageJournal");
+								File newFolder = new File(Environment.getExternalStorageDirectory(), "GasMileageJournal");
 								if ( ! newFolder.exists() ) {
 									newFolder.mkdir();
 								}
@@ -288,7 +341,7 @@ public class MainActivity extends FragmentActivity
 				}
 				if ( success ) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-					builder.setMessage("Files were successfully exported to GasMialgeJournal folder on your SD Card").setPositiveButton("Ok", null);
+					builder.setMessage("Files were successfully exported to GasMileageJournal folder on your SD Card").setPositiveButton("Ok", null);
 					builder.create().show();
 				}
 			}
@@ -308,7 +361,7 @@ public class MainActivity extends FragmentActivity
 	public void displayAboutDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-		builder.setMessage("Gas Milage Journal\nDeveloped by Orange Games\nVersion 2.0").setPositiveButton("Ok", null);
+		builder.setMessage("Gas Mileage Journal\nDeveloped by Orange Games\nVersion 2.0").setPositiveButton("Ok", null);
 		builder.create().show();
 	}
 
@@ -328,6 +381,10 @@ public class MainActivity extends FragmentActivity
 
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
+		}
+		
+		if(maintenanceLogDatabaseHelper == null) {
+			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(this);
 		}
 	}
 
@@ -381,3 +438,4 @@ public class MainActivity extends FragmentActivity
 	}
 
 }
+
