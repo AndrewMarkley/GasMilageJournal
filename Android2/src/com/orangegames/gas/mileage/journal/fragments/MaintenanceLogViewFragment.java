@@ -14,11 +14,14 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -139,7 +142,7 @@ public class MaintenanceLogViewFragment extends Fragment
 			View rowView = inflater.inflate(R.layout.maintenance_log_view_fragment_list_view, parent, false);
 
 			TextView title = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_title);
-			TextView description = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_description);
+//			TextView description = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_description);
 			TextView cost = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_list_view_cost);
 			TextView date = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_list_view_date);
 			TextView odometer = (TextView) rowView.findViewById(R.id.maintenance_log_view_frament_list_view_odometer);
@@ -152,7 +155,7 @@ public class MaintenanceLogViewFragment extends Fragment
 			}
 			
 			title.setTextColor(Color.WHITE);
-			description.setTextColor(Color.WHITE);
+//			description.setTextColor(Color.WHITE);
 			cost.setTextColor(Color.WHITE);
 			date.setTextColor(Color.WHITE);
 			odometer.setTextColor(Color.WHITE);
@@ -179,8 +182,13 @@ public class MaintenanceLogViewFragment extends Fragment
 
 			}
 
+			WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+			Display display = wm.getDefaultDisplay();
+			int width = display.getWidth();  // deprecated
+
 			title.setText(log.getTitle());
-			description.setText(log.getDescription());
+			title.setMaxWidth((int) (width * .5));
+//			description.setText(log.getDescription());
 			cost.setText(currencyUnits + round(log.getCost()));
 			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate()));
 			odometer.setText("" + round(log.getOdometer()) + distanceUnits);
@@ -212,7 +220,9 @@ public class MaintenanceLogViewFragment extends Fragment
 		
 		MaintenanceLog[] temp = new MaintenanceLog[maintenanceLogs.size()];
 		maintenanceLogs.toArray(temp);
-		maintenanceArrayAdapter = new MaintenanceArrayAdapter(getActivity().getBaseContext(), (MaintenanceLog[]) temp);
+		
+		listView.invalidate();
+		maintenanceArrayAdapter = new MaintenanceArrayAdapter(getActivity().getBaseContext(), temp);
 		listView.setAdapter(maintenanceArrayAdapter);
 	}
 
@@ -225,6 +235,20 @@ public class MaintenanceLogViewFragment extends Fragment
 	public void onResume() 
 	{
 		super.onResume();
+		refreshMaintenanceList();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		Log.i("log", "on Activity result");
+		if ( requestCode == android.app.Activity.RESULT_OK ) {
+
+		}
+		
+		for(MaintenanceLog log : maintenanceLogs) {
+			Log.i("log", log.toString());
+		}
 		refreshMaintenanceList();
 	}
 }

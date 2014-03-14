@@ -19,7 +19,7 @@ public class MaintenanceLogDatabaseHelper extends OrmLiteSqliteOpenHelper
 
 	private static final String DATABASE_NAME = "MaintenanceLogDatabaseHelper.db";
 
-	private static final int DATABASE_VERSION = 23;
+	private static final int DATABASE_VERSION = 24;
 
 	private Dao<MaintenanceLog, Integer> complexDao = null;
 
@@ -67,7 +67,6 @@ public class MaintenanceLogDatabaseHelper extends OrmLiteSqliteOpenHelper
 		try {
 			Log.i(MaintenanceLogDatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, MaintenanceLog.class, true);
-			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
 			Log.e(MaintenanceLogDatabaseHelper.class.getName(), "Can't drop databases", e);

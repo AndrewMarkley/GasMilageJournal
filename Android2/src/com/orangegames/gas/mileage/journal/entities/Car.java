@@ -63,7 +63,7 @@ public class Car implements Serializable
 	@Override
 	public String toString()
 	{
-		return name + " " + year + " " + make + " " + model + " " + " miles: " + milage;
+		return name + "\t\t" + year + " " + make + " " + model;
 	}
 
 }

@@ -188,14 +188,18 @@ public class ShowMaintenanceDialog extends Activity
 					Date time = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(dateButton.getText().toString());
 					String loc = location.getText().toString();
 
-					if ( newLog ) {
+					if ( newLog || log == null) {
 						MaintenanceLog mlog = new MaintenanceLog(carId, time, price, odom, tit, desc, loc, receiptImage);
 						getMaintenanceLogDatabaseHelper().getMaintenanceLogDao().create(mlog);
 					} else {
-						int lId = log.getId();
-						MaintenanceLog mlog = new MaintenanceLog(carId, time, price, odom, tit, desc, loc, receiptImage);
-						log.setId(lId);
-						getMaintenanceLogDatabaseHelper().getMaintenanceLogDao().update(mlog);
+						log.setCarId(carId);
+						log.setDate(time);
+						log.setOdometer(odom);
+						log.setTitle(tit);
+						log.setDescription(desc);
+						log.setLocation(loc);
+						log.setReceipt(receiptImage);
+						getMaintenanceLogDatabaseHelper().getMaintenanceLogDao().update(log);
 					}
 
 					Intent i = getIntent();
@@ -204,11 +208,9 @@ public class ShowMaintenanceDialog extends Activity
 					finish();
 
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.i("exception", e.toString());
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.i("exception", e.toString());
 				} catch(Exception e) {
 					CharSequence text = "Please fill in all blank spaces!";
 					Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
@@ -296,6 +298,22 @@ public class ShowMaintenanceDialog extends Activity
 		if ( resultCode == Activity.RESULT_CANCELED ) {
 
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (carDatabaseHelper != null) {
+			carDatabaseHelper.close();
+			carDatabaseHelper = null;
+		}
+		
+		if (maintenanceLogDatabaseHelper != null) {
+			maintenanceLogDatabaseHelper.close();
+			maintenanceLogDatabaseHelper = null;
+		}
+		
 	}
 
 }

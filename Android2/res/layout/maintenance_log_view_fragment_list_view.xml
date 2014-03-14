@@ -49,15 +49,6 @@
             android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/maintenance_log_view_frament_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="description"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
     </LinearLayout>
 
     <LinearLayout

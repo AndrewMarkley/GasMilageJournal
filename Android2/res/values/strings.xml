@@ -7,7 +7,7 @@
     <string name="title_section2">Fill Ups</string>
     <string name="title_section3">Cars</string>
     <string name="title_section4">Service Log</string>
-    <string name="detailed_car_form_car_name">Car Nickname: </string>
+    <string name="detailed_car_form_car_name">Choose a Car:</string>
     <string name="add_new_fill_up">Add new Fill Up</string>
     <string name="add_new_car">Add new Car</string>
     <string name="car_nickname">Car Nickname</string>

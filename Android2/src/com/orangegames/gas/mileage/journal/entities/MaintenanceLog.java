@@ -48,7 +48,7 @@ public class MaintenanceLog implements Serializable
 		this.cost = cost;
 		this.odometer = odometer;
 		this.title = title;
-		this.setDescription(description);
+		this.description = description;
 		this.location = location;
 		this.receipt = receipt;
 	}
@@ -63,7 +63,7 @@ public class MaintenanceLog implements Serializable
 	public void setDescription(String value) { this.description = value; }
 	
 	public String getTitle() { return title; }
-	public void setTitle(String value) { this.description = title; }
+	public void setTitle(String value) { this.title = value; }
 	
 	public String getLocation() { return location; }
 	public void setLocation(String value) { this.location = value; }
@@ -82,6 +82,6 @@ public class MaintenanceLog implements Serializable
 	
 	public String toString()
 	{
-		return getTitle() + " " + getDescription() + " " + getCost() + " " + getDate();   
+		return getId() + " " + getTitle() + " " + getDescription() + " " + getCost() + " " + getDate();   
 	}
 }
