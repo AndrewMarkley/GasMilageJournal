@@ -213,14 +213,7 @@ public class FillUpViewFragment extends Fragment
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		if ( fillUps.isEmpty() ) {
-			fillUpListView.invalidate();
-			fillUpListView.setVisibility(View.GONE);
-			return;
-		} else {
-			fillUpListView.setVisibility(View.VISIBLE);
-		}
+		
 		FillUp[] temp = new FillUp[fillUps.size()];
 		fillUps.toArray(temp);
 

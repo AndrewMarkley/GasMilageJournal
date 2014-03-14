@@ -16,7 +16,7 @@
     <ListView
         android:id="@+id/maintenance_log_view_fragment_list"
         android:layout_width="match_parent"
-        android:layout_height="394dp"
+        android:layout_height="438dp"
         android:layout_weight=".8" >
     </ListView>
     
