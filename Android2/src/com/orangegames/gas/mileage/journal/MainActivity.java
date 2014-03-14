@@ -80,7 +80,7 @@ public class MainActivity extends FragmentActivity
 			editor.putString(MEASUREMENT_KEY, "US");
 		}
 		if ( ! sharedPref.contains(DATE_FORMAT_KEY) ) {
-			editor.putString(DATE_FORMAT_KEY, "mm/dd/yyyy");
+			editor.putString(DATE_FORMAT_KEY, "MM/dd/yyyy");
 		}
 		if ( ! sharedPref.contains(CURRENCY_KEY) ) {
 			editor.putString(CURRENCY_KEY, "$");
