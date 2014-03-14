@@ -1,8 +1,7 @@
-package com.orangegames.gasmilagejournal.fragments;
+package com.orangegames.gas.mileage.journal.fragments;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,22 +20,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.orangegames.gasmilagejournal.MainActivity;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.MaintenanceLogDatabaseHelper;
-import com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog;
-import com.orangegames.gasmilagejournal.dialogs.ShowMaintenanceDialog;
-import com.orangegames.gasmilagejournal.entities.FillUp;
-import com.orangegames.gasmilagejournal.entities.MaintenanceLog;
+import com.orangegames.gas.mileage.journal.MainActivity;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.MaintenanceLogDatabaseHelper;
+import com.orangegames.gas.mileage.journal.dialogs.ShowMaintenanceDialog;
+import com.orangegames.gas.mileage.journal.entities.MaintenanceLog;
 
 public class MaintenanceLogViewFragment extends Fragment
 {

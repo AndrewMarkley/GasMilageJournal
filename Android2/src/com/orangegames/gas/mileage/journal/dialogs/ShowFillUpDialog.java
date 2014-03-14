@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.dialogs;
+package com.orangegames.gas.mileage.journal.dialogs;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
@@ -34,12 +34,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.internal.di;
-import com.orangegames.gasmilagejournal.MainActivity;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.entities.Car;
-import com.orangegames.gasmilagejournal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.MainActivity;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
 
 public class ShowFillUpDialog extends Activity
 {

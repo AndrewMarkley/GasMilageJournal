@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.fragments;
+package com.orangegames.gas.mileage.journal.fragments;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,12 +28,12 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.orangegames.gasmilagejournal.MainActivity;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.dialogs.ShowCarDialog;
-import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gas.mileage.journal.MainActivity;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.dialogs.ShowCarDialog;
+import com.orangegames.gas.mileage.journal.entities.Car;
 
 public class CarsViewFragment extends Fragment
 {

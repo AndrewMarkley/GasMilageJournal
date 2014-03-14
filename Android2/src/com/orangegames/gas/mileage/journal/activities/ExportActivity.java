@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.activities;
+package com.orangegames.gas.mileage.journal.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,8 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.internal.de;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.entities.Car;
 
 public class ExportActivity extends Activity
 {

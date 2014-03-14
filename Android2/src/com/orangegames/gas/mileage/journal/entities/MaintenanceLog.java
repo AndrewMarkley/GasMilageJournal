@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.entities;
+package com.orangegames.gas.mileage.journal.entities;
 
 import java.io.Serializable;
 import java.util.Date;

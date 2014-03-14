@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal;
+package com.orangegames.gas.mileage.journal;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,17 +29,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.orangegames.gasmilagejournal.activities.SettingsActivity;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.OldCarDatabaseHandler;
-import com.orangegames.gasmilagejournal.database.OldFillUpDatabaseHandler;
-import com.orangegames.gasmilagejournal.entities.Car;
-import com.orangegames.gasmilagejournal.entities.FillUp;
-import com.orangegames.gasmilagejournal.fragments.CarsViewFragment;
-import com.orangegames.gasmilagejournal.fragments.FillUpViewFragment;
-import com.orangegames.gasmilagejournal.fragments.MaintenanceLogViewFragment;
-import com.orangegames.gasmilagejournal.fragments.StatisticsViewFragment;
+import com.orangegames.gas.mileage.journal.activities.SettingsActivity;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.fragments.CarsViewFragment;
+import com.orangegames.gas.mileage.journal.fragments.FillUpViewFragment;
+import com.orangegames.gas.mileage.journal.fragments.MaintenanceLogViewFragment;
+import com.orangegames.gas.mileage.journal.fragments.StatisticsViewFragment;
 
 public class MainActivity extends FragmentActivity
 {
@@ -93,37 +90,6 @@ public class MainActivity extends FragmentActivity
 
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
-		}
-
-		//migrate old database
-		try {
-			OldCarDatabaseHandler oldCarDB = new OldCarDatabaseHandler(this);
-			OldFillUpDatabaseHandler oldFillUpDB = new OldFillUpDatabaseHandler(this);
-			
-			if(oldCarDB.tableExists()) {
-				List<Car> cars = oldCarDB.getAllCars();
-				
-				for(Car car : cars) {
-					Log.i("Upgrading Car", "adding new car to new database: " + car.toString());
-					carDatabaseHelper.getCarDao().create(car);
-				}
-				
-				oldCarDB.dropTable();
-			}
-			
-			if ( oldFillUpDB.tableExists() ) {
-				List<Car> cars = carDatabaseHelper.getCarDao().queryForAll();
-				List<FillUp> fillUps = oldFillUpDB.getAllFillUps(cars);
-
-				for ( FillUp fu : fillUps ) {
-					Log.i("Upgrading FillUp", "adding new fillup to new database: " + fu.toString());
-					fillUpDatabaseHelper.getFillUpDao().create(fu);
-				}
-				
-				oldFillUpDB.dropTable();
-			}
-		} catch (Exception e) {
-			Log.i("exception", e.toString());
 		}
 	}
 

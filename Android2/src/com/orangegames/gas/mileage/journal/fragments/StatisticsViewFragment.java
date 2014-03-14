@@ -1,19 +1,16 @@
-package com.orangegames.gasmilagejournal.fragments;
+package com.orangegames.gas.mileage.journal.fragments;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -46,11 +43,11 @@ import android.widget.TextView;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.entities.Car;
-import com.orangegames.gasmilagejournal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
 
 public class StatisticsViewFragment extends Fragment
 {

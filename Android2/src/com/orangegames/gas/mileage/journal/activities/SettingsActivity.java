@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.activities;
+package com.orangegames.gas.mileage.journal.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,8 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.internal.em;
-import com.orangegames.gasmilagejournal.MainActivity;
-import com.orangegames.gasmilagejournal.R;
+import com.orangegames.gas.mileage.journal.MainActivity;
+import com.orangegames.gas.mileage.journal.R;
 
 public class SettingsActivity extends Activity
 {

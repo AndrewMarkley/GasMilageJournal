@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.database;
+package com.orangegames.gas.mileage.journal.database;
 
 import java.io.IOException;
 

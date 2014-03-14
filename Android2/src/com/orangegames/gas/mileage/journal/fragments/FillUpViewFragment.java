@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.fragments;
+package com.orangegames.gas.mileage.journal.fragments;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -29,13 +29,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.orangegames.gasmilagejournal.MainActivity;
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.FillUpDatabaseHelper;
-import com.orangegames.gasmilagejournal.dialogs.ShowFillUpDialog;
-import com.orangegames.gasmilagejournal.entities.Car;
-import com.orangegames.gasmilagejournal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.MainActivity;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.dialogs.ShowFillUpDialog;
+import com.orangegames.gas.mileage.journal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
 
 public class FillUpViewFragment extends Fragment
 {

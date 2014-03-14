@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.dialogs;
+package com.orangegames.gas.mileage.journal.dialogs;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,12 +35,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.database.MaintenanceLogDatabaseHelper;
-import com.orangegames.gasmilagejournal.entities.Car;
-import com.orangegames.gasmilagejournal.entities.FillUp;
-import com.orangegames.gasmilagejournal.entities.MaintenanceLog;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.MaintenanceLogDatabaseHelper;
+import com.orangegames.gas.mileage.journal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.entities.MaintenanceLog;
 
 public class ShowMaintenanceDialog extends Activity
 {

@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.dialogs;
+package com.orangegames.gas.mileage.journal.dialogs;
 
 import java.util.Calendar;
 
@@ -14,9 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orangegames.gasmilagejournal.R;
-import com.orangegames.gasmilagejournal.database.CarDatabaseHelper;
-import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gas.mileage.journal.R;
+import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
+import com.orangegames.gas.mileage.journal.entities.Car;
 
 public class ShowCarDialog extends Activity
 {

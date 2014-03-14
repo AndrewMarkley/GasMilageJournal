@@ -1,4 +1,4 @@
-package com.orangegames.gasmilagejournal.database;
+package com.orangegames.gas.mileage.journal.database;
 
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +11,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.orangegames.gasmilagejournal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.Car;
 
 public class CarDatabaseHelper extends OrmLiteSqliteOpenHelper
 {
