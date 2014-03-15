@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -49,6 +50,7 @@ public class CarsViewFragment extends Fragment
 	List<Car> cars = new ArrayList<Car>();
 	Button newCarButton = null;
 	private MaintenanceLogDatabaseHelper maintenanceLogDatabaseHelper = null;
+	AlertDialog.Builder builder;
 
 	public CarsViewFragment() {}
 
@@ -243,10 +245,16 @@ public class CarsViewFragment extends Fragment
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		Car[] temp = new Car[cars.size()];
+		cars.toArray(temp);
 
-		if ( cars == null || cars.isEmpty() ) {
+		carArrayAdapter = new CarArrayAdapter(getActivity().getBaseContext(), temp);
+		carListView.setAdapter(carArrayAdapter);
+		
+		if ( cars == null || cars.isEmpty() && builder == null) {
 			// Force creation of a new car
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("You Must have at least 1 car entered to use Gas Mileage Journal!").setPositiveButton("OK", new DialogInterface.OnClickListener()
 			{
 
@@ -255,16 +263,21 @@ public class CarsViewFragment extends Fragment
 				{
 					Intent i = new Intent(getActivity(), ShowCarDialog.class);
 					startActivityForResult(i, 1);
+					refreshCarList();
+					builder = null;
+				}
+			}).setOnCancelListener(new DialogInterface.OnCancelListener()
+			{
+				
+				@Override
+				public void onCancel(DialogInterface dialog)
+				{
+					builder = null;
+					refreshCarList();
 				}
 			});
 			builder.show();
 
-		} else {
-			Car[] temp = new Car[cars.size()];
-			cars.toArray(temp);
-
-			carArrayAdapter = new CarArrayAdapter(getActivity().getBaseContext(), temp);
-			carListView.setAdapter(carArrayAdapter);
 		}
 	}
 
