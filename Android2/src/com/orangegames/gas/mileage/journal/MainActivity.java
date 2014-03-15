@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
-		mViewPager.setCurrentItem(1, false);
+		mViewPager.setCurrentItem(2, false);
 
 		// check shared preference keys
 		Context context = getApplicationContext();
@@ -125,9 +125,6 @@ public class MainActivity extends FragmentActivity
 		if ( maintenanceLogDatabaseHelper == null ) {
 			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(this);
 		}
-
-		checkForAtLeastOneCar();
-
 	}
 
 	@Override
@@ -415,47 +412,16 @@ public class MainActivity extends FragmentActivity
 	{
 		super.onDestroy();
 	}
-
-	private void checkForAtLeastOneCar()
-	{
-		try {
-			if ( carDatabaseHelper.getCarDao().queryForAll().size() == 0 ) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setMessage("You Must have at least 1 car entered to use Gas Mileage Journal!").setPositiveButton("Add a Car", new OnClickListener()
-				{
-
-					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
-						Intent intent = new Intent(getBaseContext(), ShowCarDialog.class);
-						startActivityForResult(intent, 0);
-					}
-				}).setOnCancelListener(new OnCancelListener()
-				{
-					@Override
-					public void onCancel(DialogInterface dialog)
-					{
-						checkForAtLeastOneCar();
-					}
-				});
-				builder.create().show();
-
-			}
-		} catch (SQLException e) {
-
-		}
-	}
-
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		checkForAtLeastOneCar();
 		if ( resultCode == RESULT_OK ) {
 			// launch tutorial here
 		}
 
 		if ( resultCode == Activity.RESULT_CANCELED ) {
-
+			
 		}
 	}
 

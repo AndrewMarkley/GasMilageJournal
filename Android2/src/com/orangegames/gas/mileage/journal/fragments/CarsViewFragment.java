@@ -13,14 +13,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -34,8 +33,11 @@ import com.orangegames.gas.mileage.journal.MainActivity;
 import com.orangegames.gas.mileage.journal.R;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.database.FillUpDatabaseHelper;
+import com.orangegames.gas.mileage.journal.database.MaintenanceLogDatabaseHelper;
 import com.orangegames.gas.mileage.journal.dialogs.ShowCarDialog;
 import com.orangegames.gas.mileage.journal.entities.Car;
+import com.orangegames.gas.mileage.journal.entities.FillUp;
+import com.orangegames.gas.mileage.journal.entities.MaintenanceLog;
 
 public class CarsViewFragment extends Fragment
 {
@@ -46,6 +48,7 @@ public class CarsViewFragment extends Fragment
 	CarArrayAdapter carArrayAdapter = null;
 	List<Car> cars = new ArrayList<Car>();
 	Button newCarButton = null;
+	private MaintenanceLogDatabaseHelper maintenanceLogDatabaseHelper = null;
 
 	public CarsViewFragment() {}
 
@@ -99,13 +102,34 @@ public class CarsViewFragment extends Fragment
 								startActivityForResult(intent, 1);
 								break;
 							case 1:
-								try {
-									carDatabaseHelper.getCarDao().delete(selectedCar);
-									cars.remove(positionInList);
-									refreshCarList();
-								} catch (SQLException e) {
-									e.printStackTrace();
-								}
+								AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+								builder.setMessage("Are you sure you want to delete this car and all of it's associated records?").setPositiveButton("Ok", new DialogInterface.OnClickListener()
+								{
+									@Override
+									public void onClick(DialogInterface dialog, int id)
+									{
+										try {
+											List<FillUp> fillUps = fillUpDatabaseHelper.getFillUpDao().queryBuilder().where().eq(FillUp.COLUMN_CAR_ID, selectedCar.getId()).query();
+											List<MaintenanceLog> logs = maintenanceLogDatabaseHelper.getMaintenanceLogDao().queryBuilder().where().eq(FillUp.COLUMN_CAR_ID, selectedCar.getId())
+													.query();
+
+											for ( FillUp fu : fillUps ) {
+												fillUpDatabaseHelper.getFillUpDao().delete(fu);
+											}
+
+											for ( MaintenanceLog log : logs ) {
+												maintenanceLogDatabaseHelper.getMaintenanceLogDao().delete(logs);
+											}
+
+											carDatabaseHelper.getCarDao().delete(selectedCar);
+										} catch (SQLException e) {
+											e.printStackTrace();
+										}
+										cars.remove(positionInList);
+										refreshCarList();
+									}
+								});
+								builder.create().show();
 								break;
 							case 2:
 								break;
@@ -146,13 +170,13 @@ public class CarsViewFragment extends Fragment
 			TextView make = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_make);
 			TextView model = (TextView) rowView.findViewById(R.id.fillup_view_frament_list_view_car_units);
 			TextView odometer = (TextView) rowView.findViewById(R.id.car_view_frament_list_view_car_odometer);
-			
+
 			if ( position % 2 == 0 ) {
 				rowView.setBackgroundColor(Color.BLACK);
 			} else {
 				rowView.setBackgroundColor(Color.DKGRAY);
 			}
-			
+
 			carName.setTextColor(Color.WHITE);
 			year.setTextColor(Color.WHITE);
 			make.setTextColor(Color.WHITE);
@@ -173,14 +197,14 @@ public class CarsViewFragment extends Fragment
 			make.setText(c.getMake());
 			model.setText(c.getModel());
 			odometer.setText("Odometer: " + c.getMilage() + units);
-			
+
 			WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 			Display display = wm.getDefaultDisplay();
-			int width = display.getWidth();  // deprecated
-			
+			int width = display.getWidth(); // deprecated
+
 			carName.setMaxWidth(width);
 			carName.setMaxLines(1);
-			
+
 			return rowView;
 		}
 	}
@@ -195,6 +219,10 @@ public class CarsViewFragment extends Fragment
 
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
+		}
+
+		if ( maintenanceLogDatabaseHelper == null ) {
+			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(activity);
 		}
 	}
 
@@ -216,10 +244,21 @@ public class CarsViewFragment extends Fragment
 			e.printStackTrace();
 		}
 
-		if ( cars == null ) {
+		if ( cars == null || cars.isEmpty() ) {
 			// Force creation of a new car
-			Intent i = new Intent(getActivity(), ShowCarDialog.class);
-			startActivityForResult(i, 1);
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage("You Must have at least 1 car entered to use Gas Mileage Journal!").setPositiveButton("OK", new DialogInterface.OnClickListener()
+			{
+
+				@Override
+				public void onClick(DialogInterface dialog, int which)
+				{
+					Intent i = new Intent(getActivity(), ShowCarDialog.class);
+					startActivityForResult(i, 1);
+				}
+			});
+			builder.show();
+
 		} else {
 			Car[] temp = new Car[cars.size()];
 			cars.toArray(temp);
@@ -239,6 +278,10 @@ public class CarsViewFragment extends Fragment
 		if ( fillUpDatabaseHelper != null ) {
 			fillUpDatabaseHelper.close();
 			fillUpDatabaseHelper = null;
+		}
+		if ( maintenanceLogDatabaseHelper != null ) {
+			maintenanceLogDatabaseHelper.close();
+			maintenanceLogDatabaseHelper = null;
 		}
 		super.onDestroy();
 	}
