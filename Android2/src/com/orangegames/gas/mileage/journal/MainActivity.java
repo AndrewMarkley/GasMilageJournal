@@ -20,6 +20,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Vibrator;
@@ -33,6 +35,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.orangegames.gas.mileage.journal.activities.SettingsActivity;
 import com.orangegames.gas.mileage.journal.apprater.AppRater;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
@@ -59,12 +64,26 @@ public class MainActivity extends FragmentActivity
 	public static final String DATE_FORMAT_KEY = "date_format";
 	public static final String CURRENCY_KEY = "currency";
 	public static final String FILLUP_READING_KEY = "fillup_reading";
+	
+	public static EasyTracker tracker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		String value = pInfo.versionName;
+		tracker = EasyTracker.getInstance(this);
+		tracker.set(Fields.APP_ID, value);
+		tracker.set(Fields.LANGUAGE, "English");
+		tracker.send(MapBuilder.createEvent("App Info", "App Started", Calendar.getInstance().getTime().toString(), null).build());
 		
 		AppRater.app_launched(this);
 
@@ -102,7 +121,7 @@ public class MainActivity extends FragmentActivity
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
-		
+
 		if ( maintenanceLogDatabaseHelper == null ) {
 			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(this);
 		}
@@ -241,7 +260,7 @@ public class MainActivity extends FragmentActivity
 						writer = new CSVWriter(new FileWriter(file));
 					} catch (Exception ex) {
 					}
-					
+
 					SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 					List<String[]> data = new ArrayList<String[]>();
 					String[] columns = { "CAR NAME", "MPG", "PRICE", "GALLONS", "DISTANCE", "DATE", "COMMENTS" };
@@ -284,13 +303,16 @@ public class MainActivity extends FragmentActivity
 						writer = new CSVWriter(new FileWriter(file));
 					} catch (Exception ex) {
 					}
-					
+
 					SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 					List<String[]> data = new ArrayList<String[]>();
 					String[] columns = { "CAR NAME", "TITLE", "DESCRIPTION", "COST", "ODOMETER", "DATE" };
-					for (MaintenanceLog log : logs ) {
+					for ( MaintenanceLog log : logs ) {
 						try {
-							//public MaintenanceLog(int carId, Date date, double cost, double odometer, String title, String description, String location, byte[] receipt)
+							// public MaintenanceLog(int carId, Date date,
+							// double cost, double odometer, String title,
+							// String description, String location, byte[]
+							// receipt)
 							String[] values = new String[6];
 							values[0] = carDatabaseHelper.getCarDao().queryForId(log.getCarId()).getName();
 							values[1] = "" + log.getTitle();
@@ -382,8 +404,8 @@ public class MainActivity extends FragmentActivity
 		if ( carDatabaseHelper == null ) {
 			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
-		
-		if(maintenanceLogDatabaseHelper == null) {
+
+		if ( maintenanceLogDatabaseHelper == null ) {
 			maintenanceLogDatabaseHelper = MaintenanceLogDatabaseHelper.getHelper(this);
 		}
 	}
@@ -429,13 +451,26 @@ public class MainActivity extends FragmentActivity
 	{
 		checkForAtLeastOneCar();
 		if ( resultCode == RESULT_OK ) {
-			//launch tutorial here
+			// launch tutorial here
 		}
 
 		if ( resultCode == Activity.RESULT_CANCELED ) {
-			
+
 		}
 	}
 
-}
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		EasyTracker.getInstance(this).activityStart(this);
+	}
 
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance(this).activityStop(this);
+	}
+
+}

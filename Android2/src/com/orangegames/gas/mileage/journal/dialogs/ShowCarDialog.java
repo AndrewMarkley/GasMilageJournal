@@ -14,6 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.orangegames.gas.mileage.journal.MainActivity;
 import com.orangegames.gas.mileage.journal.R;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.entities.Car;
@@ -27,6 +31,7 @@ public class ShowCarDialog extends Activity
 	Spinner year;
 	Button save;
 	Car car;
+	EasyTracker tracker;
 
 	private CarDatabaseHelper carDatabaseHelper = null;
 
@@ -37,6 +42,7 @@ public class ShowCarDialog extends Activity
 		setContentView(R.layout.detailed_car_form);
 		in = getIntent();
 		newCar = in.getBooleanExtra("new", newCar);
+		tracker = EasyTracker.getInstance(this);
 
 		// initialize all the fields
 		title = (TextView) findViewById(R.id.detailed_car_form_title);
@@ -68,9 +74,9 @@ public class ShowCarDialog extends Activity
 			nickname.setText(car.getName());
 			make.setText(car.getMake());
 			model.setText(car.getModel());
-			odometer.setText(""+car.getMilage());
-			year.setSelection((car.getYear() - 1960));
-			
+			odometer.setText("" + car.getMilage());
+			year.setSelection(( car.getYear() - 1960 ));
+
 		}
 
 		save.setOnClickListener(new View.OnClickListener()
@@ -84,7 +90,7 @@ public class ShowCarDialog extends Activity
 
 					var = odometer.getText();
 					double odometer = ( Double.parseDouble(var.toString()) );
-					
+
 					if ( newCar ) {
 						car = new Car(nickname.getText().toString(), year, make.getText().toString(), model.getText().toString(), odometer);
 						getCarDatabaseHelper().getCarDao().create(car);
@@ -94,6 +100,8 @@ public class ShowCarDialog extends Activity
 						car.setId(carId);
 						getCarDatabaseHelper().getCarDao().update(car);
 					}
+
+					tracker.send(MapBuilder.createEvent("CarDialog", "Add/Edit Car", newCar ? "Car Added " + car.toString() : "Car Edited " + car.toString(), null).build());
 
 					Intent i = getIntent();
 					i.putExtra("success", success);
@@ -148,16 +156,17 @@ public class ShowCarDialog extends Activity
 	private CarDatabaseHelper getCarDatabaseHelper()
 	{
 		if ( carDatabaseHelper == null ) {
-			carDatabaseHelper = carDatabaseHelper.getHelper(this);
+			carDatabaseHelper = CarDatabaseHelper.getHelper(this);
 		}
 		return carDatabaseHelper;
 	}
-	
+
 	@Override
-	protected void onDestroy() {
+	protected void onDestroy()
+	{
 		super.onDestroy();
 
-		if (carDatabaseHelper != null) {
+		if ( carDatabaseHelper != null ) {
 			carDatabaseHelper.close();
 			carDatabaseHelper = null;
 		}

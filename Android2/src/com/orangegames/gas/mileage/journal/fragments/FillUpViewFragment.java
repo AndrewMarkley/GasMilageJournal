@@ -196,7 +196,7 @@ public class FillUpViewFragment extends Fragment
 			Display display = wm.getDefaultDisplay();
 			int width = display.getWidth();  // deprecated
 			
-			carName.setMaxWidth((int)(width * .5));
+			carName.setMaxWidth((int)(width * .52));
 			carName.setMaxLines(1);
 			
 			return rowView;

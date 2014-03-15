@@ -33,7 +33,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.internal.di;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.orangegames.gas.mileage.journal.MainActivity;
 import com.orangegames.gas.mileage.journal.R;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
@@ -53,6 +54,7 @@ public class ShowFillUpDialog extends Activity
 	FillUp fillUp;
 	ImageView receiptView;
 	byte[] receiptImage = null;
+	EasyTracker tracker;
 
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private FillUpDatabaseHelper fillUpDatabaseHelper = null;
@@ -64,6 +66,7 @@ public class ShowFillUpDialog extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detailed_fillup_form);
 		in = getIntent();
+		tracker = EasyTracker.getInstance(this);
 		newFillUp = in.getBooleanExtra("newFillUp", newFillUp);
 		fillUp = (FillUp) in.getSerializableExtra("fillUp");
 		SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -218,6 +221,8 @@ public class ShowFillUpDialog extends Activity
 						car.setMilage(car.getMilage() + fillUp.getDistance());
 						getCarDatabaseHelper().getCarDao().update(car);
 					}
+					
+					tracker.send(MapBuilder.createEvent("FillUpDialog", "Add/Edit FillUp", newFillUp ? "FillUp Added " + fillUp.toString(): "FillUp Edited " + fillUp.toString(), null).build());
 
 				} catch (Exception e) {
 					e.printStackTrace();

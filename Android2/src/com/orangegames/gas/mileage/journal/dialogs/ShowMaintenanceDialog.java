@@ -1,7 +1,6 @@
 package com.orangegames.gas.mileage.journal.dialogs;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,7 +23,6 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -35,11 +33,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.orangegames.gas.mileage.journal.R;
 import com.orangegames.gas.mileage.journal.database.CarDatabaseHelper;
 import com.orangegames.gas.mileage.journal.database.MaintenanceLogDatabaseHelper;
 import com.orangegames.gas.mileage.journal.entities.Car;
-import com.orangegames.gas.mileage.journal.entities.FillUp;
 import com.orangegames.gas.mileage.journal.entities.MaintenanceLog;
 
 public class ShowMaintenanceDialog extends Activity
@@ -55,12 +54,15 @@ public class ShowMaintenanceDialog extends Activity
 	private byte[] receiptImage = null;
 	private CarDatabaseHelper carDatabaseHelper = null;
 	private MaintenanceLogDatabaseHelper maintenanceLogDatabaseHelper = null;
+	EasyTracker tracker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detailed_maintenance_form);
+		tracker = EasyTracker.getInstance(this);
+		
 		newLog = getIntent().getBooleanExtra("new", true);
 		log = (MaintenanceLog) getIntent().getSerializableExtra("log");
 
@@ -192,9 +194,10 @@ public class ShowMaintenanceDialog extends Activity
 					String desc = description.getText().toString();
 					Date time = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(dateButton.getText().toString());
 					String loc = location.getText().toString();
-
+					
+					MaintenanceLog mlog = null;
 					if ( newLog || log == null) {
-						MaintenanceLog mlog = new MaintenanceLog(carId, time, price, odom, tit, desc, loc, receiptImage);
+						mlog = new MaintenanceLog(carId, time, price, odom, tit, desc, loc, receiptImage);
 						getMaintenanceLogDatabaseHelper().getMaintenanceLogDao().create(mlog);
 					} else {
 						log.setCarId(carId);
@@ -206,6 +209,8 @@ public class ShowMaintenanceDialog extends Activity
 						log.setReceipt(receiptImage);
 						getMaintenanceLogDatabaseHelper().getMaintenanceLogDao().update(log);
 					}
+					
+					tracker.send(MapBuilder.createEvent("Maintenance Logs Dialog", "Add/Edit Maintenance Logs", newLog ? "Maintenance Log Added " + mlog.toString() : "Maintenance Log Edited" + log.toString(), null).build());
 
 					Intent i = getIntent();
 					i.putExtra("success", true);

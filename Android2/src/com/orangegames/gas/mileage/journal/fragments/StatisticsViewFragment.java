@@ -133,7 +133,16 @@ public class StatisticsViewFragment extends Fragment
 			carDatabaseHelper = CarDatabaseHelper.getHelper(activity);
 		}
 	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		repaintGraphs();
+		addAllGraphViews();
+	}
 
+	@Override
 	public void onResume()
 	{
 		super.onResume();
