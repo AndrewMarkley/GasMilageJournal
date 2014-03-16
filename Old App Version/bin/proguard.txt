@@ -1,0 +1,38 @@
+# view AndroidManifest.xml #generated:17
+-keep class andrews.gas.milage.journal.Controller { <init>(...); }
+
+# view AndroidManifest.xml #generated:39
+-keep class andrews.gas.milage.journal.Stats { <init>(...); }
+
+# view AndroidManifest.xml #generated:47
+-keep class andrews.gas.milage.journal.newCarProfile { <init>(...); }
+
+# view AndroidManifest.xml #generated:31
+-keep class andrews.gas.milage.journal.newFillUp { <init>(...); }
+
+# view AndroidManifest.xml #generated:35
+-keep class andrews.gas.milage.journal.showCarProfile { <init>(...); }
+
+# view AndroidManifest.xml #generated:27
+-keep class andrews.gas.milage.journal.showFillUps { <init>(...); }
+
+# view AndroidManifest.xml #generated:43
+-keep class andrews.gas.milage.journal.showServiceLog { <init>(...); }
+
+# view AndroidManifest.xml #generated:51
+-keep class com.google.ads.AdActivity { <init>(...); }
+
+# view res/layout/show_car_profiles.xml #generated:55
+# view res/layout/show_fill_ups.xml #generated:62
+# view res/layout/show_service_log.xml #generated:73
+# view res/layout/show_stats.xml #generated:51
+-keep class com.google.ads.AdView { <init>(...); }
+
+# onClick res/layout/activity_home_screen.xml #generated:46
+# onClick res/layout/activity_home_screen.xml #generated:74
+# onClick res/layout/activity_home_screen.xml #generated:98
+# onClick res/layout/new_car_form.xml #generated:118
+# onClick res/layout/new_car_form.xml #generated:31
+# onClick res/layout/new_car_form.xml #generated:95
+-keepclassmembers class * { *** onClick(...); }
+

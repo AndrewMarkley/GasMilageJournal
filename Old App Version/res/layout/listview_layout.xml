@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/LinearLayout2"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="#55777777"
+	android:orientation="vertical" >
+
+	<TextView
+		android:id="@+id/txt"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="20dp"
+		android:text="Car Name"
+		android:textColor="#36B5E4" />
+
+	<TextView
+		android:id="@+id/cur"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="15dp"
+		android:text="Car Name"
+		android:textColor="#36B5E4" />
+
+	<TextView
+		android:id="@+id/cos"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="15dp"
+		android:text="Car Name"
+		android:textColor="#36B5E4" />
+
+</LinearLayout>

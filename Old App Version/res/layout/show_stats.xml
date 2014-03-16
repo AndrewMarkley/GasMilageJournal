@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/LinearLayout1"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/grey_background"
+	android:orientation="vertical"
+	xmlns:app="http://schemas.android.com/apk/lib/com.google.ads" >
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+		<Button
+			android:id="@+id/filter_button"
+			android:layout_width="318dp"
+			android:layout_height="wrap_content"
+			android:text="Filter" />
+
+	</LinearLayout>
+
+	<ListView
+		android:id="@+id/statlist"
+		android:layout_width="match_parent"
+		android:layout_height="372dp"
+		android:layout_weight="0.38"
+		android:background="#00ffffff" >
+	</ListView>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+		<ScrollView
+			xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/scroll"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+
+			<LinearLayout
+				android:id="@+id/linear"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:orientation="vertical" >
+
+			<com.google.ads.AdView
+				android:id="@+id/ad"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="bottom"
+				app:adSize="BANNER"
+				app:adUnitId="a1507a731497aa5"
+				app:loadAdOnCreate="true"
+				app:testDevices="TEST_EMULATOR, TEST_DEVICE_ID" >
+		</com.google.ads.AdView>
+			</LinearLayout>
+		</ScrollView>
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,15 @@
+<resources>
+
+	<string name="app_name">Gas Milage Journal</string>
+	<string name="hello_world">Hello world!</string>
+	<string name="menu_settings">Settings</string>
+	<string name="title_activity_home_screen">HomeScreen</string>
+	<string name="logFillUp">Fill up</string>
+	<string name="allLogs">All Logs</string>
+	<string name="stats">Stats.</string>
+	<string name="milestraveled">Miles Traveled:</string>
+	<string name="car_service_button">Services</string>
+	<string name="yearInput">year</string>
+	<string name="date_display">10/31/1992</string>
+
+</resources>

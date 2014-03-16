@@ -1,0 +1,55 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"	
+	package="andrews.gas.milage.journal"
+	android:versionCode="3"
+	android:versionName="1.5" >
+
+	<uses-sdk
+		android:minSdkVersion="8"
+		android:targetSdkVersion="15" />
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-feature android:name="android.hardware.camera" />
+	<application
+		android:icon="@drawable/ic_launcher"
+		android:label=""
+		android:theme="@style/AppTheme" >
+		<activity
+			android:name=".Controller"
+			android:label="Gas Mileage Journal"
+			android:screenOrientation="portrait" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".showFillUps"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name=".newFillUp"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name=".showCarProfile"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name=".Stats"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name=".showServiceLog"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity
+			android:name=".newCarProfile"
+			android:screenOrientation="portrait" >
+		</activity>
+		<activity android:name="com.google.ads.AdActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+	</application>
+	<meta-data android:value="k2d307d321b5c7af0308ee51eed3e0ae" android:name="a1507a731497aa5"></meta-data>
+</manifest>
