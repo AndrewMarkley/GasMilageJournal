@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity
 	public static final String MEASUREMENT_KEY = "measurement";
 	public static final String DATE_FORMAT_KEY = "date_format";
 	public static final String CURRENCY_KEY = "currency";
-	public static final String FILLUP_READING_KEY = "fillup_reading";
+	public static final String FILLUP_READING_KEY = "fillup_reading"; 
 
 	public static EasyTracker tracker;
 
@@ -330,20 +330,21 @@ public class MainActivity extends FragmentActivity
 
 					SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 					List<String[]> data = new ArrayList<String[]>();
-					String[] columns = { "CAR NAME", "TITLE", "DESCRIPTION", "COST", "ODOMETER", "DATE" };
+					String[] columns = { "CAR NAME", "TITLE", "DESCRIPTION", "COST", "ODOMETER", "LOCATION", "DATE" };
 					for ( MaintenanceLog log : logs ) {
 						try {
 							// public MaintenanceLog(int carId, Date date,
 							// double cost, double odometer, String title,
 							// String description, String location, byte[]
 							// receipt)
-							String[] values = new String[6];
+							String[] values = new String[7];
 							values[0] = carDatabaseHelper.getCarDao().queryForId(log.getCarId()).getName();
 							values[1] = "" + log.getTitle();
 							values[2] = "" + log.getDescription();
 							values[3] = "" + log.getCost();
 							values[4] = "" + log.getOdometer();
-							values[5] = new SimpleDateFormat(sharedPref.getString(DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate());
+							values[5] = "" + log.getLocation();
+							values[6] = new SimpleDateFormat(sharedPref.getString(DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate());
 							data.add(values);
 						} catch (SQLException e) {
 							Log.i("erroe", e.toString());

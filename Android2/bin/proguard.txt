@@ -1,0 +1,45 @@
+# view res/layout/detailed_fillup_form.xml #generated:69
+# view res/layout/detailed_maintenance_form.xml #generated:85
+-keep class ImageView { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class andrews.gas.milage.journal.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:49
+-keep class andrews.gas.milage.journal.activities.AboutActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:54
+-keep class andrews.gas.milage.journal.activities.SettingsActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:39
+-keep class andrews.gas.milage.journal.dialogs.ShowCarDialog { <init>(...); }
+
+# view AndroidManifest.xml #generated:44
+-keep class andrews.gas.milage.journal.dialogs.ShowFillUpDialog { <init>(...); }
+
+# view AndroidManifest.xml #generated:59
+-keep class andrews.gas.milage.journal.dialogs.ShowMaintenanceDialog { <init>(...); }
+
+# view res/layout/activity_main.xml #generated:13
+-keep class android.support.v4.view.PagerTitleStrip { <init>(...); }
+
+# view res/layout/activity_main.xml #generated:1
+-keep class android.support.v4.view.ViewPager { <init>(...); }
+
+# view res/layout/statistics_view_fragement_graph_view.xml #generated:7
+-keep class com.androidplot.xy.XYPlot { <init>(...); }
+
+# view AndroidManifest.xml #generated:64
+-keep class com.google.android.gms.ads.AdActivity { <init>(...); }
+
+# view res/layout/car_view_fragment.xml #generated:23
+# view res/layout/fillup_view_fragment.xml #generated:23
+# view res/layout/maintenance_log_view_fragment.xml #generated:23
+# view res/layout/statistics_view_fragment.xml #generated:72
+-keep class com.google.android.gms.ads.AdView { <init>(...); }
+
+# onClick res/layout/detailed_car_form.xml #generated:80
+# onClick res/layout/detailed_fillup_form.xml #generated:86
+# onClick res/layout/detailed_maintenance_form.xml #generated:93
+-keepclassmembers class * { *** sendFeedback(...); }
+

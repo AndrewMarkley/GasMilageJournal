@@ -193,7 +193,7 @@ public class FillUpViewFragment extends Fragment
 			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(temp.getDate()));
 			
 			if(!sharedPref.getString(MainActivity.DATE_FORMAT_KEY, "").equals("MM/dd")) {
-				date.setTextSize(15);
+				date.setTextSize(17);
 			} else {
 				date.setTextSize(22);
 			}
