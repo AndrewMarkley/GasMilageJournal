@@ -36,10 +36,10 @@
             android:id="@+id/maintenance_log_view_frament_list_view_car_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:text="Car Name"
-            android:textSize="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:ellipsize="end" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/maintenance_log_view_frament_title"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Odometer"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 

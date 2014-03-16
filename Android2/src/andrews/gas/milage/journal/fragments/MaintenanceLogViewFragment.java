@@ -197,6 +197,13 @@ public class MaintenanceLogViewFragment extends Fragment
 			cost.setText(currencyUnits + round(log.getCost()));
 			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(log.getDate()));
 			odometer.setText("" + round(log.getOdometer()) + distanceUnits);
+			
+			if(!sharedPref.getString(MainActivity.DATE_FORMAT_KEY, "").equals("MM/dd")) {
+				date.setTextSize(15);
+			} else {
+				date.setTextSize(22);
+			}
+			
 			return rowView;
 		}
 	}
