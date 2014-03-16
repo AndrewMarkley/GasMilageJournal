@@ -191,6 +191,12 @@ public class FillUpViewFragment extends Fragment
 			}
 			
 			date.setText(new SimpleDateFormat(sharedPref.getString(MainActivity.DATE_FORMAT_KEY, ""), Locale.US).format(temp.getDate()));
+			
+			if(!sharedPref.getString(MainActivity.DATE_FORMAT_KEY, "").equals("MM/dd")) {
+				date.setTextSize(15);
+			} else {
+				date.setTextSize(22);
+			}
 			mpg.setText("" + round(temp.getMPG()));
 			cost.setText(currencySymbol + round(temp.getPrice() * temp.getGas()));
 
@@ -198,7 +204,7 @@ public class FillUpViewFragment extends Fragment
 			Display display = wm.getDefaultDisplay();
 			int width = display.getWidth();  // deprecated
 			
-			carName.setMaxWidth((int)(width * .52));
+			carName.setMaxWidth((int)(width * .50));
 			carName.setMaxLines(1);
 			
 			return rowView;

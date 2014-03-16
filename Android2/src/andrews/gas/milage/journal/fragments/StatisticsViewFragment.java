@@ -23,6 +23,7 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ import android.widget.TextView;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+
+import andrews.gas.milage.journal.MainActivity;
 import andrews.gas.milage.journal.R;
 import andrews.gas.milage.journal.database.CarDatabaseHelper;
 import andrews.gas.milage.journal.database.FillUpDatabaseHelper;
@@ -68,12 +71,16 @@ public class StatisticsViewFragment extends Fragment
 	GraphicalView gviewMonthlyMilage = null;
 
 	private View rootView = null;
+	private SharedPreferences sharedPref;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		rootView = inflater.inflate(R.layout.statistics_view_fragment, container, false);
 
+		sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
 		carList = (Spinner) rootView.findViewById(R.id.statistics_view_fragment_car_spinner);
 		lMPG = (LinearLayout) rootView.findViewById(R.id.statistics_view_fragment_mpg_graph);
 		lPPG = (LinearLayout) rootView.findViewById(R.id.statistics_view_fragment_ppg_graph);
@@ -195,10 +202,16 @@ public class StatisticsViewFragment extends Fragment
 	public void addAllGraphViews()
 	{
 		removeAllGraphViews();
+		
+		String currencySymbol = sharedPref.getString(MainActivity.CURRENCY_KEY, "$");
+		String distanceUnit = " mi";
+		if(sharedPref.getString(MainActivity.MEASUREMENT_KEY, "US").equals("Metric")) {
+			distanceUnit = " km";
+		}
 
 		List<FillUp> fillups = null;
 		try {
-			fillups = getFillUpDatabaseHelper().getFillUpDao().queryForAll();
+			fillups = fillUpDatabaseHelper.getFillUpDao().queryBuilder().where().eq(FillUp.COLUMN_CAR_ID, ((Car)carList.getSelectedItem()).getId()).query();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -212,29 +225,29 @@ public class StatisticsViewFragment extends Fragment
 		TextView h = (TextView) container.findViewById(R.id.statistics_view_high_text);
 		TextView l = (TextView) container.findViewById(R.id.statistics_view_low_text);
 
-		h.setText("Best: " + getBestMPGRecord(fillups));
-		l.setText("Worst: " + getWorstMPGRecord(fillups));
+		h.setText("Highest: " + getBestMPGRecord(fillups));
+		l.setText("Lowest: " + getWorstMPGRecord(fillups));
 		lMPG.addView(container);
 
 		h = (TextView) container2.findViewById(R.id.statistics_view_high_text);
 		l = (TextView) container2.findViewById(R.id.statistics_view_low_text);
 
-		h.setText("Best: " + getWorstPPGRecord(fillups));
-		l.setText("Worst: " + getBestPPGRecord(fillups));
+		h.setText("Highest: " + currencySymbol + getBestPPGRecord(fillups));
+		l.setText("Lowest: " + currencySymbol + getWorstPPGRecord(fillups));
 		lPPG.addView(container2);
 
 		h = (TextView) container3.findViewById(R.id.statistics_view_high_text);
 		l = (TextView) container3.findViewById(R.id.statistics_view_low_text);
 
-		h.setText("Best: " + getBestMFCRecord(fillups));
-		l.setText("Worst: " + getWorstMFCRecord(fillups));
+		h.setText("Most: " + currencySymbol + getBestMFCRecord(fillups));
+		l.setText("Least: " + currencySymbol + getWorstMFCRecord(fillups));
 		lMFC.addView(container3);
 
 		h = (TextView) container5.findViewById(R.id.statistics_view_high_text);
 		l = (TextView) container5.findViewById(R.id.statistics_view_low_text);
 
-		h.setText("Best: " + getBestMMRecord(fillups));
-		l.setText("Worst: " + getWorstMMRecord(fillups));
+		h.setText("Most: " + getBestMMRecord(fillups) + distanceUnit);
+		l.setText("Least: " + getWorstMMRecord(fillups) + distanceUnit);
 		lMM.addView(container5);
 
 		WindowManager wm = (WindowManager) getActivity().getBaseContext().getSystemService(Context.WINDOW_SERVICE);
@@ -319,9 +332,14 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false, false);
 		// top, left, bottom, right
 		renderer.setMargins(new int[] { 80, 80, 20, 0 });
-		renderer.setChartTitle("MPG Over Time");
+		String unit = "MPG";
+		if(sharedPref.getString(MainActivity.MEASUREMENT_KEY, "US").equals("Metric")) {
+			unit = "Km/L";
+		}
+		
+		renderer.setChartTitle(unit + " Over Time");
 		renderer.setXTitle("Date");
-		renderer.setYTitle("MPG");
+		renderer.setYTitle(unit);
 		renderer.setApplyBackgroundColor(false);
 		renderer.setFitLegend(false);
 		renderer.setPanEnabled(false, false);
@@ -403,9 +421,13 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false, false);
 		// top, left, bottom, right
 		renderer.setMargins(new int[] { 80, 80, 20, 0 });
-		renderer.setChartTitle("Price Per Gallon");
+		String unit = "Gallon";
+		if(sharedPref.getString(MainActivity.MEASUREMENT_KEY, "US").equals("Metric")) {
+			unit = "Liter";
+		}
+		renderer.setChartTitle("Price Per " + unit);
 		renderer.setXTitle("Date");
-		renderer.setYTitle("Price Per Gallon");
+		renderer.setYTitle("Price Per " + unit);
 		renderer.setApplyBackgroundColor(false);
 		renderer.setFitLegend(false);
 		renderer.setPanEnabled(false, false);
@@ -599,9 +621,15 @@ public class StatisticsViewFragment extends Fragment
 		renderer.setZoomEnabled(false, false);
 		// top, left, bottom, right
 		renderer.setMargins(new int[] { 80, 80, 20, 0 });
+		
+		String unit = "Miles";
+		if(sharedPref.getString(MainActivity.MEASUREMENT_KEY, "US").equals("Metric")) {
+			unit = "Kilometers";
+		}
+		
 		renderer.setChartTitle("Monthly Mileage");
 		renderer.setXTitle("Month");
-		renderer.setYTitle("Miles");
+		renderer.setYTitle(unit);
 		renderer.setApplyBackgroundColor(false);
 		renderer.setFitLegend(false);
 		renderer.setPanEnabled(false, false);
@@ -727,7 +755,7 @@ public class StatisticsViewFragment extends Fragment
 			}
 		}
 
-		return max;
+		return round(max);
 	}
 
 	public double getBestMMRecord(List<FillUp> fillups)
