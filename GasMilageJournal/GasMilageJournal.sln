@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GasMilageJournal", "GasMilageJournal\GasMilageJournal.csproj", "{D9EB87E2-CDF7-4246-A16D-7BD650D17575}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{04A73D79-B592-46A9-971C-49F4B7CDBFCA}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9EB87E2-CDF7-4246-A16D-7BD650D17575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9EB87E2-CDF7-4246-A16D-7BD650D17575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9EB87E2-CDF7-4246-A16D-7BD650D17575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9EB87E2-CDF7-4246-A16D-7BD650D17575}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
