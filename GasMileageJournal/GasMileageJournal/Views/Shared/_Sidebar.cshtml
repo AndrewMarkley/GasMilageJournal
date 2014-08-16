@@ -1,0 +1,41 @@
+﻿@{
+    // ViewBag.Title, Url, Label, Icon
+    var navItems = new[]
+    {
+        new[] {"Home", "/Home", "Home", "icon-home"},
+        new[] {"Car", "/Car", "Car", "icon-car"},
+        new[] {"Fill Ups", "/FillUp", "Fill Ups", "icon-fill-up"},
+        new[] {"Maintenance Logs", "/MaintenanceLog", "Maintenance Logs", "icon-maintenance-log"},
+        new[] {"Statistics", "/Statistics", "Statistics", "icon-statistics"}
+    };
+}
+<div id="sidebar-nav">
+    <div class="userbox" style="text-align: center;">
+        <a href="/Profile">
+            <img src="~/Public/img/profile.png" alt="avatar" class="img-circle avatar" />
+            <h4>@ViewBag.CurrentUserName</h4>
+        </a>
+        <div style="clear: both"></div>
+    </div>
+    <ul id="dashboard-menu">
+        
+        @foreach (var item in navItems) {
+            if (ViewBag.Section == item[0]) {
+                <li class="active">
+                    <a href="@item[1]">
+                        <i class="@item[3]"></i>
+                        <span>@item[2]</span>
+                    </a>
+                </li>
+            } else {
+                <li>
+                    <a href="@item[1]">
+                        <i class="@item[3]"></i>
+                        <span>@item[2]</span>
+                    </a>
+                </li>
+            }
+        }
+        
+    </ul>
+</div>

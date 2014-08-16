@@ -1,0 +1,38 @@
+﻿<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var jsonData = $.ajax({
+            url: "/Home/GetFillUpData",
+            dataType: "json",
+            async: false
+        }).responseText;
+
+        var data = google.visualization.arrayToDataTable(jsonData);
+
+        var options = {
+            title: 'Total Spent on gas'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+
+    <div class="middle">
+        <h4>@ViewBag.Title</h4>
+
+        <div>
+            <h4>Graphs</h4>
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        </div>
+        <div>
+            <h4>Upcoming Events</h4>
+        </div>
+        <div>
+            <h4>Recent Events</h4>
+        </div>
+    </div>
+    
+
