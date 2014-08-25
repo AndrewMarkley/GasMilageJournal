@@ -18,12 +18,8 @@ namespace GasMileageJournal.Areas.Api.Controllers
                 var apiKey = GetHeader("ApiKey");
                 var user = UserManager.Context.Users.FirstOrDefault(t => t.ApiKey == apiKey);
                 var data = UserManager.Context.FillUps.Where(t => t.UserId == user.Id).ToList();
-                var results = new List<FillUpTO>();
-                foreach (var result in data) {
-                    results.Add(FillUpTO.FromData(result));
-                }
 
-                return results;
+                return data.Select(FillUpTO.FromData).ToList();
             } catch (Exception) {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
