@@ -1,0 +1,57 @@
+﻿@model IEnumerable<FillUp>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="col-md-12 col-lg-12" style="margin-top: 10px;">
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+            <div class="bg-success panel-body mar-btm-md">
+                <div class="row" style="margin-left: 1px;">
+                    <h4>Fill Ups<a href="/FillUps/new"><i class="fa fa-plus pull-right" style="padding-right: 10px;"></i></a></h4>
+                    <ul>
+                        @foreach (var fillUp in ViewBag.FillUps) {
+                            <li><a href="/FillUps/@fillUp.Id">@fillUp.Created</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+            <div class="bg-success panel-body mar-btm-md">
+                <div class="row" style="margin-left: 1px;">
+                    <h4>Cars<a href="/Cars/new"><i class="fa fa-plus pull-right" style="padding-right: 10px;"></i></a></h4>
+                    <ul>
+                        @foreach (var car in ViewBag.Cars) {
+                            <li><a href="/Cars/@car.Id">@car.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+            <div class="bg-success panel-body mar-btm-md">
+                <div class="row" style="margin-left: 1px;">
+                    <h4>Maintenance Logs<a href="/Cars/new"><i class="fa fa-plus pull-right" style="padding-right: 10px;"></i></a></h4>
+                    <ul>
+                        @foreach (var log in ViewBag.MaintenanceLogs) {
+                            <li><a href="/MaintenanceLogs/@log.Id">@log.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+            <a href="/Statistics">
+                <div class="bg-success panel-body mar-btm-md">
+                    <div class="row text-center">
+                        <i class="fa fa-dollar fa-fw fa-3x pull-left mar-lg"></i>
+                        <h4>Statistics</h4>
+                        @*<p class="text-uppercase"></p>*@
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

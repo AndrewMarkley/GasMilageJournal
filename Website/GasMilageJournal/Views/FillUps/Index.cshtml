@@ -1,0 +1,77 @@
+﻿@model IEnumerable<FillUp>
+
+@{
+    ViewData["Title"] = "Fill Up";
+}
+
+<div class="toolbar row">
+    <div class="col-xs-12">
+        <h3>Filter</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        @if (!Model.Any()) {
+            <h3>No Result</h3>
+        } else {
+            <table id="FillUp" class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th class="edit-column"></th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.Created)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.TotalCost)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.Distance)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.Gas)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.MPG)
+                        </th>
+                        <th data-sort="string-ins">
+                            @Html.DisplayNameFor(model => model.Comments)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td class="edit-column">
+                                Edit
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.Created)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.TotalCost)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.Distance)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.Gas)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.MPG)
+                            </td>
+                            <td data-label="Name">
+                                @Html.DisplayFor(modelItem => item.Comments)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
