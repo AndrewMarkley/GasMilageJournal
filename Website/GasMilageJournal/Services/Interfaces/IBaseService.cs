@@ -7,9 +7,9 @@ namespace GasMilageJournal.Services.Interfaces
     {
         Task<ServiceResult> Edit(string id);
         Task<ServiceResult> DeleteAsync(Guid id);
-        Task<ServiceResult> DeleteAsync(T car);
+        Task<ServiceResult> DeleteAsync(T data);
         Task<ServiceResult> GetByIdAsync(Guid id);
         Task<ServiceResult> GetAllAsync();
-        Task<ServiceResult> SaveAsync(T car);
+        Task<ServiceResult> SaveAsync(T data);
     }
 }
