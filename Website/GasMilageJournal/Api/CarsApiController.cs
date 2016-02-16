@@ -8,7 +8,7 @@ namespace GasMilageJournal.Api
 {
     [Route("/api/Cars")]
     [Authorize("Authentication")]
-    public class CarsApiController : BaseController<Car, ICarService, CarsApiController>
+    public class CarsApiController : BaseApiController<Car, ICarService, CarsApiController>
     {
         public CarsApiController(ICarService carService, ILoggerFactory loggerFactory)
             : base (carService, loggerFactory)

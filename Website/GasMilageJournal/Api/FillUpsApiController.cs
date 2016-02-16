@@ -8,7 +8,7 @@ namespace GasMilageJournal.Api
 {
     [Route("/api/FillUps")]
     [Authorize("Authentication")]
-    public class FillUpsController : BaseController<FillUp, IFillUpService, FillUpsController>
+    public class FillUpsController : BaseApiController<FillUp, IFillUpService, FillUpsController>
     {
         public FillUpsController(IFillUpService service, ILoggerFactory loggerFactory)
             : base (service, loggerFactory)

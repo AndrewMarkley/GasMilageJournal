@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace GasMilageJournal.Services.Interfaces
@@ -7,6 +8,7 @@ namespace GasMilageJournal.Services.Interfaces
     public class ServiceResult : ObjectResult
     {
         public bool HasError { get; set; } = false;
+        public List<string> Messages { get; set; } = new List<string>();
 
         public ServiceResult()
             : base(null)

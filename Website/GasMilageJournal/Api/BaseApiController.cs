@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace GasMilageJournal.Api
 {
-    public class BaseController<T, Service, Controller> where Service : IBaseService<T>
+    public class BaseApiController<T, Service, U> : Controller where Service : IBaseService<T>
     {
         public readonly Service _service;
         public readonly ILogger _logger;
 
-        public BaseController(Service service, ILoggerFactory loggerFactory)
+        public BaseApiController(Service service, ILoggerFactory loggerFactory)
         {
             _service = service;
-            _logger = loggerFactory.CreateLogger<Controller>();
+            _logger = loggerFactory.CreateLogger<U>();
         }
 
         [HttpGet]
