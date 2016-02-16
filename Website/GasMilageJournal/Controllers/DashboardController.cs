@@ -24,9 +24,9 @@ namespace GasMilageJournal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.Cars = (await _carService.GetAllAsync()).Result;
-            ViewBag.FillUps = (await _fillUpService.GetAllAsync()).Result;
-            ViewBag.MaintenanceLogs = (await _maintenanceLogService.GetAllAsync()).Result;
+            ViewBag.Cars = await _carService.GetAllAsync();
+            ViewBag.FillUps = await _fillUpService.GetAllAsync();
+            ViewBag.MaintenanceLogs = await _maintenanceLogService.GetAllAsync();
 
             return View();
         }

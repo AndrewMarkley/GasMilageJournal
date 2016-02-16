@@ -1,32 +1,33 @@
 ﻿using GasMilageJournal.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GasMilageJournal.Models;
 using Microsoft.Data.Entity;
-using GasMilageJournal.Extensions;
+using Microsoft.AspNet.Identity;
 
 namespace GasMilageJournal.Services
 {
-    public class MaintenanceLogService : IMaintenanceLogService
+    public class UserService : IUserService
     {
         private DataContext _dataContext;
         private IApplicationService _appService;
+        private readonly UserManager<User> _userManager;
 
-        public MaintenanceLogService(DataContext dataContext, IApplicationService appService)
+        public UserService(DataContext dataContext, IApplicationService appService, UserManager<User> userManager)
         {
             _dataContext = dataContext;
             _appService = appService;
+            _userManager = userManager;
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id)
         {
             try {
-                var maintenanceLog = await _dataContext.MaintenanceLogs.Where(t => t.Id == id)
+                var user = await _dataContext.Users.Where(t => t.Id == id.ToString())
                                                        .SingleOrDefaultAsync();
 
-                await DeleteAsync(maintenanceLog);
+                await DeleteAsync(user);
 
                 return new ServiceResult();
             } catch (Exception ex) {
@@ -34,10 +35,10 @@ namespace GasMilageJournal.Services
             }
         }
 
-        public async Task<ServiceResult> DeleteAsync(MaintenanceLog maintenanceLog)
+        public async Task<ServiceResult> DeleteAsync(User user)
         {
             try {
-                _dataContext.MaintenanceLogs.Remove(maintenanceLog);
+                _dataContext.Users.Remove(user);
                 await _dataContext.SaveChangesAsync();
 
                 return new ServiceResult();
@@ -49,21 +50,11 @@ namespace GasMilageJournal.Services
         public async Task<ServiceResult> Edit(string id)
         {
             try {
-                MaintenanceLog maintenanceLog;
+                User user = await _dataContext.Users.Where(t => t.Id == _appService.UserId)
+                                                    .Where(t => t.Id == id)
+                                                    .SingleAsync();
 
-                if (id.ToLower().Equals("new")) {
-                    maintenanceLog = new MaintenanceLog
-                    {
-                        Created = DateTime.Now,
-                        UserId = _appService.UserId
-                    };
-                } else {
-                    maintenanceLog = await _dataContext.MaintenanceLogs.Where(t => t.UserId == _appService.UserId)
-                                                       .Where(t => t.Id == id.ToGuid())
-                                                       .SingleAsync();
-                }
-
-                return new ServiceResult(maintenanceLog);
+                return new ServiceResult(user);
             } catch (Exception ex) {
                 return new ServiceResult(ex);
             }
@@ -72,9 +63,9 @@ namespace GasMilageJournal.Services
         public async Task<ServiceResult> GetAllAsync()
         {
             try {
-                var maintenanceLogs = await _dataContext.MaintenanceLogs.ToListAsync();
+                var users = await _dataContext.Users.ToListAsync();
 
-                return new ServiceResult(maintenanceLogs);
+                return new ServiceResult(users);
             } catch (Exception ex) {
                 return new ServiceResult(ex);
             }
@@ -83,22 +74,22 @@ namespace GasMilageJournal.Services
         public async Task<ServiceResult> GetByIdAsync(Guid id)
         {
             try {
-                var maintenanceLog = await _dataContext.MaintenanceLogs.Where(t => t.Id == id)
+                var user = await _dataContext.Users.Where(t => t.Id == id.ToString())
                                                        .SingleOrDefaultAsync();
 
-                return new ServiceResult(maintenanceLog);
+                return new ServiceResult(user);
             } catch (Exception ex) {
                 return new ServiceResult(ex);
             }
         }
 
-        public async Task<ServiceResult> SaveAsync(MaintenanceLog maintenanceLog)
+        public async Task<ServiceResult> SaveAsync(User user)
         {
             try {
-                await _dataContext.AddOrUpdateAsync(maintenanceLog);
+                _dataContext.Update(user);
                 _dataContext.SaveChanges();
 
-                return new ServiceResult(maintenanceLog);
+                return new ServiceResult(user);
             } catch (Exception ex) {
                 return new ServiceResult(ex);
             }

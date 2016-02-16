@@ -33,6 +33,12 @@ namespace GasMilageJournal.Services.Interfaces
         {
             StatusCode = (int)(HttpStatusCode.InternalServerError);
             HasError = true;
+
+            while (ex.InnerException != null) {
+                ex = ex.InnerException;
+            }
+
+            Messages.Add(ex.InnerException.ToString());
         }
 
         public ServiceResult(Exception ex, HttpStatusCode status)
@@ -40,6 +46,12 @@ namespace GasMilageJournal.Services.Interfaces
         {
             StatusCode = (int)(status);
             HasError = true;
+
+            while (ex.InnerException != null) {
+                ex = ex.InnerException;
+            }
+
+            Messages.Add(ex.InnerException.ToString());
         }
     }
 }
