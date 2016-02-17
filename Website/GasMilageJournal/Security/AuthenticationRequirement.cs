@@ -1,5 +1,4 @@
-﻿using GasMilageJournal.Extensions;
-using GasMilageJournal.Models;
+﻿using GasMilageJournal.Models;
 using GasMilageJournal.Services;
 using Microsoft.AspNet.Authorization;
 using System;

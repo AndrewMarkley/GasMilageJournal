@@ -60,3 +60,5 @@ proguard/
 hs_err_pid*
 Website/GasMilageJournal/node_modules/*
 Website/artifacts/*
+*.suo
+Website/GasMilageJournal/appsettings.Production.json
